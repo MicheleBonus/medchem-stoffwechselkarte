@@ -48,7 +48,10 @@ def schreibe(pfad, text):
 
 # ------------------------------------------------------------------ Bausteine
 STRUCT = json.loads(lies(os.path.join(HERE, "structures.json")))
-TAFELN = json.loads(lies(os.path.join(HERE, "tafeln.json")))
+# Eine Datei je Tafel: so koennen die siebzehn Skripte nebeneinander laufen.
+TAFELORDNER = os.path.join(HERE, "tafeln")
+TAFELN = {n[:-4]: lies(os.path.join(TAFELORDNER, n))
+          for n in sorted(os.listdir(TAFELORDNER)) if n.endswith(".svg")}
 
 fehlt_struktur, fehlt_tafel = set(), set()
 
@@ -75,29 +78,30 @@ def einsetzen(doc):
 
 # ------------------------------------------------------- Mechanismusteil teilen
 def teile_mechanismen():
-    """40_mech.html -> (kopfteil, [(id, titel, sub, rumpf)], schlussteil)"""
-    txt = lies(os.path.join(SRC, "40_mech.html"))
-    marken = list(re.finditer(r"[ \t]*<!--\s*=+\s*M-(\d\d)\s*-->\n", txt))
-    if len(marken) != 17:
-        raise SystemExit("ABBRUCH: %d Tafelmarken in 40_mech.html, erwartet 17"
-                         % len(marken))
-    kopf = txt[:marken[0].start()]
+    """src/mech/ -> (kopfteil, [(id, titel, sub, rumpf)], schlussteil)
+
+    Je Tafel eine Quelldatei. Vorher stand alles in einer Datei; sobald mehrere
+    Tafeln nebeneinander bearbeitet wurden, kamen sich die Aenderungen in die
+    Quere.
+    """
+    ordner = os.path.join(SRC, "mech")
+    kopf = lies(os.path.join(ordner, "00_kopf.html"))
+    schluss = lies(os.path.join(ordner, "99_schluss.html"))
     tafeln = []
-    for i, m in enumerate(marken):
-        anfang = m.end()
-        ende = marken[i + 1].start() if i + 1 < len(marken) else len(txt)
-        rumpf = txt[anfang:ende]
-        tid = "m" + m.group(1)
-        titel = re.search(r"<h3>(.*?)</h3>", rumpf, re.S).group(1)
+    for n in sorted(os.listdir(ordner)):
+        if not re.match(r"m\d\d\.html$", n):
+            continue
+        rumpf = lies(os.path.join(ordner, n))
+        titel = re.search(r"<h3>(.*?)</h3>", rumpf, re.S)
+        if not titel:
+            raise SystemExit("ABBRUCH: keine h3-Ueberschrift in mech/%s" % n)
         sub = re.search(r'<p class="tafel-sub">(.*?)</p>', rumpf, re.S)
-        tafeln.append((tid, re.sub(r"\s+", " ", titel).strip(),
+        tafeln.append((n[:-5], re.sub(r"\s+", " ", titel.group(1)).strip(),
                        re.sub(r"\s+", " ", sub.group(1)).strip() if sub else "",
                        rumpf))
-    # Der Schlussteil (Merkkasten + </section>) haengt an der letzten Tafel.
-    letzte = tafeln[-1][3]
-    schnitt = letzte.rindex("</figure>") + len("</figure>")
-    schluss = letzte[schnitt:]
-    tafeln[-1] = tafeln[-1][:3] + (letzte[:schnitt],)
+    if len(tafeln) != 17:
+        raise SystemExit("ABBRUCH: %d Tafeltexte in src/mech, erwartet 17"
+                         % len(tafeln))
     return kopf, tafeln, schluss
 
 

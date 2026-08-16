@@ -699,3 +699,25 @@ class Tafel(object):
         if art == "bindung":
             return "%s.bindung%s" % (name, idx)
         return "%s.%s(%s)" % (name, art, idx)
+
+
+def speichern(tid, svg, tafel=None):
+    """Eine fertige Tafel als eigene Datei ablegen: tafeln/<tid>.svg
+
+    Frueher schrieben alle siebzehn Skripte in dieselbe tafeln.json. Sobald
+    zwei davon gleichzeitig liefen, ueberschrieb der spaetere den frueheren
+    Stand. Eine Datei je Tafel schliesst das aus; site.py liest das ganze
+    Verzeichnis.
+    """
+    import os
+    import io as _io
+    ordner = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tafeln")
+    os.makedirs(ordner, exist_ok=True)
+    ziel = os.path.join(ordner, "%s.svg" % tid)
+    with _io.open(ziel, "w", encoding="utf-8", newline="\n") as f:
+        f.write(svg)
+    if tafel is not None:
+        print("geschrieben: tafeln/%s.svg  (%d Zeichen, %d Molekuele, %d Pfeile)"
+              % (tid, len(svg), len(tafel.mole), len(tafel.anker)))
+    else:
+        print("geschrieben: tafeln/%s.svg  (%d Zeichen)" % (tid, len(svg)))

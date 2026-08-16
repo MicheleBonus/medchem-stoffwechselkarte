@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Rendert eine einzelne Tafel aus tafeln.json zur Sichtpruefung."""
 import io
-import json
 import os
 import sys
 
@@ -12,7 +11,7 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 HERE = os.path.dirname(os.path.abspath(__file__))
 TID = sys.argv[1] if len(sys.argv) > 1 else "m05"
 
-svg = json.load(io.open(os.path.join(HERE, "tafeln.json"), encoding="utf-8"))[TID]
+svg = io.open(os.path.join(HERE, "tafeln", TID + ".svg"), encoding="utf-8").read()
 css = "<style>%s\n%s</style>" % (
     io.open(os.path.join(HERE, "geruest", "karte.css"), encoding="utf-8").read(),
     io.open(os.path.join(HERE, "geruest", "site.css"), encoding="utf-8").read())

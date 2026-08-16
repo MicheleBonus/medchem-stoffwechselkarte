@@ -7,8 +7,6 @@ Gezeichnet wird jetzt der Ausschnitt N5 bis N10 - nur dort sitzt die C1-Einheit,
 und nur dort unterscheiden sich die vier Oxidationsstufen. Zone B fuehrt den
 Schritt aus, an dem 5-Fluoruracil angreift.
 """
-import io
-import json
 import os
 import sys
 
@@ -17,7 +15,6 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 import mech
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ZIEL = os.path.join(HERE, "tafeln.json")
 
 W = "var(--warn)"
 R = "var(--drug)"
@@ -219,11 +216,4 @@ for m in t.mole:
     if x0 < 10 or y0 < 10 or x1 > t.b - 10 or y1 > t.h - 10:
         print("WARNUNG: %s reicht bis (%.0f,%.0f)-(%.0f,%.0f)" % (m.name, x0, y0, x1, y1))
 
-daten = {}
-if os.path.exists(ZIEL):
-    daten = json.load(io.open(ZIEL, encoding="utf-8"))
-daten["m04"] = t.svg(ARIA)
-io.open(ZIEL, "w", encoding="utf-8").write(
-    json.dumps(daten, ensure_ascii=False, indent=1))
-print("geschrieben: tafeln.json / m04  (%d Zeichen, %d Molekuele, %d Pfeile)"
-      % (len(daten["m04"]), len(t.mole), len(t.anker)))
+mech.speichern("m04", t.svg(ARIA), t)

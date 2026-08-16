@@ -6,8 +6,6 @@ Kern ist der NIH-Shift: Das Wasserstoffatom wird nicht abgespalten, sondern an
 den Nachbarkohlenstoff geschoben. Das laesst sich nur zeigen, wenn es als
 eigenes Atom gezeichnet ist und der Pfeil an seiner Bindung ansetzt.
 """
-import io
-import json
 import os
 import sys
 
@@ -16,7 +14,6 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 import mech
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ZIEL = os.path.join(HERE, "tafeln.json")
 
 W = "var(--warn)"
 R = "var(--drug)"
@@ -184,11 +181,4 @@ for m in t.mole:
     if x0 < 10 or y0 < 10 or x1 > t.b - 10 or y1 > t.h - 10:
         print("WARNUNG: %s reicht bis (%.0f,%.0f)-(%.0f,%.0f)" % (m.name, x0, y0, x1, y1))
 
-daten = {}
-if os.path.exists(ZIEL):
-    daten = json.load(io.open(ZIEL, encoding="utf-8"))
-daten["m10"] = t.svg(ARIA)
-io.open(ZIEL, "w", encoding="utf-8").write(
-    json.dumps(daten, ensure_ascii=False, indent=1))
-print("geschrieben: tafeln.json / m10  (%d Zeichen, %d Molekuele, %d Pfeile)"
-      % (len(daten["m10"]), len(t.mole), len(t.anker)))
+mech.speichern("m10", t.svg(ARIA), t)

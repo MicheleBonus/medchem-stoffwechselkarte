@@ -6,8 +6,6 @@ Vorher stand die ganze Tafel als Text da - selbst der Glutamatrest war die
 Zeichenkette "Protein-CH2-CH2-COO". Zone A fuehrt jetzt beide Schritte aus:
 die Deprotonierung durch das Alkoxid und den Angriff des Carbanions auf CO2.
 """
-import io
-import json
 import os
 import sys
 
@@ -16,7 +14,6 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 import mech
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ZIEL = os.path.join(HERE, "tafeln.json")
 
 W = "var(--warn)"
 R = "var(--drug)"
@@ -186,11 +183,4 @@ for m in t.mole:
     if x0 < 10 or y0 < 10 or x1 > t.b - 10 or y1 > t.h - 10:
         print("WARNUNG: %s reicht bis (%.0f,%.0f)-(%.0f,%.0f)" % (m.name, x0, y0, x1, y1))
 
-daten = {}
-if os.path.exists(ZIEL):
-    daten = json.load(io.open(ZIEL, encoding="utf-8"))
-daten["m15"] = t.svg(ARIA)
-io.open(ZIEL, "w", encoding="utf-8").write(
-    json.dumps(daten, ensure_ascii=False, indent=1))
-print("geschrieben: tafeln.json / m15  (%d Zeichen, %d Molekuele, %d Pfeile)"
-      % (len(daten["m15"]), len(t.mole), len(t.anker)))
+mech.speichern("m15", t.svg(ARIA), t)

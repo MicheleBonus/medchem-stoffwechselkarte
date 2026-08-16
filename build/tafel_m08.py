@@ -8,15 +8,12 @@ einem Bausatz kommen statt als Textzeilen, und dass die drei Schritte, an denen
 wirklich Chemie passiert, mit Elektronenpfeilen ausgefuehrt sind:
 die heterolytische O-O-Spaltung, die Wasserstoffabstraktion und der Rebound.
 """
-import io
-import json
 import math
 import os
 
 import mech
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ZIEL = os.path.join(HERE, "tafeln.json")
 
 W = "var(--warn)"
 R = "var(--drug)"
@@ -235,11 +232,4 @@ for m in t.mole:
     if x0 < 10 or y0 < 10 or x1 > t.b - 10 or y1 > t.h - 10:
         print("WARNUNG: %s reicht bis (%.0f,%.0f)-(%.0f,%.0f)" % (m.name, x0, y0, x1, y1))
 
-daten = {}
-if os.path.exists(ZIEL):
-    daten = json.load(io.open(ZIEL, encoding="utf-8"))
-daten["m08"] = t.svg(ARIA)
-io.open(ZIEL, "w", encoding="utf-8").write(
-    json.dumps(daten, ensure_ascii=False, indent=1))
-print("geschrieben: tafeln.json / m08  (%d Zeichen, %d Molekuele, %d Zentren, %d Pfeile)"
-      % (len(daten["m08"]), len(t.mole), 12, len(t.anker)))
+mech.speichern("m08", t.svg(ARIA), t)
