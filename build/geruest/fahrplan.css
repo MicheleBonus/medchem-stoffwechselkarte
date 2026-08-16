@@ -1,0 +1,136 @@
+/* --- Lernfahrplan: gilt nur auf fahrplan.html ------------------ */
+body.fahrplan * {box-sizing:border-box}
+body.fahrplan {margin:0; background:var(--bg); color:var(--ink); font-family:var(--f-serif); font-size:17px; line-height:1.62; -webkit-font-smoothing:antialiased;}
+body.fahrplan h1, body.fahrplan h2, body.fahrplan h3, body.fahrplan h4 {font-family:var(--f-serif); text-wrap:balance; line-height:1.2; margin:0}
+body.fahrplan p {margin:0}
+body.fahrplan a {color:inherit}
+body.fahrplan :focus-visible {outline:2px solid var(--cofaktor); outline-offset:2px; border-radius:2px}
+@media (prefers-reduced-motion:reduce) {
+  body.fahrplan * {animation:none!important;transition:none!important}
+}
+body.fahrplan .band {padding-inline:max(clamp(18px,5vw,48px), calc((100% - 980px) / 2))}
+body.fahrplan .spalte {max-width:64ch}
+body.fahrplan .kopf {padding-block:clamp(40px,7vw,78px) clamp(28px,4vw,44px); padding-inline:max(clamp(18px,5vw,48px), calc((100% - 980px) / 2)); border-bottom:1px solid var(--rule); background:linear-gradient(180deg,var(--surface) 0%,var(--bg) 100%);}
+body.fahrplan .kopf .eyebrow {font-family:var(--f-sans); font-size:11.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--cofaktor); font-weight:600; margin-bottom:14px;}
+body.fahrplan .kopf h1 {font-size:clamp(29px,4.4vw,46px); letter-spacing:-.022em; max-width:17ch}
+body.fahrplan .kopf .lead {margin-top:18px; max-width:58ch; font-size:18.5px; color:var(--ink-2); line-height:1.55}
+body.fahrplan .kopf .meta {margin-top:28px; display:flex; flex-wrap:wrap; gap:10px 26px; font-family:var(--f-sans); font-size:12.5px; color:var(--ink-3);}
+body.fahrplan .kopf .meta b {color:var(--ink-2); font-weight:600}
+body.fahrplan .kap {padding-top:clamp(42px,6vw,72px); scroll-margin-top:12px}
+body.fahrplan .kap-kopf {border-top:2px solid var(--ink); padding-top:13px; margin-bottom:24px; max-width:72ch}
+body.fahrplan .kap-kopf .nr {font-family:var(--f-mono); font-size:12px; letter-spacing:.1em; color:var(--cofaktor); text-transform:uppercase; font-weight:700;}
+body.fahrplan .kap-kopf h2 {font-size:clamp(23px,3vw,31px); letter-spacing:-.015em; margin-top:5px}
+body.fahrplan .kap-kopf .abstract {margin-top:12px; color:var(--ink-2); font-size:17px; max-width:62ch}
+body.fahrplan .spalte p + p {margin-top:13px}
+body.fahrplan .uebersicht {margin-top:26px; display:grid; gap:14px; grid-template-columns:1fr; max-width:980px;}
+@media (min-width:760px) {
+  body.fahrplan .uebersicht {grid-template-columns:repeat(2,1fr)}
+}
+body.fahrplan .uebersicht a {display:block; text-decoration:none; background:var(--surface); border:1px solid var(--rule); border-radius:8px; padding:16px 18px 15px; box-shadow:var(--shadow); border-left:4px solid var(--cofaktor);}
+body.fahrplan .uebersicht a:hover {background:var(--surface-2)}
+body.fahrplan .uebersicht .nr {font-family:var(--f-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--cofaktor); font-weight:700;}
+body.fahrplan .uebersicht b {display:block; font-size:18px; margin:4px 0 6px; letter-spacing:-.01em}
+body.fahrplan .uebersicht span.was {display:block; font-family:var(--f-sans); font-size:13px; color:var(--ink-2); line-height:1.5}
+body.fahrplan .uebersicht span.dauer {display:block; margin-top:9px; font-family:var(--f-mono); font-size:11px; color:var(--ink-3);}
+body.fahrplan .zwischen {margin-top:34px; font-family:var(--f-sans); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); font-weight:600;}
+body.fahrplan .hinweis-reihe {margin-top:26px; display:grid; gap:18px; grid-template-columns:1fr; align-items:start; max-width:980px;}
+@media (min-width:820px) {
+  body.fahrplan .hinweis-reihe {grid-template-columns:1fr 1fr}
+}
+body.fahrplan .hinweis {background:var(--surface); border:1px solid var(--rule); border-radius:8px; padding:17px 19px; box-shadow:var(--shadow);}
+body.fahrplan .hinweis > b {display:block; font-family:var(--f-sans); font-size:13px; font-weight:700; margin-bottom:8px; color:var(--enzym);}
+body.fahrplan .hinweis p {font-size:15.5px; color:var(--ink-2); line-height:1.55}
+body.fahrplan .hinweis p + p {margin-top:10px}
+body.fahrplan .hinweis ul {margin:9px 0 0; padding-left:18px; font-size:15px; color:var(--ink-2)}
+body.fahrplan .hinweis li {margin-bottom:5px}
+body.fahrplan .amp {display:inline-block; font-family:var(--f-sans); font-size:11px; font-weight:700; letter-spacing:.05em; padding:1px 8px 2px; border-radius:20px; vertical-align:1px; white-space:nowrap;}
+body.fahrplan .amp.hoch {background:var(--warn-bg); color:var(--warn)}
+body.fahrplan .amp.mittel {background:var(--cofaktor-bg); color:var(--cofaktor)}
+body.fahrplan .amp.kuer {background:var(--surface-3); color:var(--ink-3)}
+body.fahrplan .block {background:var(--surface); border:1px solid var(--rule); border-radius:10px; box-shadow:var(--shadow); overflow:hidden;}
+body.fahrplan .block-kopf {padding:24px clamp(18px,3vw,30px) 22px; border-bottom:1px solid var(--rule); border-top:4px solid var(--cofaktor); background:var(--surface-2);}
+body.fahrplan .block-kopf .marke {display:flex; flex-wrap:wrap; gap:6px 18px; align-items:baseline; margin-bottom:7px;}
+body.fahrplan .block-kopf .marke .nr {font-family:var(--f-mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--cofaktor); font-weight:700;}
+body.fahrplan .block-kopf .marke .dauer {font-family:var(--f-mono); font-size:11.5px; color:var(--ink-3)}
+body.fahrplan .block-kopf h2 {font-size:clamp(24px,3.2vw,33px); letter-spacing:-.018em}
+body.fahrplan .block-kopf .ziel {margin-top:11px; color:var(--ink-2); font-size:16.5px; max-width:60ch}
+body.fahrplan .raster {display:grid; grid-template-columns:1fr; gap:0; border-bottom:1px solid var(--rule);}
+@media (min-width:900px) {
+  body.fahrplan .raster {grid-template-columns:minmax(0,1.62fr) minmax(0,1fr)}
+}
+body.fahrplan .haupt {padding:22px clamp(18px,3vw,30px) 26px; min-width:0}
+body.fahrplan .haupt h3, body.fahrplan .seite b {font-family:var(--f-sans); font-size:12px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3); font-weight:700;}
+body.fahrplan ol.kern {margin:14px 0 0; padding-left:0; list-style:none; counter-reset:k}
+body.fahrplan ol.kern > li {position:relative; padding-left:34px; margin-bottom:16px; font-size:16.5px; line-height:1.56; counter-increment:k;}
+body.fahrplan ol.kern > li::before {content:counter(k); position:absolute; left:0; top:3px; width:23px; height:23px; border-radius:50%; background:var(--surface-3); color:var(--ink-2); font-family:var(--f-mono); font-size:11.5px; font-weight:700; display:flex; align-items:center; justify-content:center;}
+body.fahrplan ol.kern b {font-weight:700}
+body.fahrplan ol.kern em {font-style:italic}
+body.fahrplan .seite {padding:22px clamp(18px,3vw,30px) 26px; background:var(--surface-2); min-width:0; display:grid; gap:20px; align-content:start;}
+@media (min-width:900px) {
+  body.fahrplan .seite {border-left:1px solid var(--rule)}
+}
+@media (max-width:899px) {
+  body.fahrplan .seite {border-top:1px solid var(--rule)}
+}
+body.fahrplan .seite b.zweit {display:block; margin-top:16px}
+body.fahrplan .seite ul {margin:9px 0 0; padding:0; list-style:none}
+body.fahrplan .seite li {margin-bottom:4px; font-family:var(--f-sans); font-size:13.5px; line-height:1.45}
+body.fahrplan .seite li a {color:var(--ink-2); text-decoration:none; border-bottom:1px solid var(--rule)}
+body.fahrplan .seite li a:hover {color:var(--ink); border-bottom-color:var(--cofaktor)}
+body.fahrplan .seite ul.tafeln li a {color:var(--enzym); border-bottom-color:transparent}
+body.fahrplan .seite ul.tafeln li a:hover {border-bottom-color:var(--enzym)}
+body.fahrplan .stoffe p {font-size:14.5px; color:var(--ink-2); line-height:1.5; margin-top:9px}
+body.fahrplan .stoffe p b {color:var(--drug); font-weight:700}
+body.fahrplan .sc {font-variant:small-caps}
+body.fahrplan .aufgabe, body.fahrplan .gespraech, body.fahrplan .fehler {padding:20px clamp(18px,3vw,30px) 22px; border-bottom:1px solid var(--rule)}
+body.fahrplan .fehler {border-bottom:none}
+body.fahrplan .aufgabe {background:var(--cofaktor-bg)}
+body.fahrplan .aufgabe > b {display:block; font-family:var(--f-sans); font-size:12px; letter-spacing:.13em; text-transform:uppercase; color:var(--cofaktor); font-weight:700; margin-bottom:8px;}
+body.fahrplan .aufgabe p {max-width:70ch; font-size:16.5px}
+body.fahrplan .gespraech > b, body.fahrplan .fehler > b {display:block; font-family:var(--f-sans); font-size:12px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3); font-weight:700; margin-bottom:12px;}
+body.fahrplan .gespraech dl {margin:0; max-width:74ch}
+body.fahrplan .gespraech dt {font-weight:700; font-size:16.5px; margin-top:16px; color:var(--ink);}
+body.fahrplan .gespraech dt::before {content:"„"}
+body.fahrplan .gespraech dt::after {content:"“"}
+body.fahrplan .gespraech dt:first-of-type {margin-top:0}
+body.fahrplan .gespraech dd {margin:6px 0 0; padding-left:16px; border-left:2px solid var(--enzym); font-size:16px; color:var(--ink-2); line-height:1.55;}
+body.fahrplan .fehler ul {margin:0; padding-left:19px; max-width:72ch}
+body.fahrplan .fehler li {margin-bottom:7px; font-size:16px; color:var(--ink-2); line-height:1.53}
+body.fahrplan .tabelle-wrap {margin-top:6px; overflow-x:auto; max-width:1000px}
+body.fahrplan table.pflicht {border-collapse:collapse; width:100%; min-width:660px; background:var(--surface); box-shadow:var(--shadow); border-radius:8px;}
+body.fahrplan table.pflicht th, body.fahrplan table.pflicht td {text-align:left; vertical-align:top; padding:9px 13px; border-bottom:1px solid var(--rule-2);}
+body.fahrplan table.pflicht thead th {font-family:var(--f-sans); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); font-weight:700; border-bottom:1px solid var(--rule); background:var(--surface-2); position:sticky; top:0;}
+body.fahrplan table.pflicht td {font-size:15.5px; line-height:1.48}
+body.fahrplan table.pflicht tbody tr:hover {background:var(--surface-2)}
+body.fahrplan table.pflicht tbody tr:last-child td {border-bottom:none}
+body.fahrplan .c-nr {width:2.6em; font-family:var(--f-mono); font-size:12.5px; color:var(--ink-3); font-variant-numeric:tabular-nums; text-align:right}
+body.fahrplan .c-amp {width:6.5em; white-space:nowrap}
+body.fahrplan .c-q {width:5.2em; font-family:var(--f-mono); font-size:12.5px; white-space:nowrap}
+body.fahrplan .c-t {width:4.6em; font-family:var(--f-mono); font-size:12.5px; white-space:nowrap; font-weight:700}
+body.fahrplan .c-t a {color:var(--enzym); text-decoration:none}
+body.fahrplan .c-t a:hover {text-decoration:underline}
+body.fahrplan .c-b {width:3.4em; font-family:var(--f-mono); font-size:12.5px; color:var(--ink-3); text-align:center}
+body.fahrplan .c-q a {color:var(--enzym); text-decoration:none}
+body.fahrplan .c-q a:hover {text-decoration:underline}
+body.fahrplan .kuerliste > b {color:var(--ink-3)}
+body.fahrplan .plan-raster {margin-top:8px; display:grid; gap:20px; grid-template-columns:1fr; align-items:start; max-width:1000px;}
+@media (min-width:900px) {
+  body.fahrplan .plan-raster {grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+}
+body.fahrplan .plan {background:var(--surface); border:1px solid var(--rule); border-radius:9px; padding:20px clamp(17px,2.4vw,24px) 22px; box-shadow:var(--shadow);}
+body.fahrplan .plan.notfall {border-left:4px solid var(--warn)}
+body.fahrplan .plan-kopf {display:block; font-family:var(--f-sans); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; font-weight:700; color:var(--enzym); margin-bottom:14px;}
+body.fahrplan .plan.notfall .plan-kopf {color:var(--warn)}
+body.fahrplan .notfall-intro {font-size:15px; color:var(--ink-2); margin-bottom:14px; line-height:1.5}
+body.fahrplan ol.wochen {margin:0; padding:0; list-style:none}
+body.fahrplan ol.wochen > li {padding-bottom:13px; margin-bottom:13px; border-bottom:1px solid var(--rule-2)}
+body.fahrplan ol.wochen > li:last-child {border-bottom:none; padding-bottom:0; margin-bottom:0}
+body.fahrplan .wtag {display:block; font-family:var(--f-mono); font-size:11.5px; letter-spacing:.06em; color:var(--cofaktor); font-weight:700; margin-bottom:5px;}
+body.fahrplan ol.wochen p {font-size:15.5px; color:var(--ink-2); line-height:1.53}
+body.fahrplan .abschluss {margin-top:26px; max-width:74ch; background:var(--enzym-bg); border-radius:9px; padding:20px 22px; border:1px solid var(--rule);}
+body.fahrplan .abschluss > b {display:block; font-family:var(--f-sans); font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--enzym); font-weight:700; margin-bottom:10px;}
+body.fahrplan .abschluss p {font-size:16.5px; line-height:1.56}
+body.fahrplan .abschluss p + p {margin-top:11px}
+body.fahrplan .fuss {margin-top:clamp(46px,6vw,80px); padding-block:26px 60px; border-top:1px solid var(--rule); font-family:var(--f-sans); font-size:12.5px; color:var(--ink-3); line-height:1.6;}
+body.fahrplan .fuss p {max-width:78ch}
+body.fahrplan .fuss a {color:var(--enzym)}

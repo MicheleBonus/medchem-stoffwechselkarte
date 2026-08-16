@@ -1,0 +1,82 @@
+/* --- Website-Geruest: Sprungmarke, Blaettern, Startseite ---------------- */
+
+.sprung{position:absolute; left:-9999px; top:0; z-index:99; background:var(--surface);
+  color:var(--ink); padding:10px 16px; border:1px solid var(--rule); border-radius:6px;
+  font:600 14px/1 var(--f-sans)}
+.sprung:focus{left:12px; top:12px}
+
+.rail a.marke{display:block; text-decoration:none; color:inherit}
+.rail a.marke:hover{color:var(--enzym)}
+.rail ol.wege{display:flex; gap:16px; margin:0 0 16px; padding:0 0 13px;
+  border-bottom:1px solid var(--rule-2)}
+.rail ol.wege li{list-style:none; margin:0}
+.rail ol.wege a{display:inline; padding:0; font:600 12.5px/1 var(--f-sans);
+  letter-spacing:.02em}
+.rail nav a[aria-current="page"]{color:var(--enzym); font-weight:700}
+.rail nav a[aria-current="page"] .nr{background:var(--enzym); color:var(--surface);
+  border-color:var(--enzym)}
+
+.rail .thema{margin-top:18px; width:100%; text-align:left; cursor:pointer;
+  background:var(--surface-2); color:var(--ink-2); border:1px solid var(--rule);
+  border-radius:6px; padding:8px 10px; font:500 12px/1.3 var(--f-sans)}
+.rail .thema:hover{background:var(--surface-3); color:var(--ink)}
+
+.blaettern{display:flex; justify-content:space-between; gap:16px; margin:56px 0 8px;
+  padding-top:22px; border-top:1px solid var(--rule)}
+.blaettern a{display:flex; flex-direction:column; gap:3px; text-decoration:none;
+  color:var(--ink-2); max-width:46%; padding:10px 14px; border:1px solid var(--rule);
+  border-radius:8px; background:var(--surface)}
+.blaettern a:hover{border-color:var(--enzym); color:var(--enzym)}
+.blaettern a span{font:600 11px/1 var(--f-sans); letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink-3)}
+.blaettern a b{font:600 15px/1.3 var(--f-sans)}
+.blaettern a.weiter{text-align:right; margin-left:auto}
+
+/* --- Startseite --------------------------------------------------------- */
+.start .kopf{margin-bottom:38px}
+.wege-gross{display:grid; grid-template-columns:1fr; gap:16px; margin:0 0 44px}
+@media (min-width:760px){.wege-gross{grid-template-columns:repeat(3,1fr)}}
+.weg{display:flex; flex-direction:column; gap:9px; text-decoration:none; color:inherit;
+  padding:22px 22px 20px; border:1px solid var(--rule); border-radius:12px;
+  background:var(--surface); box-shadow:var(--shadow)}
+.weg:hover{border-color:var(--enzym)}
+.weg-marke{font:700 11px/1 var(--f-sans); letter-spacing:.1em; text-transform:uppercase;
+  color:var(--enzym)}
+.weg b{font:600 20px/1.25 var(--f-serif); color:var(--ink)}
+.weg-was{font:400 14.5px/1.55 var(--f-sans); color:var(--ink-2)}
+.weg-mehr{margin-top:auto; padding-top:6px; font:600 13px/1 var(--f-sans);
+  color:var(--enzym)}
+.weg-mehr::after{content:" \2192"}
+
+.teilgitter{display:grid; grid-template-columns:1fr; gap:2px; background:var(--rule-2);
+  border:1px solid var(--rule-2); border-radius:10px; overflow:hidden; margin:0 0 12px}
+@media (min-width:700px){.teilgitter{grid-template-columns:1fr 1fr}}
+.teilgitter a{display:grid; grid-template-columns:34px 1fr; gap:2px 14px;
+  align-items:baseline; padding:16px 18px; background:var(--surface);
+  text-decoration:none; color:inherit}
+.teilgitter a:hover{background:var(--surface-2)}
+.teilgitter .tg-nr{grid-row:span 2; font:700 22px/1 var(--f-mono); color:var(--ink-3);
+  text-align:right}
+.teilgitter b{font:600 16.5px/1.3 var(--f-sans); color:var(--ink)}
+.teilgitter .tg-was{font:400 13.5px/1.5 var(--f-sans); color:var(--ink-2)}
+
+/* --- Uebersicht der Mechanismus-Tafeln ---------------------------------- */
+.tafelgitter{display:grid; grid-template-columns:1fr; gap:2px; background:var(--rule-2);
+  border:1px solid var(--rule-2); border-radius:10px; overflow:hidden;
+  margin:8px 0 34px; max-width:1000px}
+@media (min-width:760px){.tafelgitter{grid-template-columns:1fr 1fr}}
+.tafelkarte{display:grid; grid-template-columns:52px 1fr; gap:3px 14px;
+  align-items:baseline; padding:15px 18px; background:var(--surface);
+  text-decoration:none; color:inherit}
+.tafelkarte:hover{background:var(--surface-2)}
+.tafelkarte .tk-id{grid-row:span 2; font:700 12px/1.4 var(--f-mono);
+  color:var(--cofaktor); letter-spacing:.03em}
+.tafelkarte b{font:600 15.5px/1.3 var(--f-sans); color:var(--ink)}
+.tafelkarte .tk-was{font:400 13px/1.5 var(--f-sans); color:var(--ink-2)}
+
+.teil-kopf.schmal{margin-bottom:14px; padding-bottom:0; border-bottom:0}
+.teil-kopf.schmal .nr a{text-decoration:none; color:inherit}
+.teil-kopf.schmal .nr a:hover{color:var(--enzym)}
+
+h2.zwischen{font:600 19px/1.3 var(--f-sans); color:var(--ink-2); margin:36px 0 16px;
+  padding-bottom:8px; border-bottom:1px solid var(--rule-2); max-width:1000px}
