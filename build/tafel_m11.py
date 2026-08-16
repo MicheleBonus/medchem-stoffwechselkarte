@@ -26,7 +26,7 @@ t = mech.Tafel(1000, 1240)
 # ===================================================== ZONE A · die Luecke
 t.zone(24, "A · ZWEI KUPFERZENTREN OHNE VERBINDUNG")
 t.text(20, 54, "Das eine Kupfer nimmt die Elektronen auf, das andere macht die Chemie. Zwischen "
-               "ihnen liegen etwa elf Ångström — ohne Aminosäurekette, die sie verbände.",
+               "ihnen liegen etwa elf Ångström ohne eine Aminosäurekette, die sie verbände.",
        size=12.5)
 
 cuh = t.zentrum(230, 156, "Cu(I)", unten="3 His", ebene=False, name="CuH")
@@ -44,12 +44,15 @@ t.text(435, 144, "≈ 11 Å, keine Proteinbrücke", size=12, anchor="middle", ge
 t.text(435, 176, "wie das zweite Elektron hinüberkommt, ist bis heute umstritten", size=10.5,
        anchor="middle", farbe=G)
 
-asc = mech.Molekuel("OC[C@H](O)[C@H]1OC(=O)C([O-])=C1O", 88, 322, name="Ascorbat")
+# Ascorbat ist an O3 deprotoniert, nicht an O2: nur dieses Anion ist ueber
+# C3=C2-C1=O bis zum Lactoncarbonyl delokalisiert. Das ist der Grund fuer
+# pKs1 = 4,2; die 2-OH-Gruppe bleibt mit pKs2 = 11,6 protoniert.
+asc = mech.Molekuel("OC[C@H](O)[C@H]1OC(=O)C(O)=C1[O-]", 88, 322, name="Ascorbat")
 t.mole.append(asc)
 t.ueberschrift(asc, "Ascorbat", abstand=30, farbe=G, gewicht=None, size=11)
 t.reaktionspfeil(158, 300, 212, 218)
 t.text(240, 300, "Zwei Ascorbat reduzieren beide Kupferzentren von Cu(II) zu Cu(I). Das ist "
-                 "die zweite große Funktion des Vitamin C —", size=12.5)
+                 "die zweite große Funktion des Vitamin C,", size=12.5)
 t.text(240, 319, "neben der Prolylhydroxylierung im Kollagen. Ascorbat wird hier verbraucht, "
                  "nicht katalytisch genutzt.", size=12.5)
 
@@ -67,31 +70,38 @@ t.text(193, 528, "+ O&#8322;", size=10.5, anchor="middle", gewicht=700, farbe=C)
 z2 = t.zentrum(300, 540, "Cu(II)", axial=["O", "O&#8226;"], unten="", ebene=False,
                schritt=46, name="Superoxo")
 t.text(300, 596, "Superoxo-Komplex", size=11, anchor="middle", gewicht=700, farbe=W)
+t.text(300, 614, "nach der Abstraktion Cu(II)&#8722;OOH", size=10, anchor="middle", farbe=G)
 
-dop = mech.Molekuel("NCCc1ccc(O)c(O)c1", 500, 500, wasserstoff=[1], zeige={1: "links"},
+# Atom 2 ist der benzylische Kohlenstoff (Nachbar des Rings); Atom 1 die CH2-Gruppe
+# am Stickstoff. Nur an Atom 2 sitzt im Produkt die Hydroxylgruppe, also muss auch
+# der Fischhaken dort ansetzen.
+dop = mech.Molekuel("NCCc1ccc(O)c(O)c1", 500, 500, wasserstoff=[2], zeige={2: "links"},
                     name="Dopamin")
 t.mole.append(dop)
-hd = dop.h_index[1]
-t.pfeil((dop, 1, hd), z2.ax(1, winkel=20, abstand=34), bogen=0.24, seite=-1,
+hd = dop.h_index[2]
+t.pfeil((dop, 2, hd), z2.ax(1, winkel=20, abstand=34), bogen=0.24, seite=-1,
         typ="fischhaken", farbe=R)
-t.pfeil((dop, 1, hd), dop.abseits(1, hd), bogen=0.45, seite=1, typ="fischhaken", farbe=R)
-t.unterschrift(dop, "Dopamin — abstrahiert wird das benzylische",
+t.pfeil((dop, 2, hd), dop.abseits(2, hd, abstand=26), bogen=0.40, seite=-1,
+        typ="fischhaken", farbe=R)
+t.unterschrift(dop, "Dopamin: abstrahiert wird das benzylische",
                "Wasserstoffatom, nicht ein beliebiges", abstand=30)
 
 t.reaktionspfeil(660, 540, 726)
 t.text(693, 528, "Rebound", size=10.5, anchor="middle", gewicht=700, farbe=G)
+t.text(693, 562, "+ e&#8722;, + H&#8314;", size=10, anchor="middle", farbe=G)
+t.text(693, 576, "&#8722; H&#8322;O", size=10, anchor="middle", farbe=G)
 
 nor = mech.Molekuel("NC[C@H](O)c1ccc(O)c(O)c1", 850, 540, stereo=True, name="Noradrenalin")
 t.mole.append(nor)
-t.unterschrift(nor, "Noradrenalin — die Hydroxylgruppe steht",
+t.unterschrift(nor, "Noradrenalin: die Hydroxylgruppe steht",
                "immer (<tspan font-style='italic'>R</tspan>)-konfiguriert", abstand=30)
 
 t.kasten(20, 660, 960, 76, fill="var(--surface-2)")
-t.text(38, 682, "DERSELBE ABLAUF WIE BEIM P450 — MIT EINEM SCHWÄCHEREN OXIDANS", size=11,
+t.text(38, 682, "DERSELBE ABLAUF WIE BEIM P450, MIT EINEM SCHWÄCHEREN OXIDANS", size=11,
        gewicht=700, farbe=G)
 t.text(38, 704, "Wasserstoffabstraktion, dann Rebound: die beiden Schritte aus Tafel M-08. "
-                "Nur ist das Oxidans hier kein Fe(IV)=O, sondern ein Cu(II)-Superoxo —", size=12.5)
-t.text(38, 723, "und deshalb greift das Enzym nur schwache C&#8722;H-Bindungen an, etwa "
+                "Nur ist das Oxidans hier kein Fe(IV)=O, sondern ein Cu(II)-Superoxo.", size=12.5)
+t.text(38, 723, "Deshalb greift das Enzym nur schwache C&#8722;H-Bindungen an, etwa "
                 "benzylische. Ein Alkan könnte es nicht hydroxylieren.", size=12.5)
 
 # ===================================================== ZONE C · die zwei Enzyme
@@ -102,7 +112,7 @@ t.text(38, 838, "DOPAMIN-β-HYDROXYLASE", size=11, gewicht=700, farbe=E)
 t.text(38, 860, "Hydroxyliert benzylisch und macht damit aus", size=12.5)
 t.text(38, 879, "Dopamin Noradrenalin. Sitzt in den Vesikeln der", size=12.5)
 t.text(38, 898, "sympathischen Neurone und des Nebennierenmarks.", size=12.5)
-t.text(38, 921, "Disulfiram hemmt sie als Nebenwirkung — daher der", size=12.5)
+t.text(38, 921, "Disulfiram hemmt sie als Nebenwirkung. Daher der", size=12.5)
 t.text(38, 940, "Blutdruckabfall unter der Therapie.", size=12.5)
 
 t.kasten(510, 816, 470, 138, fill="var(--surface-2)")
@@ -121,9 +131,11 @@ t.text(38, 1057, "Beim Kollagen ist es das Eisen der Prolylhydroxylase, hier das
                  "erklärt sich aus dem einen, der Catecholaminmangel aus dem anderen.", size=12.5)
 
 t.text(20, 1140, "Das benzylische Wasserstoffatom ist deshalb angreifbar, weil das entstehende "
-                 "Radikal vom Aromaten stabilisiert wird — dieselbe Überlegung wie bei der "
-                 "schwächsten", size=12.5, farbe=G)
-t.text(20, 1160, "C&#8722;H-Bindung des Ibuprofens in Tafel M-08.", size=12.5, farbe=G)
+                 "Radikal vom Aromaten stabilisiert wird. Die Bindung ist dadurch rund", size=12.5,
+       farbe=G)
+t.text(20, 1160, "50 kJ/mol schwächer als eine gewöhnliche aliphatische C&#8722;H-Bindung. "
+                 "Bei den P450 entscheidet dagegen die Bindetasche, siehe Tafel M-08.",
+       size=12.5, farbe=G)
 
 # ===================================================== Ausgabe
 ARIA = (
@@ -132,8 +144,11 @@ ARIA = (
     "Histidinen und einem Methionin, getrennt durch etwa elf Angstroem ohne verbindende "
     "Proteinkette; daneben das gezeichnete Ascorbat, das beide reduziert. Zone B zeigt den "
     "Zyklus: Aus Kupfer eins und Sauerstoff entsteht ein Superoxo-Komplex, der mit "
-    "Fischhakenpfeilen ein benzylisches Wasserstoffatom vom Dopamin abstrahiert; nach dem "
-    "Rebound entsteht Noradrenalin mit R-konfigurierter Hydroxylgruppe. Zone C stellt die "
+    "Fischhakenpfeilen das benzylische Wasserstoffatom vom Dopamin abstrahiert: ein Haken "
+    "fuehrt zum Superoxo-Sauerstoff, der zweite laesst das Elektron am benzylischen "
+    "Kohlenstoff zurueck. Aus dem Superoxo wird dabei ein Hydroperoxo. Nach dem Rebound, der "
+    "ein Elektron und ein Proton verbraucht und Wasser freisetzt, "
+    "entsteht Noradrenalin mit R-konfigurierter Hydroxylgruppe. Zone C stellt die "
     "beiden Enzyme dieses Bauplans nebeneinander, die Dopamin-beta-Hydroxylase und die "
     "Peptidylglycin-alpha-amidierende Monooxygenase."
 )

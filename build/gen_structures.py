@@ -174,6 +174,11 @@ def render(smiles, labels=None, scale=1.0, rotate=0.0, reihe=None, hervor=None):
     d = rdMolDraw2D.MolDraw2DSVG(w, h)
     o = d.drawOptions()
     o.clearBackground = False
+    # RDKit umrahmt Atombeschriftungen, die es fuer zu dicht beieinander haelt,
+    # mit einem roten Kasten. Das ist als Warnung an den Zeichner gedacht und
+    # gehoert nicht in eine Lehrunterlage: bei ausgerichteten Steroiden trifft
+    # es regelmaessig die Wasserstoffe an den Ringverknuepfungen. Abschalten.
+    o.flagCloseContactsDist = -1
     o.addStereoAnnotation = (n_stereo <= 3)
     o.annotationFontScale = 0.62
     o.bondLineWidth = 1.6
@@ -281,8 +286,12 @@ for _t in ("teil1", "teil2", "teil3", "teil4", "teil5", "teil6", "teil7", "teil8
     _SCHMUCK.update(getattr(_mod, "SCHMUCK", {}))
 
 
-# Dummy-Atome ('*') automatisch mit 'CoA' beschriften
-COA_IDS = {"acetyl_coa_abbr", "acetoacetyl_coa", "hmg_coa", "malonyl_coa"}
+# Dummy-Atome ('*') automatisch mit 'CoA' beschriften.
+# Die Liste stand einmal von Hand da und lief prompt hinterher: succinyl_coa kam
+# spaeter dazu und trug ein nacktes Sternchen. Die Regel liest sich jetzt aus der
+# id: was 'coa' heisst und ein Dummy traegt, bekommt die Beschriftung.
+COA_IDS = {mid for mid, (smi, _) in MOLS.items() if "coa" in mid.split("_")
+           and "*" in smi}
 
 
 REIHEN.update(_REIHEN)

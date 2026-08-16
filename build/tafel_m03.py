@@ -2,7 +2,7 @@
 """
 M-03 · Biotin, gebaut mit mech.py.
 
-Die Tafel hatte bisher keine einzige Struktur - nur Kaesten und einen
+Die Tafel hatte bisher keine einzige Struktur, nur Kaesten und einen
 schematischen Arm. Jetzt sind beide Halbreaktionen ausgefuehrt: die
 Carboxylierung des Biotins und die Uebertragung auf das Enolat.
 """
@@ -21,10 +21,19 @@ E = "var(--enzym)"
 C = "var(--cofaktor)"
 G = "var(--ink-3)"
 
-BIOTIN = "O=C1N[C@@H]2CS[C@@H](*)[C@@H]2N1"
-CARBOXY = "OC(=O)N1C(=O)N[C@@H]2CS[C@@H](*)[C@@H]12"
+# d-Biotin ist (3aS,4S,6aR): alle drei Ringprotonen stehen cis auf derselben
+# Seite des cis-verknuepften Bicyclus. Die Stereodeskriptoren sind gegen
+# PubChem CID 171548 geprueft; mit der Valeriansaeurekette statt des Dummys
+# liefert rdCIPLabeler genau diese drei Zuordnungen.
+BIOTIN = "O=C1N[C@H]2CS[C@@H](*)[C@H]2N1"
+# Carboxyliert wird N1': der Ureidostickstoff am Ringfusionskohlenstoff C6a',
+# also der von der Seitenkette abgewandte. Mit der Valeriansaeurekette statt des
+# Dummys ist die Struktur kanonisch identisch mit dem PubChem-Eintrag zum
+# 1'-N-Carboxybiotin. Hier ist das Atom 2. Bei pH 7,4 liegt das Carbamat als
+# Anion vor, deshalb [O-].
+CARBOXY = "O=C1N(C(=O)[O-])[C@H]2CS[C@@H](*)[C@H]2N1"
 # RDKit zeichnet Atomlabel aus einem eigenen Vektorfont, der weder
-# HTML-Entitaeten noch Tiefstellungszeichen kennt - beides faellt im Bild aus.
+# HTML-Entitaeten noch Tiefstellungszeichen kennt; beides faellt im Bild aus.
 # Deshalb hier nur "Lys"; die Amidbindung erklaert die Unterschrift.
 KETTE = "Lys"
 
@@ -41,12 +50,12 @@ t.unterschrift(hco3, "Hydrogencarbonat", abstand=28, farbe=G)
 
 t.reaktionspfeil(180, 170, 254)
 t.text(217, 158, "+ ATP", size=10.5, anchor="middle", gewicht=700, farbe=C)
-t.text(217, 192, "&#8722; ADP", size=10, anchor="middle", farbe=G)
+t.text(217, 192, "&#8722; ADP, &#8722; H&#8314;", size=10, anchor="middle", farbe=G)
 
-cp = mech.Molekuel("OC(=O)OP(=O)([O-])[O-]", 356, 170, zeige={1: "links"},
+cp = mech.Molekuel("[O-]C(=O)OP(=O)([O-])[O-]", 356, 170, zeige={1: "links"},
                    name="Carboxyphosphat")
 t.mole.append(cp)
-t.unterschrift(cp, "Carboxyphosphat — ein gemischtes Anhydrid", abstand=28, farbe=G)
+t.unterschrift(cp, "Carboxyphosphat, ein gemischtes Anhydrid", abstand=28, farbe=G)
 
 t.reaktionspfeil(468, 170, 542)
 t.text(505, 158, "&#8722; P&#7522;", size=10.5, anchor="middle", gewicht=700, farbe=G)
@@ -55,83 +64,107 @@ co2 = mech.Molekuel("O=C=O", 604, 170, zeige={0: "oben"}, name="Kohlendioxid")
 t.mole.append(co2)
 t.unterschrift(co2, "CO&#8322;", abstand=24, farbe=G)
 
-t.kasten(690, 104, 290, 116, fill="var(--cofaktor-bg)", stroke=C)
+t.kasten(690, 104, 290, 186, fill="var(--cofaktor-bg)", stroke=C)
 t.text(708, 126, "DIE BILANZ", size=11, gewicht=700, farbe=C)
 t.text(708, 148, "Ein ATP wird zu ADP und Phosphat", size=12.5)
-t.text(708, 167, "gespalten — und zwar hier, nicht bei", size=12.5)
+t.text(708, 167, "gespalten, und zwar hier, nicht bei", size=12.5)
 t.text(708, 186, "der eigentlichen Carboxylierung.", size=12.5)
 t.text(708, 209, "Der teure Schritt ist die Aktivierung.", size=12, farbe=G)
+t.text(708, 234, "Das freigesetzte Phosphat bleibt im", size=12, farbe=G)
+t.text(708, 253, "Zentrum und wird gleich als Base", size=12, farbe=G)
+t.text(708, 272, "gebraucht.", size=12, farbe=G)
 
 # ===================================================== ZONE B · Carboxylierung
-t.zone(288, "B · DAS BIOTIN NIMMT DAS CO&#8322; AUF")
-t.text(20, 318, "Von den beiden Stickstoffatomen des Ureidorings ist nur einer nucleophil genug: "
-                "N1&#8242;, der dem Schwefelring benachbarte.", size=12.5)
+t.zone(300, "B · DAS BIOTIN NIMMT DAS CO&#8322; AUF")
+t.text(20, 330, "Carboxyliert wird N1&#8242;: der Ureidostickstoff am Ringfusionskohlenstoff "
+                "C6a&#8242;, also der von der Valeriansäurekette abgewandte. Als Amid-Stickstoff", size=12.5)
+t.text(20, 349, "ist er von sich aus kein Nucleophil. Erst wenn das Phosphat aus Zone A ihm sein "
+                "Proton abnimmt, greift er das Kohlendioxid an.", size=12.5)
 
-bio = mech.Molekuel(BIOTIN, 190, 452, labels={7: KETTE}, zeige={9: "rechts"}, name="Biotin")
+bio = mech.Molekuel(BIOTIN, 190, 486, labels={7: KETTE},
+                    zeige={2: "oben", 7: "links"}, wasserstoff=[2], name="Biotin")
 t.mole.append(bio)
-# Welcher der beiden Ureido-Stickstoffe gemeint ist, zeigt das freie
-# Elektronenpaar - eine Positionsnummer daneben behauptet mehr, als das
-# Bild hergibt.
-lp_n = t.elektronenpaar(bio, 9, 340)
+hn = bio.h_index[2]
 
-co2b = mech.Molekuel("O=C=O", 428, 400, zeige={0: "oben"}, name="Kohlendioxid")
+# Das Phosphat steht ueber dem N-H, damit sein Pfeil von oben hereinkommt und
+# der Pfeil aus der N-H-Bindung nach rechts unten abziehen kann.
+pi = t.paar(150, 402, 250, "Phosphat")
+t.text(150, 386, "P&#7522;", size=12.5, anchor="middle", gewicht=700, farbe=C)
+t.text(150, 370, "das Phosphat aus Zone A", size=10, anchor="middle", farbe=G)
+
+co2b = mech.Molekuel("O=C=O", 440, 440, zeige={0: "oben"}, name="Kohlendioxid")
 t.mole.append(co2b)
-t.pfeil(lp_n, (co2b, 1), bogen=0.24, seite=-1, farbe=W)
-t.pfeil((co2b, 1, 2), co2b.abseits(2, 1), bogen=0.42, seite=1, farbe=W)
-t.unterschrift(bio, "Biotin — über (CH&#8322;)&#8324;&#8211;CO an ein Lysin gebunden;",
-               "nur der markierte Stickstoff ist nucleophil genug", abstand=30)
-t.unterschrift(co2b, "CO&#8322;", abstand=24, farbe=G)
+t.text(474, 445, "CO&#8322;", size=10.5, farbe=G)
 
-t.reaktionspfeil(500, 452, 574)
+t.pfeil(pi, (bio, hn), bogen=0.30, seite=-1, farbe=W)
+t.pfeil((bio, 2, hn), (co2b, 1), bogen=0.18, seite=1, farbe=W)
+t.pfeil((co2b, 0, 1), co2b.abseits(0, 1, abstand=18), bogen=0.42, seite=1, farbe=W)
+t.unterschrift(bio, "Biotin, über (CH&#8322;)&#8324;&#8722;CO an ein Lysin gebunden;",
+               "das Elektronenpaar der N&#8722;H-Bindung wird zur neuen N&#8722;C-Bindung", abstand=30)
 
-cbio = mech.Molekuel(CARBOXY, 736, 452, labels={11: KETTE}, zeige={3: "links"},
-                     name="Carboxybiotin")
+t.reaktionspfeil(560, 486, 634)
+
+cbio = mech.Molekuel(CARBOXY, 790, 486, labels={10: KETTE},
+                     zeige={10: "links", 3: "rechts"}, name="Carboxybiotin")
 t.mole.append(cbio)
-t.unterschrift(cbio, "Carboxybiotin — das CO&#8322; ist jetzt gebunden",
+t.unterschrift(cbio, "Carboxybiotin: das CO&#8322; ist jetzt gebunden",
                "und wird nicht mehr in die Lösung entlassen", abstand=30)
 
 # ===================================================== ZONE C · Uebertragung
-t.zone(596, "C · UND GIBT ES AM ZWEITEN ZENTRUM WIEDER AB")
-t.text(20, 626, "Dort wartet das Substrat, vom Enzym als Enolat deprotoniert. Es greift den "
+t.zone(614, "C · UND GIBT ES AM ZWEITEN ZENTRUM WIEDER AB")
+t.text(20, 644, "Dort zerfällt das Carboxybiotin, und das dabei frei werdende Biotin-Anion ist "
+                "selbst die Base: es nimmt dem Acetyl-CoA das α-Proton ab. Deshalb laufen", size=12.5)
+t.text(20, 663, "Deprotonierung und Carboxylierung praktisch gleichzeitig ab. Das Enolat greift den "
                 "Carboxylkohlenstoff an, und die N&#8722;C-Bindung bricht.", size=12.5)
 
-cbio2 = mech.Molekuel(CARBOXY, 190, 764, labels={11: KETTE}, zeige={3: "rechts"},
-                      name="Carboxybiotin")
+cbio2 = mech.Molekuel(CARBOXY, 190, 762, labels={10: KETTE},
+                      zeige={10: "links", 3: "rechts"}, name="Carboxybiotin")
 t.mole.append(cbio2)
-t.pfeil((cbio2, 1, 3), cbio2.abseits(3, 1, abstand=22), bogen=0.42, seite=1, farbe=W)
-t.unterschrift(cbio2, "die N&#8722;C-Bindung bricht,", "das Biotin wird frei", abstand=30)
+# Der Stickstoff sitzt im Ring: das frei werdende Paar hat nur nach aussen
+# unten Platz. Bezugspunkt ist der Harnstoff-Kohlenstoff, damit der Pfeilkopf
+# nicht in den Ring hinein zeigt.
+t.pfeil((cbio2, 2, 3), cbio2.abseits(2, 1, abstand=26), bogen=0.34, seite=1, farbe=W)
+t.unterschrift(cbio2, "die N&#8722;C-Bindung bricht, das Biotin-Anion",
+               "wird frei und wirkt als Base", abstand=30)
 
-enol = mech.Molekuel("[CH2-]C(=O)*", 470, 712, labels={3: "SCoA"}, zeige={0: "links"},
+# Der Carboxylkohlenstoff ist trigonal: seine drei Nachbarn stehen 120 Grad
+# auseinander. Das Enolat steht deshalb rechts unterhalb, in der Luecke
+# zwischen den beiden Sauerstoffen; von schraeg oben kaeme der Pfeilkopf auf
+# dem Carboxylat-Sauerstoff zu liegen.
+enol = mech.Molekuel("[CH2-]C(=O)*", 494, 848, labels={3: "SCoA"}, zeige={0: "links"},
                      name="Acetyl-CoA-Enolat")
 t.mole.append(enol)
-lp_e = t.elektronenpaar(enol, 0, 200)
-t.pfeil(lp_e, (cbio2, 1), bogen=0.26, seite=1, farbe=W)
-t.unterschrift(enol, "Acetyl-CoA, als Enolat deprotoniert", abstand=28)
+lp_e = t.elektronenpaar(enol, 0, 190)
+t.pfeil(lp_e, (cbio2, 3), bogen=0.16, seite=1, farbe=W)
+# Wer die Base ist, steht im Zonentext: das Biotin-Anion aus dem Bild links.
+# Eine laengere Beschriftung an dieser Stelle kreuzt den Angriffspfeil.
+t.ueberschrift(enol, "Acetyl-CoA, als Enolat deprotoniert", abstand=26, size=10.5,
+               farbe=G, gewicht=None)
 
-t.reaktionspfeil(560, 764, 634)
+t.reaktionspfeil(620, 762, 694)
 
-mal = mech.Molekuel("[O-]C(=O)CC(=O)*", 780, 764, labels={6: "SCoA"}, zeige={0: "links"},
+mal = mech.Molekuel("[O-]C(=O)CC(=O)*", 830, 762, labels={6: "SCoA"}, zeige={0: "links"},
                     name="Malonyl-CoA")
 t.mole.append(mal)
-t.unterschrift(mal, "Malonyl-CoA — der schrittbestimmende",
-               "Baustein der Fettsäuresynthese", abstand=30)
+t.unterschrift(mal, "Malonyl-CoA: der Baustein, an dem",
+               "die Fettsäuresynthese hängt", abstand=30)
 
 # ===================================================== ZONE D · Arm und Enzyme
-t.zone(880, "D · DER SCHWENKARM UND DIE VIER HUMANEN CARBOXYLASEN")
+t.zone(898, "D · DER SCHWENKARM UND DIE VIER HUMANEN CARBOXYLASEN")
 
-t.kasten(20, 912, 470, 118, fill="var(--surface-2)")
-t.text(38, 934, "WARUM ZWEI ZENTREN UND EIN ARM", size=11, gewicht=700, farbe=G)
-t.text(38, 956, "Beide Halbreaktionen laufen an verschiedenen Stellen des", size=12.5)
-t.text(38, 975, "Enzyms. Biotin und Lysin bilden zusammen einen etwa", size=12.5)
-t.text(38, 994, "16 Å langen Arm, der das gebundene CO&#8322; von einem", size=12.5)
-t.text(38, 1013, "Zentrum zum anderen trägt, ohne es freizusetzen.", size=12.5)
+t.kasten(20, 930, 470, 118, fill="var(--surface-2)")
+t.text(38, 952, "WARUM ZWEI ZENTREN UND EIN ARM", size=11, gewicht=700, farbe=G)
+t.text(38, 974, "Beide Halbreaktionen laufen an verschiedenen Stellen des", size=12.5)
+t.text(38, 993, "Enzyms. Biotin und Lysin bilden zusammen einen etwa", size=12.5)
+t.text(38, 1012, "16 Å langen Arm, der das gebundene CO&#8322; von einem", size=12.5)
+t.text(38, 1031, "Zentrum zum anderen trägt, ohne es freizusetzen.", size=12.5)
 
-t.kasten(510, 912, 470, 118, fill="var(--cofaktor-bg)", stroke=C)
-t.text(528, 934, "DASSELBE PRINZIP AN ZWEI WEITEREN STELLEN", size=11, gewicht=700, farbe=C)
-t.text(528, 956, "Das Liponamid im Pyruvat-Dehydrogenase-Komplex und", size=12.5)
-t.text(528, 975, "das Phosphopantethein der Fettsäure-Synthase arbeiten", size=12.5)
-t.text(528, 994, "genauso: ein reaktives Zwischenprodukt bleibt kovalent", size=12.5)
-t.text(528, 1013, "gebunden und wandert zwischen den Zentren.", size=12.5)
+t.kasten(510, 930, 470, 118, fill="var(--cofaktor-bg)", stroke=C)
+t.text(528, 952, "DASSELBE PRINZIP AN ZWEI WEITEREN STELLEN", size=11, gewicht=700, farbe=C)
+t.text(528, 974, "Das Liponamid im Pyruvat-Dehydrogenase-Komplex und", size=12.5)
+t.text(528, 993, "das Phosphopantethein der Fettsäure-Synthase arbeiten", size=12.5)
+t.text(528, 1012, "genauso: ein reaktives Zwischenprodukt bleibt kovalent", size=12.5)
+t.text(528, 1031, "gebunden und wandert zwischen den Zentren.", size=12.5)
 
 CARBOXYLASEN = [
     (20, "Pyruvat-Carboxylase", "Pyruvat → Oxalacetat",
@@ -144,37 +177,41 @@ CARBOXYLASEN = [
      "der Marker im Neugeborenenscreening"),
 ]
 for x, name, r1, r2 in CARBOXYLASEN:
-    t.text(x, 1074, name, size=11.5, gewicht=700, farbe=E)
-    t.text(x, 1094, r1, size=11)
-    t.text(x, 1112, r2, size=11, farbe=G)
+    t.text(x, 1092, name, size=11.5, gewicht=700, farbe=E)
+    t.text(x, 1112, r1, size=11)
+    t.text(x, 1130, r2, size=11, farbe=G)
 
-t.kasten(20, 1140, 960, 96, fill="var(--warn-bg)", stroke=W)
-t.text(38, 1162, "WORAN ES IN DER PRAXIS SCHEITERT", size=11, gewicht=700, farbe=W)
-t.text(38, 1184, "Ein alimentärer Biotinmangel ist selten, weil Darmbakterien Biotin bilden. "
+t.kasten(20, 1158, 960, 96, fill="var(--warn-bg)", stroke=W)
+t.text(38, 1180, "WORAN ES IN DER PRAXIS SCHEITERT", size=11, gewicht=700, farbe=W)
+t.text(38, 1202, "Ein alimentärer Biotinmangel ist selten, weil Darmbakterien Biotin bilden. "
                  "Klinisch zählen drei Sonderfälle: der Biotinidase-Mangel, bei dem Biotin", size=12.5)
-t.text(38, 1203, "nicht aus dem Biocytin zurückgewonnen wird; große Mengen rohen Eiklars, dessen "
+t.text(38, 1221, "nicht aus dem Biocytin zurückgewonnen wird; große Mengen rohen Eiklars, dessen "
                  "Avidin das Biotin praktisch irreversibel bindet; und die", size=12.5)
-t.text(38, 1222, "Langzeittherapie mit Antikonvulsiva.", size=12.5)
+t.text(38, 1240, "Langzeittherapie mit Antikonvulsiva.", size=12.5)
 
-t.kasten(20, 1264, 960, 76, fill="var(--drug-bg)", stroke=R)
-t.text(38, 1286, "EINE LABORFALLE, DIE IM EXAMEN GERN GEFRAGT WIRD", size=11, gewicht=700, farbe=R)
-t.text(38, 1308, "Hochdosiertes Biotin als Nahrungsergänzung verfälscht Immunoassays, die auf der "
-                 "Biotin-Streptavidin-Bindung beruhen — je nach Testaufbau", size=12.5)
-t.text(38, 1327, "fallen TSH, Troponin oder die Schilddrüsenhormone falsch aus. Vor der Blutabnahme "
+t.kasten(20, 1282, 960, 76, fill="var(--drug-bg)", stroke=R)
+t.text(38, 1304, "EINE LABORFALLE, DIE IM EXAMEN GERN GEFRAGT WIRD", size=11, gewicht=700, farbe=R)
+t.text(38, 1326, "Hochdosiertes Biotin als Nahrungsergänzung verfälscht Immunoassays, die auf der "
+                 "Biotin-Streptavidin-Bindung beruhen. Je nach Testaufbau", size=12.5)
+t.text(38, 1345, "fallen TSH, Troponin oder die Schilddrüsenhormone falsch aus. Vor der Blutabnahme "
                  "muss Biotin deshalb abgesetzt werden.", size=12.5)
 
 # ===================================================== Ausgabe
 ARIA = (
     "Biotin in vier Zonen. Zone A zeigt, warum eine Carboxylierung ATP kostet: Hydrogencarbonat "
     "wird mit ATP zum gemischten Anhydrid Carboxyphosphat, das in Kohlendioxid und Phosphat "
-    "zerfaellt. Zone B zeigt die Carboxylierung des Biotins: Das freie Elektronenpaar des "
-    "Stickstoffs N1-Strich greift mit einem Elektronenpaarpfeil den Kohlenstoff des "
-    "Kohlendioxids an, eine der beiden Doppelbindungen weicht auf den Sauerstoff aus, es "
-    "entsteht Carboxybiotin. Zone C zeigt die Uebertragung am zweiten aktiven Zentrum: Das als "
-    "Enolat deprotonierte Acetyl-CoA greift den Carboxylkohlenstoff an, die "
-    "Stickstoff-Kohlenstoff-Bindung bricht, und es entsteht Malonyl-CoA. Zone D erklaert den "
-    "sechzehn Angstroem langen Schwenkarm aus Biotin und Lysin, nennt die vier humanen "
-    "Carboxylasen und die klinischen Sonderfaelle."
+    "zerfaellt. Zone B zeigt die Carboxylierung des Biotins am Ureidostickstoff N1-Strich, dem "
+    "Stickstoff am Ringfusionskohlenstoff C6a-Strich, der von der Valeriansaeurekette abgewandt "
+    "ist. Der Bicyclus traegt die Konfiguration des natuerlichen d-Biotins: alle drei Ringprotonen "
+    "stehen cis auf derselben Seite. Drei Elektronenpaarpfeile: "
+    "Das Phosphat aus Zone A nimmt dem Stickstoff sein Proton ab, "
+    "das Elektronenpaar der Stickstoff-Wasserstoff-Bindung greift den Kohlenstoff des "
+    "Kohlendioxids an, und eine der beiden Doppelbindungen weicht auf den Sauerstoff aus. Es "
+    "entsteht Carboxybiotin als Carbamat-Anion. Zone C zeigt die Uebertragung am zweiten aktiven "
+    "Zentrum: Das als Enolat deprotonierte Acetyl-CoA greift den Carboxylkohlenstoff an, die "
+    "Stickstoff-Kohlenstoff-Bindung bricht, das frei werdende Biotin-Anion ist dabei selbst die "
+    "Base, und es entsteht Malonyl-CoA. Zone D erklaert den sechzehn Angstroem langen Schwenkarm "
+    "aus Biotin und Lysin, nennt die vier humanen Carboxylasen und die klinischen Sonderfaelle."
 )
 
 fehler, bericht = t.pruefe()

@@ -21,7 +21,7 @@ import math
 import re
 
 from rdkit import Chem
-from rdkit.Chem import rdDepictor, rdCIPLabeler
+from rdkit.Chem import rdDepictor, rdCIPLabeler, rdFMCS
 from rdkit.Chem.Draw import rdMolDraw2D
 
 rdDepictor.SetPreferCoordGen(True)
@@ -89,6 +89,18 @@ def _ellipse(ux, uy, rx, ry):
     return 1.0 / math.sqrt((ux / rx) ** 2 + (uy / ry) ** 2)
 
 
+def _gemeinsames_muster(mol, ref):
+    """Groesste gemeinsame Teilstruktur zweier Molekuele als SMARTS-Molekuel."""
+    res = rdFMCS.FindMCS([Chem.Mol(mol), Chem.Mol(ref)],
+                         atomCompare=rdFMCS.AtomCompare.CompareElements,
+                         bondCompare=rdFMCS.BondCompare.CompareAny,
+                         ringMatchesRingOnly=True, completeRingsOnly=False,
+                         matchValences=False, timeout=20)
+    if res.canceled or res.numAtoms < 3:
+        return None
+    return Chem.MolFromSmarts(res.smartsString)
+
+
 class Molekuel(object):
     """Ein von RDKit gezeichnetes Molekuel an fester Position in der Tafel."""
 
@@ -96,10 +108,20 @@ class Molekuel(object):
     RICHTUNG = {"rechts": 0.0, "unten": 90.0, "links": 180.0, "oben": 270.0}
 
     def __init__(self, smiles, x, y, labels=None, rotate=0.0, stereo=False,
-                 bindung=BINDUNG, name=None, zeige=None, wasserstoff=()):
+                 bindung=BINDUNG, name=None, zeige=None, wasserstoff=(),
+                 vorlage=None, muster=None):
         """zeige={atom_idx: 'links'|'rechts'|'oben'|'unten'} dreht die Darstellung so,
         dass dieses Atom in die genannte Richtung weist - damit Pfeile zwischen zwei
-        Molekuelen kurze Wege haben, statt quer ueber die Struktur zu laufen."""
+        Molekuelen kurze Wege haben, statt quer ueber die Struktur zu laufen.
+
+        vorlage=<Molekuel> legt die Struktur auf die Lage eines frueher gebauten
+        Molekuels. Ohne das bekommt jede Zwischenstufe ihr eigenes Compute2DCoords,
+        und zwei aufeinanderfolgende Stufen stehen gedreht oder gespiegelt
+        nebeneinander; der Leser muss dann jedes Bild neu einnorden, statt den
+        Unterschied zu sehen. zeige= dreht nur, es spiegelt nicht, und kann das
+        deshalb nicht leisten.
+        muster=SMARTS bestimmt, welcher Teil festgehalten wird; ohne Angabe sucht
+        der Builder die groesste gemeinsame Teilstruktur beider Molekuele."""
         self.name = name or smiles
         mol = Chem.MolFromSmiles(smiles)
         if mol is None:
@@ -145,8 +167,27 @@ class Molekuel(object):
                         "atomLabel %r enthaelt eine HTML-Entitaet. In Atomlabeln muss "
                         "echter Unicode stehen (z. B. CH₂ statt CH&#8322;)." % txt)
                 mol.GetAtomWithIdx(int(idx)).SetProp("atomLabel", txt)
-        rdDepictor.Compute2DCoords(mol)
-        rdDepictor.StraightenDepiction(mol)
+        self.gelegt = False
+        if vorlage is not None:
+            ref = vorlage.mol if isinstance(vorlage, Molekuel) else vorlage
+            if isinstance(ref, str):
+                ref = Chem.MolFromSmiles(ref)
+                if ref is None:
+                    raise ValueError("Vorlage nicht parsebar: %s" % vorlage)
+                rdDepictor.Compute2DCoords(ref)
+                rdDepictor.StraightenDepiction(ref)
+            patt = Chem.MolFromSmarts(muster) if muster else _gemeinsames_muster(mol, ref)
+            if patt is None:
+                raise ValueError("%s: keine gemeinsame Teilstruktur mit der Vorlage"
+                                 % (name or smiles))
+            if not mol.GetSubstructMatch(patt) or not ref.GetSubstructMatch(patt):
+                raise ValueError("%s: Muster trifft nicht" % (name or smiles))
+            rdDepictor.GenerateDepictionMatching2DStructure(
+                mol, ref, refPatt=patt, acceptFailure=False)
+            self.gelegt = True
+        else:
+            rdDepictor.Compute2DCoords(mol)
+            rdDepictor.StraightenDepiction(mol)
         self.mol = mol
 
         self.stereo = stereo and len(
@@ -155,7 +196,26 @@ class Molekuel(object):
         self.bindung_px = bindung
 
         if zeige:
+            if self.gelegt:
+                raise ValueError("%s: vorlage= und zeige= schliessen einander aus. "
+                                 "Die Vorlage bestimmt die Lage bereits."
+                                 % (name or smiles))
             rotate = self._drehwinkel(zeige)
+        if self.gelegt:
+            rotate = 0.0
+        if rotate:
+            # Die Drehung in den Konformer schreiben statt sie nur dem Zeichner
+            # mitzugeben. Sonst zeigt mol eine andere Lage als das Bild, und ein
+            # spaeteres Molekuel mit vorlage=dieses richtet sich an der ungedrehten
+            # Fassung aus. Das Vorzeichen ist gemessen: o.rotate=+g entspricht einer
+            # Konformerdrehung um -g (die Bildachse zeigt nach unten).
+            w = math.radians(-rotate)
+            k = self.mol.GetConformer()
+            for i in range(self.mol.GetNumAtoms()):
+                p = k.GetAtomPosition(i)
+                k.SetAtomPosition(i, (p.x * math.cos(w) - p.y * math.sin(w),
+                                      p.x * math.sin(w) + p.y * math.cos(w), 0.0))
+            rotate = 0.0
         d = self._zeichner(rotate)
         roh = [(d.GetDrawCoords(i).x, d.GetDrawCoords(i).y)
                for i in range(mol.GetNumAtoms())]

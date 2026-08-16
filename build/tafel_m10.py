@@ -33,7 +33,7 @@ t.text(120, 224, "Fe(II) im aktiven Zentrum", size=11, anchor="middle", gewicht=
 
 bh4 = mech.Molekuel("CC(O)C(O)C1CNC2=C(N1)C(=O)NC(N)=N2", 380, 168, name="BH4")
 t.mole.append(bh4)
-t.unterschrift(bh4, "Tetrahydrobiopterin — als Arzneistoff Sapropterin", abstand=30)
+t.unterschrift(bh4, "Tetrahydrobiopterin (als Arzneistoff Sapropterin)", abstand=30)
 
 t.reaktionspfeil(520, 168, 594)
 t.text(557, 156, "+ O&#8322;", size=10.5, anchor="middle", gewicht=700, farbe=C)
@@ -42,7 +42,7 @@ t.text(557, 204, "zwischen Pterin und Eisen", size=10, anchor="middle", farbe=G)
 
 zfeo = t.zentrum(680, 168, "Fe(IV)", axial=["O"], doppelt=True, unten="His", schritt=46,
                  name="Ferryl")
-t.text(680, 224, "Fe(IV)=O — dasselbe Oxidans", size=11, anchor="middle", gewicht=700, farbe=W)
+t.text(680, 224, "Fe(IV)=O: dasselbe Oxidans", size=11, anchor="middle", gewicht=700, farbe=W)
 t.text(680, 240, "wie Compound I, nur ohne Porphyrin", size=10.5, anchor="middle", farbe=G)
 
 t.kasten(790, 96, 190, 132, fill="var(--surface-2)")
@@ -54,7 +54,7 @@ t.text(808, 196, "an drei Stellen fest. Die", size=12)
 t.text(808, 215, "drei übrigen bleiben frei.", size=12)
 
 # ===================================================== ZONE B · NIH-Shift
-t.zone(300, "B · DER NIH-SHIFT — DAS WASSERSTOFFATOM WIRD GESCHOBEN, NICHT ENTFERNT")
+t.zone(300, "B · DER NIH-SHIFT: DAS WASSERSTOFFATOM WIRD GESCHOBEN, NICHT ENTFERNT")
 t.text(20, 330, "Das Ferryl greift den aromatischen Ring elektrophil an. Dabei entsteht ein "
                 "kationisches σ-Addukt, in dem die Aromatizität kurz aufgehoben ist.", size=12.5)
 
@@ -62,20 +62,25 @@ arom = mech.Molekuel("*c1ccccc1", 130, 452, labels={0: "R"}, wasserstoff=[4],
                      zeige={0: "links"}, name="Aromat")
 t.mole.append(arom)
 ha = arom.h_index[4]
-t.unterschrift(arom, "der Aromat — das markierte H sitzt dort,", "wo die OH-Gruppe eintreten wird",
+t.unterschrift(arom, "der Aromat: das markierte H sitzt dort,", "wo die OH-Gruppe eintreten wird",
                abstand=30)
 
 t.reaktionspfeil(228, 452, 306)
 t.text(267, 440, "Fe(IV)=O", size=10.5, anchor="middle", gewicht=700, farbe=W)
 t.text(267, 476, "greift an", size=10, anchor="middle", farbe=G)
 
-sigma = mech.Molekuel("OC1C=C[C+](*)C=C1", 420, 452, labels={5: "R"}, wasserstoff=[1],
-                      zeige={5: "rechts"}, name="σ-Addukt")
+# Die Grenzstruktur mit dem Kation direkt neben dem sp3-Zentrum ist die einzige, an
+# der sich der Hydridpfeil lesen laesst: das H wandert an ein Kation, nicht an einen
+# neutralen Kohlenstoff. Stuende das Kation in para-Stellung, wuerde das Zielatom des
+# Pfeils fuenfbindig.
+sigma = mech.Molekuel("OC1[CH+]C=C(*)C=C1", 420, 452, labels={5: "R"}, wasserstoff=[1],
+                      zeige={1: "links", 5: "rechts"}, name="σ-Addukt")
 t.mole.append(sigma)
 hs = sigma.h_index[1]
-t.pfeil((sigma, 1, hs), sigma.aussen(2, abstand=28), bogen=0.38, seite=1, farbe=W)
-t.unterschrift(sigma, "das kationische σ-Addukt — hier wandert das H",
-               "an den Nachbarkohlenstoff, statt abzugehen", abstand=30, farbe=W, gewicht=700)
+t.pfeil((sigma, 1, hs), (sigma, 2), bogen=1.25, seite=-1, farbe=W)
+t.unterschrift(sigma, "das kationische σ-Addukt: das H wandert an den",
+               "benachbarten Kationenkohlenstoff, statt abzugehen", abstand=30, farbe=W,
+               gewicht=700)
 
 t.reaktionspfeil(534, 452, 612)
 t.text(573, 440, "Tautomerie", size=10.5, anchor="middle", gewicht=700, farbe=G)
@@ -83,7 +88,7 @@ t.text(573, 440, "Tautomerie", size=10.5, anchor="middle", gewicht=700, farbe=G)
 phen = mech.Molekuel("Oc1ccc(*)cc1", 720, 452, labels={5: "R"}, zeige={5: "rechts"},
                      name="Phenol")
 t.mole.append(phen)
-t.unterschrift(phen, "das Phenol — Aromatizität wiederhergestellt", abstand=30)
+t.unterschrift(phen, "das Phenol, Aromatizität wiederhergestellt", abstand=30)
 
 t.kasten(820, 386, 160, 152, fill="var(--warn-bg)", stroke=W)
 t.text(838, 408, "DER BEWEIS", size=11, gewicht=700, farbe=W)
@@ -102,25 +107,32 @@ t.zone(596, "C · DER COFAKTOR MUSS ZURÜCKGEFÜHRT WERDEN")
 t.text(20, 626, "Anders als das Häm bleibt das Pterin nicht unverändert: Es wird bei jedem Umsatz "
                 "oxidiert und braucht zwei Enzyme, um wieder BH&#8324; zu werden.", size=12.5)
 
-bh4b = mech.Molekuel("CC(O)C(O)C1CNC2=C(N1)C(=O)NC(N)=N2", 150, 750, name="4a-Hydroxy-BH4")
+# Die drei Pterine der Zone unterscheiden sich wirklich, sonst waere der Zyklus
+# stofflich leer: C9H15N5O4 (Carbinolamin, ein O mehr), C9H13N5O3 (q-BH2, zwei H
+# weniger), C9H15N5O3 (BH4).
+bh4b = mech.Molekuel("CC(O)C(O)C1CN=C2N=C(N)NC(=O)C2(O)N1", 150, 750,
+                     name="4a-Hydroxy-BH4")
 t.mole.append(bh4b)
-t.unterschrift(bh4b, "4a-Hydroxy-BH&#8324;", abstand=30, farbe=G)
+t.unterschrift(bh4b, "4a-Hydroxy-BH&#8324;, das Carbinolamin:",
+               "OH am sp&#179;-C4a, ein O mehr als BH&#8324;", abstand=30, farbe=G)
 
 t.reaktionspfeil(290, 750, 364)
 t.text(327, 738, "PCD", size=11, anchor="middle", gewicht=700, farbe=E, mono=True)
 t.text(327, 772, "&#8722; H&#8322;O", size=10, anchor="middle", farbe=G)
 
-qbh2 = mech.Molekuel("CC(O)C(O)C1CN=C2C(=O)NC(N)=NC2N1", 500, 750, name="q-BH2")
+qbh2 = mech.Molekuel("CC(O)C(O)C1CN=C2N=C(N)NC(=O)C2=N1", 500, 750, name="q-BH2")
 t.mole.append(qbh2)
-t.unterschrift(qbh2, "q-Dihydrobiopterin", abstand=30, farbe=G)
+t.unterschrift(qbh2, "q-Dihydrobiopterin: chinoid, mit C4a=N5", "und zwei H weniger als BH&#8324;",
+               abstand=30, farbe=G)
 
 t.reaktionspfeil(640, 750, 714)
 t.text(677, 738, "DHPR", size=11, anchor="middle", gewicht=700, farbe=E, mono=True)
-t.text(677, 772, "+ NADH", size=10, anchor="middle", gewicht=700, farbe=C)
+t.text(677, 772, "+ NADH + H&#8314;", size=10, anchor="middle", gewicht=700, farbe=C)
+t.text(677, 786, "&#8722; NAD&#8314;", size=10, anchor="middle", farbe=G)
 
 bh4c = mech.Molekuel("CC(O)C(O)C1CNC2=C(N1)C(=O)NC(N)=N2", 850, 750, name="BH4 zurueck")
 t.mole.append(bh4c)
-t.unterschrift(bh4c, "BH&#8324; — wieder einsatzbereit", abstand=30, farbe=E)
+t.unterschrift(bh4c, "BH&#8324;, wieder einsatzbereit", abstand=30, farbe=E)
 
 # ===================================================== ZONE D · Klinik
 t.zone(880, "D · WARUM NICHT JEDE HYPERPHENYLALANINÄMIE EINE PKU IST")
@@ -139,14 +151,14 @@ t.text(528, 956, "Etwa 2 %. Betroffen ist entweder die Neusynthese des", size=12
 t.text(528, 975, "BH&#8324; oder seine Regeneration über die DHPR.", size=12.5)
 t.text(528, 998, "Weil BH&#8324; auch die Tyrosin- und die", size=12.5)
 t.text(528, 1017, "Tryptophanhydroxylase versorgt, fallen zusätzlich", size=12.5)
-t.text(528, 1036, "Catecholamine und Serotonin aus — die Diät genügt nicht.", size=12.5)
+t.text(528, 1036, "Catecholamine und Serotonin aus. Die Diät genügt nicht.", size=12.5)
 
 t.kasten(20, 1080, 960, 96, fill="var(--drug-bg)", stroke=R)
 t.text(38, 1102, "WAS DARAUS FÜR DIE PRÜFUNG FOLGT", size=11, gewicht=700, farbe=R)
 t.text(38, 1124, "BH&#8324; ist Cofaktor von vier Enzymen: Phenylalanin-, Tyrosin- und "
                  "Tryptophanhydroxylase sowie der NO-Synthase (Tafel M-14). Ein", size=12.5)
 t.text(38, 1143, "Cofaktordefekt trifft deshalb den Aromatenstoffwechsel und die "
-                 "Gefäßregulation zugleich — ein Enzymdefekt nur einen Weg.", size=12.5)
+                 "Gefäßregulation zugleich. Ein Enzymdefekt trifft nur einen Weg.", size=12.5)
 
 t.text(20, 1216, "Bei der NO-Synthase hat BH&#8324; übrigens eine andere Rolle: Dort liefert es "
                  "ein Elektron und wird sofort zurückreduziert, statt Sauerstoff zu tragen.",
@@ -160,9 +172,12 @@ ARIA = (
     "Ferryl-Ion Eisen vier gleich Sauerstoff. Zone B zeigt den NIH-Shift an gezeichneten "
     "Strukturen: Der Aromat mit einem eigens gezeichneten Wasserstoffatom, das kationische "
     "Sigma-Addukt, in dem ein Elektronenpaarpfeil das Wasserstoffatom an den "
-    "Nachbarkohlenstoff schiebt, und schliesslich das Phenol mit wiederhergestellter "
-    "Aromatizitaet. Zone C zeigt die Regeneration des Cofaktors ueber Pterin-4a-Carbinolamin-"
-    "Dehydratase und Dihydropteridin-Reduktase. Zone D unterscheidet die haeufige "
+    "benachbarten Kationenkohlenstoff schiebt, und schliesslich das Phenol mit "
+    "wiederhergestellter Aromatizitaet. Zone C zeigt die Regeneration des Cofaktors an drei "
+    "verschiedenen gezeichneten Pterinen: das 4a-Carbinolamin mit Hydroxylgruppe am "
+    "Kohlenstoff vier a, daraus durch die Pterin-4a-Carbinolamin-Dehydratase unter "
+    "Wasserabspaltung das chinoide Dihydrobiopterin, und daraus durch die "
+    "Dihydropteridin-Reduktase mit NADH wieder Tetrahydrobiopterin. Zone D unterscheidet die haeufige "
     "Phenylketonurie durch Enzymdefekt von der seltenen Form durch Cofaktordefekt."
 )
 

@@ -25,8 +25,8 @@ t = mech.Tafel(1000, 1390)
 
 # ===================================================== ZONE A · der Gegensatz
 t.zone(24, "A · DIESELBE BINDUNG, ZWEI ARTEN SIE ZU BRECHEN")
-t.text(20, 54, "Die C&#8722;Co-Bindung ist mit rund 30 kcal/mol ungewöhnlich schwach. Wohin ihre "
-               "beiden Elektronen gehen, entscheidet über den ganzen Reaktionstyp.", size=12.5)
+t.text(20, 54, "Die C&#8722;Co-Bindung ist schwach: beim Adenosylcobalamin rund 30 kcal/mol. Wohin "
+               "ihre beiden Elektronen gehen, entscheidet über den Reaktionstyp.", size=12.5)
 
 # ---- links: heterolytisch
 zh = t.zentrum(230, 158, "Co(III)", axial=["CH&#8323;"], unten="DMB", schritt=48,
@@ -40,7 +40,7 @@ t.text(230, 214, "heterolytisch", size=12.5, anchor="middle", gewicht=700, farbe
 t.reaktionspfeil(230, 228, 230, 270)
 
 zh2 = t.zentrum(230, 322, "Co(I)", axial=[], unten="DMB", name="Co(I)")
-t.text(230, 376, "Co(I) — eines der stärksten Nucleophile", size=11, anchor="middle",
+t.text(230, 376, "Co(I): eines der stärksten Nucleophile", size=11, anchor="middle",
        gewicht=700, farbe=E)
 t.text(230, 392, "der gesamten Biochemie", size=10.5, anchor="middle", farbe=G)
 t.text(230, 412, "die Methylgruppe geht als CH&#8323;&#8314; weiter", size=10.5,
@@ -61,7 +61,7 @@ t.text(730, 214, "homolytisch", size=12.5, anchor="middle", gewicht=700, farbe=R
 t.reaktionspfeil(730, 228, 730, 270)
 
 zr2 = t.zentrum(730, 322, "Co(II)", axial=[], unten="DMB", name="Co(II)")
-t.text(730, 376, "Co(II) — und daneben das freie", size=11, anchor="middle",
+t.text(730, 376, "Co(II), daneben das freie", size=11, anchor="middle",
        gewicht=700, farbe=R)
 t.text(730, 392, "5&#8242;-Desoxyadenosyl-Radikal", size=10.5, anchor="middle", farbe=G)
 t.text(730, 412, "das Enzym beschleunigt die Homolyse um 10&#185;&#178;", size=10.5,
@@ -70,20 +70,25 @@ t.text(730, 412, "das Enzym beschleunigt die Homolyse um 10&#185;&#178;", size=1
 t.linie(480, 96, 480, 420, farbe="currentColor", breite=1, strich="4 4", z=0)
 
 # ===================================================== ZONE B · Methylcobalamin
-t.zone(456, "B · DER HETEROLYTISCHE WEG — METHIONINSYNTHASE")
+t.zone(456, "B · DER HETEROLYTISCHE WEG: METHIONINSYNTHASE")
 t.text(20, 486, "Das Co(I) holt sich die Methylgruppe vom 5-Methyl-Tetrahydrofolat und gibt sie "
                 "an Homocystein weiter. Zweimal derselbe "
                 "S<tspan baseline-shift='sub' font-size='8.5'>N</tspan>2-Schritt am Methyl.",
        size=12.5)
+t.text(20, 505, "Damit das Tetrahydrofolat als neutrales Molekül abgehen kann, muss sein N5 vorher "
+                "protoniert werden.", size=12.5)
 
 zb1 = t.zentrum(96, 590, "Co(I)", axial=[], unten="DMB", name="Co(I)")
 lp_co = t.paar(96, 566, 270, "Cobalt(I)")
-mthf = mech.Molekuel("CN(*)*", 254, 574, labels={2: "C4a", 3: "C6"},
+mthf = mech.Molekuel("C[NH+](*)*", 254, 574, labels={2: "C4a", 3: "C6"},
                      zeige={0: "links"}, name="5-Methyl-THF")
 t.mole.append(mthf)
 t.pfeil(lp_co, (mthf, 0), bogen=0.24, seite=-1, farbe=W)
-t.pfeil((mthf, 0, 1), (mthf, 1), bogen=0.50, seite=1, farbe=W, mindestbogen=22)
-t.unterschrift(mthf, "5-Methyl-THF — nur der Stickstoff N5", "mit seinen zwei Nachbarn")
+# Das Bindungspaar geht auf den Stickstoff. Der Pfeil endet ueber dem N und nicht
+# auf ihm: die Beschriftung "NH+" ist breiter als der halbe Bindungsabstand, ein
+# Pfeil bis ins Zentrum entartete zur Schleife um das Symbol herum.
+t.pfeil((mthf, 0, 1), mthf.abseits(1, 3, abstand=32), bogen=0.34, seite=-1, farbe=W)
+t.unterschrift(mthf, "5-Methyl-THF: nur das protonierte N5", "mit seinen zwei Nachbarn")
 t.text(96, 646, "Co(I)", size=11, anchor="middle", gewicht=700, farbe=E)
 
 t.reaktionspfeil(362, 578, 424)
@@ -99,20 +104,25 @@ t.mole.append(hcy)
 lp_s = t.elektronenpaar(hcy, 0, 200)
 t.pfeil(lp_s, zb2.ax(0), bogen=0.24, seite=1, farbe=W)
 t.pfeil(zb2.axb(-1, 0), zb2.fe(winkel=203, abstand=46), bogen=0.45, seite=-1, farbe=W)
-t.unterschrift(hcy, "Homocystein — das Thiolat greift an")
+t.unterschrift(hcy, "Homocystein: das Thiolat greift an")
 
 t.reaktionspfeil(786, 578, 848)
 
 met = mech.Molekuel("CSCC[C@H]([NH3+])C(=O)[O-]", 896, 574, name="Methionin")
 t.mole.append(met)
-t.unterschrift(met, "Methionin — das Cobalt steht", "wieder als Co(I) bereit")
+t.unterschrift(met, "Methionin: das Cobalt steht", "wieder als Co(I) bereit")
 
 # ===================================================== ZONE C · Adenosylcobalamin
-t.zone(700, "C · DER HOMOLYTISCHE WEG — METHYLMALONYL-CoA-MUTASE")
+t.zone(700, "C · DER HOMOLYTISCHE WEG: METHYLMALONYL-CoA-MUTASE")
 t.text(20, 730, "Das Radikal holt sich ein Wasserstoffatom vom Substrat. Danach wandert die "
                 "Thioestergruppe an den Nachbarkohlenstoff, und das H kommt zurück.", size=12.5)
 
-mm = mech.Molekuel("CC(C(=O)[O-])C(=O)*", 176, 838, labels={7: "SCoA"},
+# Substrat der Mutase ist (2R)-Methylmalonyl-CoA; das (2S)-Epimer aus der
+# Propionyl-CoA-Carboxylase dreht erst die Epimerase um. [C@H] gibt genau diese
+# raeumliche Anordnung wieder. Achtung beim Nachrechnen: rdCIPLabeler meldet hier
+# "S", weil das Dummy-Atom * niedriger rangiert als das Schwefelatom des echten
+# SCoA-Restes und damit die Prioritaeten 1 und 2 vertauscht.
+mm = mech.Molekuel("C[C@H](C(=O)[O-])C(=O)*", 176, 838, labels={7: "SCoA"},
                    wasserstoff=[0], zeige={0: "oben"}, name="Methylmalonyl-CoA")
 t.mole.append(mm)
 h0 = mm.h_index[0]
@@ -120,18 +130,20 @@ ado = t.marke(176, 754, "Desoxyadenosyl-Radikal")
 t.text(176, 750, "Ado&#8226;", size=11, anchor="middle", gewicht=700, farbe=R)
 t.pfeil((mm, 0, h0), ado, bogen=0.24, seite=1, typ="fischhaken", farbe=R)
 t.pfeil((mm, 0, h0), mm.abseits(0, h0), bogen=0.45, seite=-1, typ="fischhaken", farbe=R)
-t.unterschrift(mm, "Methylmalonyl-CoA — abstrahiert wird", "ein H der Methylgruppe")
+t.unterschrift(mm, "(2R)-Methylmalonyl-CoA: abstrahiert", "wird ein H der Methylgruppe")
 
 t.reaktionspfeil(300, 842, 362)
 
 rad = mech.Molekuel("[CH2]C(C(=O)[O-])C(=O)*", 500, 838, labels={7: "SCoA"},
-                    zeige={0: "oben"}, name="Substratradikal")
+                    zeige={0: "oben", 7: "unten"}, name="Substratradikal")
 t.mole.append(rad)
-e_rad = t.einzelelektron(rad, 0, 300)
-t.pfeil(e_rad, rad.aussen(1, 5, abstand=22), bogen=0.34, seite=1, typ="fischhaken", farbe=R)
-t.pfeil(rad.aussen(1, 5, abstand=22), rad.aussen(1, abstand=24), bogen=0.42, seite=-1,
-        typ="fischhaken", farbe=R)
-t.unterschrift(rad, "die Thioestergruppe wandert 1,2 —", "das Radikal bleibt am Nachbarn zurück")
+# Den Radikalpunkt zeichnet RDKit selbst - das Atom ist im SMILES als [CH2] codiert.
+# Ein zusaetzliches t.einzelelektron ergaebe zwei Punkte an einem Atom.
+t.pfeil((rad, 0), (rad, 5), bogen=0.30, seite=1, typ="fischhaken", farbe=R)
+t.pfeil((rad, 1, 5), rad.abseits(1, 5, abstand=18), bogen=0.2, mindestbogen=8,
+        seite=1, typ="fischhaken", farbe=R)
+t.unterschrift(rad, "die Thioestergruppe wandert an das Radikalzentrum.",
+               "Das Radikal bleibt am Nachbarn zurück.")
 
 t.reaktionspfeil(624, 842, 686)
 t.text(655, 832, "+ H", size=10.5, anchor="middle", gewicht=700, farbe=G)
@@ -139,7 +151,7 @@ t.text(655, 832, "+ H", size=10.5, anchor="middle", gewicht=700, farbe=G)
 suc = mech.Molekuel("[O-]C(=O)CCC(=O)*", 832, 838, labels={7: "SCoA"},
                     zeige={0: "links"}, name="Succinyl-CoA")
 t.mole.append(suc)
-t.unterschrift(suc, "Succinyl-CoA — der Eingang", "in den Citratzyklus (§ 3.2)")
+t.unterschrift(suc, "Succinyl-CoA: der Eingang", "in den Citratzyklus (§ 3.2)")
 
 # ===================================================== ZONE D · Klinik
 t.zone(958, "D · WARUM DER MANGEL ZWEI MARKER HAT")
@@ -147,8 +159,8 @@ t.zone(958, "D · WARUM DER MANGEL ZWEI MARKER HAT")
 t.kasten(20, 990, 470, 138, fill="var(--enzym-bg)", stroke=E)
 t.text(38, 1012, "METHIONINSYNTHASE FÄLLT AUS", size=11, gewicht=700, farbe=E)
 t.text(38, 1034, "Homocystein steigt.", size=12.5)
-t.text(38, 1053, "Das Folat staut sich als 5-Methyl-THF — die", size=12.5)
-t.text(38, 1072, "Methylfalle. Folge: megaloblastäre Anämie.", size=12.5)
+t.text(38, 1053, "Das Folat staut sich als 5-Methyl-THF (die", size=12.5)
+t.text(38, 1072, "Methylfalle). Folge: megaloblastäre Anämie.", size=12.5)
 t.text(38, 1095, "Dasselbe Bild entsteht bei reinem Folatmangel;", size=12, farbe=G)
 t.text(38, 1114, "dieser Marker trennt also nicht.", size=12, farbe=G)
 
@@ -158,14 +170,14 @@ t.text(528, 1034, "Methylmalonsäure steigt.", size=12.5)
 t.text(528, 1053, "Diese Reaktion braucht kein Folat, deshalb steigt", size=12.5)
 t.text(528, 1072, "der Wert nur bei B&#8321;&#8322;-Mangel.", size=12.5)
 t.text(528, 1095, "Damit ist die Methylmalonsäure der spezifische", size=12, farbe=G)
-t.text(528, 1114, "Parameter — und der, den man vor Substitution misst.", size=12, farbe=G)
+t.text(528, 1114, "Parameter. Ihn misst man vor jeder Substitution.", size=12, farbe=G)
 
 t.kasten(20, 1152, 960, 96, fill="var(--warn-bg)", stroke=W)
 t.text(38, 1174, "LACHGAS TRIFFT NUR EINE DER BEIDEN FORMEN", size=11, gewicht=700, farbe=W)
 t.text(38, 1196, "Distickstoffmonoxid oxidiert das Co(I) der Methioninsynthase irreversibel. Die "
                  "Mutase läuft über Co(II) und bleibt zunächst unberührt.", size=12.5)
 t.text(38, 1215, "Deshalb steigt bei Lachgasschäden das Homocystein früher und deutlicher als die "
-                 "Methylmalonsäure — ein Befundmuster, das sich aus Zone A ablesen lässt.", size=12.5)
+                 "Methylmalonsäure. Dieses Befundmuster lässt sich aus Zone A ablesen.", size=12.5)
 
 t.kasten(20, 1270, 960, 96, fill="var(--surface-2)")
 t.text(38, 1292, "WAS SICH DARAUS FÜR DIE PRÜFUNG ERGIBT", size=11, gewicht=700, farbe=G)
@@ -180,11 +192,12 @@ ARIA = (
     "Kohlenstoff-Cobalt-Bindung nebeneinander: links Methylcobalamin, bei dem ein "
     "Elektronenpaarpfeil beide Bindungselektronen ans Cobalt gibt, sodass Cobalt eins "
     "entsteht; rechts Adenosylcobalamin, bei dem zwei Fischhakenpfeile je ein Elektron nach "
-    "jeder Seite ziehen, sodass Cobalt zwei und das Desoxyadenosylradikal entstehen. Zone B "
+    "jeder Seite ziehen, sodass Cobalt zwei und das Desoxyadenosyl-Radikal entstehen. Zone B "
     "zeigt den heterolytischen Weg der Methioninsynthase: Cobalt eins greift die Methylgruppe "
-    "des 5-Methyl-Tetrahydrofolats an, danach greift das Thiolat des Homocysteins die "
+    "des am Stickstoff fuenf protonierten 5-Methyl-Tetrahydrofolats an, danach greift das "
+    "Thiolat des Homocysteins die "
     "Methylgruppe am Cobalt an, es entsteht Methionin. Zone C zeigt den homolytischen Weg der "
-    "Methylmalonyl-CoA-Mutase: Das Adenosylradikal abstrahiert ein Wasserstoffatom der "
+    "Methylmalonyl-CoA-Mutase: Das Desoxyadenosyl-Radikal abstrahiert ein Wasserstoffatom der "
     "Methylgruppe, die Thioestergruppe wandert an den Nachbarkohlenstoff, das Wasserstoffatom "
     "kehrt zurueck, es entsteht Succinyl-CoA. Zone D erklaert, warum Homocystein und "
     "Methylmalonsaeure zwei verschiedene Marker sind und warum Lachgas nur die Cobalt-eins-Form "

@@ -46,7 +46,7 @@
           <td><a class="mref" href="#m03">M-03</a></td></tr>
         <tr><td class="um">B₉ Folat</td><td><b>THF</b></td>
           <td>zweifache Reduktion durch die Dihydrofolat-Reduktase</td>
-          <td>Übertragung von C₁-Einheiten auf vier Oxidationsstufen</td>
+          <td>Übertragung von C₁-Einheiten in vier Transportformen</td>
           <td><a class="mref" href="#m04">M-04</a></td></tr>
         <tr><td class="um">B₁₂ Cobalamin</td><td><b>Methyl-Cbl, Adenosyl-Cbl</b></td>
           <td>Reduktion des Cobalts zu Co(I), dann Alkylierung</td>
@@ -227,29 +227,86 @@
     </table>
   </div>
 
+  <h4 class="unter">Vom Vitamin zur Coenzymform</h4>
+  <div class="spalte">
+    <p class="intro">In den folgenden Bildpaaren steht links das Vitamin, rechts die Form, die das
+    Enzym tatsächlich bindet. Beide liegen in derselben Lage und im selben Maßstab, damit nur der
+    Unterschied auffällt und nicht die Drehung. In der Coenzymform ist grau hinterlegt, was vom
+    Vitamin übrig geblieben ist; was nicht hinterlegt ist, hat der Körper angebaut.</p>
+  </div>
+
   <div class="kaskade-wrap">
     <div class="kaskade">
-      <figure class="mol w-l"><div class="struct">{{S:thiamin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:thiamin}}</div>
         <figcaption>Thiamin (B₁)</figcaption></figure>
-      <div class="pfeil"><span class="enz">TPK</span>
+      <div class="pfeil"><span class="enz">TPK<small>Thiaminpyrophosphokinase</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">ATP → AMP</span></div>
+      <figure class="mol masstab ziel"><div class="struct">{{S:tpp}}</div>
+        <figcaption>TPP<span class="iupac">Chemie am Thiazolium
+          <a class="mref" href="#m02">M-02</a></span></figcaption></figure>
+      <figure class="mol masstab"><div class="struct">{{S:riboflavin}}</div>
+        <figcaption>Riboflavin (B₂)</figcaption></figure>
+      <div class="pfeil"><span class="enz">Riboflavinkinase</span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">ATP</span></div>
-      <figure class="mol ziel w-xl"><div class="struct">{{S:tpp}}</div>
-        <figcaption>TPP<span class="iupac">die Chemie läuft am Thiazolium ab <a class="mref" href="#m02">M-02</a></span></figcaption></figure>
-      <figure class="mol w-l"><div class="struct">{{S:pyridoxin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:fmn}}</div>
+        <figcaption>FMN<span class="iupac">weiter zu FAD
+          <a class="mref" href="#m06">M-06</a></span></figcaption></figure>
+      <figure class="mol masstab"><div class="struct">{{S:pyridoxin}}</div>
         <figcaption>Pyridoxin (B₆)</figcaption></figure>
-      <figure class="mol w-l"><div class="struct">{{S:plp}}</div>
-        <figcaption>PLP</figcaption></figure>
-      <figure class="mol w-s"><div class="struct">{{S:biotin}}</div>
-        <figcaption>Biotin (B₇)<span class="iupac">N1′ ist der CO₂-Träger <a class="mref" href="#m03">M-03</a></span></figcaption></figure>
-      <figure class="mol w-l"><div class="struct">{{S:pantothensaeure}}</div>
+      <div class="pfeil pw-l"><span class="enz">Pyridoxalkinase, PNPO<small>Kinase, dann Oxidase</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">ATP · O₂</span></div>
+      <figure class="mol masstab"><div class="struct">{{S:plp}}</div>
+        <figcaption>PLP<span class="iupac">Aldehyd + Phosphat</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol masstab"><div class="struct">{{S:pantothensaeure}}</div>
         <figcaption>Pantothensäure (B₅)</figcaption></figure>
-      <figure class="mol w-l"><div class="struct">{{S:riboflavin}}</div>
-        <figcaption>Riboflavin (B₂)</figcaption></figure>
-      <figure class="mol"><div class="struct">{{S:nicotinamid}}</div>
+      <div class="pfeil pw-l"><span class="enz">PanK … DPCK<small>über Phosphopantethein</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">Cystein · ATP</span></div>
+      <figure class="mol masstab"><div class="struct">{{S:coa}}</div>
+        <figcaption>Coenzym A<span class="iupac">gearbeitet wird am Thiol ganz links</span></figcaption></figure>
+      <figure class="mol masstab"><div class="struct">{{S:nicotinamid}}</div>
         <figcaption>Nicotinamid (B₃)</figcaption></figure>
-      <figure class="mol"><div class="struct">{{S:liponsaeure}}</div>
-        <figcaption>α-Liponsäure<span class="iupac">Disulfid als Redoxpaar</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">NAMPT, NMNAT<small>Salvage-Weg</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">PRPP · ATP</span></div>
+      <figure class="mol masstab"><div class="struct">{{S:nad}}</div>
+        <figcaption>NAD⁺<span class="iupac">Hydridtransfer an C4
+          <a class="mref" href="#m07">M-07</a></span></figcaption></figure>
+    </div>
+  </div>
+
+  <h4 class="unter">Zwei Cofaktoren, die sich mitten in der Katalyse verändern</h4>
+  <div class="spalte">
+    <p class="intro">Biotin und Liponsäure werden nicht einmalig aktiviert und dann verbraucht,
+    sondern durchlaufen in jedem Katalysezyklus dieselbe Umwandlung und kehren an den Anfang
+    zurück. Markiert ist hier nicht das Vitamin, sondern die Stelle, an der sich etwas tut.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol masstab"><div class="struct">{{S:biotin}}</div>
+        <figcaption>Biotin (B₇)</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">Biotin-Carboxylase</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">HCO₃⁻ · ATP</span></div>
+      <figure class="mol masstab"><div class="struct">{{S:carboxybiotin}}</div>
+        <figcaption>N1′-Carboxybiotin<span class="iupac">das getragene CO₂
+          <a class="mref" href="#m03">M-03</a></span></figcaption></figure>
+      <figure class="mol masstab"><div class="struct">{{S:liponsaeure}}</div>
+        <figcaption>α-Liponsäure<span class="iupac">kein Vitamin</span></figcaption></figure>
+      <div class="pfeil"><span class="enz">E2 → E3<small>im Katalysezyklus der PDH</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">2 e⁻ + 2 H⁺</span></div>
+      <figure class="mol masstab"><div class="struct">{{S:dihydroliponsaeure}}</div>
+        <figcaption>Dihydroliponsäure<span class="iupac">FAD holt sie zurück</span></figcaption></figure>
     </div>
   </div>
 
@@ -288,22 +345,22 @@
 
   <div class="kaskade-wrap">
     <div class="kaskade">
-      <figure class="mol w-l"><div class="struct">{{S:retinol}}</div>
-        <figcaption>Retinol (A₁)</figcaption></figure>
-      <figure class="mol w-l"><div class="struct">{{S:retinal}}</div>
-        <figcaption>Retinal<span class="iupac">Sehvorgang: 11-<i>cis</i> → all-<i>trans</i></span></figcaption></figure>
-      <figure class="mol w-l"><div class="struct">{{S:tretinoin}}</div>
-        <figcaption>Tretinoin<span class="iupac">all-<i>trans</i>-Retinsäure, RAR-Ligand</span></figcaption></figure>
-      <figure class="mol w-l"><div class="struct">{{S:isotretinoin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:retinol}}</div>
+        <figcaption>Retinol (A₁)<span class="iupac">Speicher- und Transportform</span></figcaption></figure>
+      <figure class="mol masstab"><div class="struct">{{S:retinal}}</div>
+        <figcaption>Retinal<span class="iupac">Schiff-Base ans Opsin</span></figcaption></figure>
+      <figure class="mol masstab"><div class="struct">{{S:tretinoin}}</div>
+        <figcaption>Tretinoin<span class="iupac">all-<i>trans</i>, RAR-Ligand</span></figcaption></figure>
+      <figure class="mol masstab"><div class="struct">{{S:isotretinoin}}</div>
         <figcaption>Isotretinoin<span class="iupac">13-<i>cis</i>, stark teratogen</span></figcaption></figure>
-      <figure class="mol w-xl"><div class="struct">{{S:tocopherol}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:tocopherol}}</div>
         <figcaption>α-Tocopherol (E)<span class="iupac">Chromanol-OH bricht Radikalketten</span></figcaption></figure>
-      <figure class="mol w-xl"><div class="struct">{{S:phyllochinon}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:phyllochinon}}</div>
         <figcaption>Phyllochinon (K₁)<span class="iupac">Naphthochinon + Phytylrest</span></figcaption></figure>
-      <figure class="mol"><div class="struct">{{S:menadion}}</div>
-        <figcaption>Menadion (K₃)<span class="iupac">Grundkörper ohne Seitenkette</span></figcaption></figure>
-      <figure class="mol w-l"><div class="struct">{{S:phenprocoumon}}</div>
-        <figcaption>Phenprocoumon<span class="iupac">4-Hydroxycumarin, VKOR-Hemmer</span></figcaption></figure>
+      <figure class="mol masstab"><div class="struct">{{S:menadion}}</div>
+        <figcaption>Menadion (K₃)<span class="iupac">ohne Kette</span></figcaption></figure>
+      <figure class="mol masstab"><div class="struct">{{S:phenprocoumon}}</div>
+        <figcaption>Phenprocoumon<span class="iupac">4-Hydroxycumarin</span></figcaption></figure>
     </div>
   </div>
 
@@ -345,9 +402,10 @@
       <em>Neusynthese</em> der Gerinnungsfaktoren. Die bereits carboxylierten Faktoren im Kreislauf
       bleiben aktiv und müssen erst abgebaut werden. Die volle Wirkung tritt daher erst nach
       etwa drei bis fünf Tagen ein, bestimmt von den Halbwertszeiten der Faktoren.</p>
-      <p>Daraus erklärt sich auch die anfängliche <b>prokoagulatorische Phase</b>: Protein C hat
-      mit sechs bis acht Stunden die kürzeste Halbwertszeit aller Vitamin-K-abhängigen Proteine
-      und fällt zuerst aus. Dieses Zeitfenster ist die Ursache der seltenen Cumarin-Nekrose und
+      <p>Daraus erklärt sich auch die anfängliche <b>prokoagulatorische Phase</b>: Protein C fällt
+      mit einer Halbwertszeit um acht Stunden fast so schnell ab wie Faktor VII, während die
+      gerinnungsfördernden Faktoren II, IX und X noch tagelang im Kreislauf bleiben. In diesem
+      Fenster fehlt die Hemmung, bevor die Gerinnung nachlässt. Dieses Zeitfenster ist die Ursache der seltenen Cumarin-Nekrose und
       der Grund für die überlappende Heparingabe zu Therapiebeginn.</p>
     </div>
   </div>
@@ -400,14 +458,14 @@
 
   <div class="kaskade-wrap">
     <div class="kaskade">
-      <figure class="mol w-s"><div class="struct">{{S:isoniazid}}</div>
-        <figcaption>Isoniazid<span class="iupac">Hydrazid, bindet PLP</span></figcaption></figure>
-      <figure class="mol w-s"><div class="struct">{{S:pyridoxal}}</div>
-        <figcaption>Pyridoxal<span class="iupac">der Reaktionspartner</span></figcaption></figure>
-      <figure class="mol w-xl"><div class="struct">{{S:methotrexat}}</div>
-        <figcaption>Methotrexat<span class="iupac">Folat-Antimetabolit</span></figcaption></figure>
-      <figure class="mol w-xl"><div class="struct">{{S:folsaeure}}</div>
-        <figcaption>Folsäure<span class="iupac">zum Vergleich: 4-Amino und N10-Methyl fehlen</span></figcaption></figure>
+      <figure class="mol masstab"><div class="struct">{{S:isoniazid}}</div>
+        <figcaption>Isoniazid<span class="iupac">Hydrazid</span></figcaption></figure>
+      <figure class="mol masstab"><div class="struct">{{S:pyridoxal}}</div>
+        <figcaption>Pyridoxal<span class="iupac">der Aldehyd</span></figcaption></figure>
+      <figure class="mol masstab"><div class="struct">{{S:methotrexat}}</div>
+        <figcaption>Methotrexat<span class="iupac">markiert: 4-NH₂ und N10-CH₃</span></figcaption></figure>
+      <figure class="mol masstab"><div class="struct">{{S:folsaeure}}</div>
+        <figcaption>Folsäure<span class="iupac">dort 4-Oxo und N10-H</span></figcaption></figure>
     </div>
   </div>
 

@@ -32,28 +32,28 @@
 
   <div class="kaskade-wrap">
     <div class="kaskade">
-      <figure class="mol"><div class="struct">{{S:glutamin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:glutamin}}</div>
         <figcaption>L-Glutamin<span class="iupac">Transportform aus dem Astrozyten</span></figcaption></figure>
       <div class="pfeil"><span class="enz">Glutaminase<small>neuronal</small></span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">H₂O · − NH₃</span></div>
-      <figure class="mol ziel"><div class="struct">{{S:glutamat}}</div>
+      <figure class="mol masstab ziel"><div class="struct">{{S:glutamat}}</div>
         <figcaption>L-Glutamat<span class="iupac">exzitatorisch</span></figcaption></figure>
       <div class="pfeil pw-l"><span class="enz">GAD65 / GAD67<small>Glutamat-Decarboxylase</small></span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">PLP · − CO₂</span></div>
-      <figure class="mol ziel"><div class="struct">{{S:gaba}}</div>
+      <figure class="mol masstab ziel"><div class="struct">{{S:gaba}}</div>
         <figcaption>GABA<span class="iupac">4-Aminobutansäure, inhibitorisch</span></figcaption></figure>
       <div class="pfeil pw-l"><span class="enz">GABA-T<small>GABA-Transaminase</small></span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">PLP · + α-Ketoglutarat</span>
         <span class="hemm">Vigabatrin</span></div>
-      <figure class="mol w-s"><div class="struct">{{S:succinatsemi}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:succinatsemi}}</div>
         <figcaption>Succinat­semialdehyd</figcaption></figure>
       <div class="pfeil"><span class="enz">SSADH</span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">NAD⁺</span></div>
-      <figure class="mol w-s"><div class="struct">{{S:succinat}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:succinat}}</div>
         <figcaption>Succinat<span class="iupac">zurück in den Citratzyklus</span></figcaption></figure>
     </div>
   </div>
@@ -155,40 +155,44 @@
       <div class="pfeil pw-l"><span class="enz">HMBS → UROS → UROD<small>vier Pyrrole, dann Decarboxylierung</small></span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 3"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">vier Zwischenstufen</span></div>
-      <figure class="mol w-xl"><div class="struct">{{S:protoporphyrin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:protoporphyrin}}</div>
         <figcaption>Protoporphyrin IX<span class="iupac">konjugiertes Makrocyclus-System</span></figcaption></figure>
       <div class="pfeil pw-l"><span class="enz">FECH<small>Ferrochelatase</small></span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">Fe²⁺ einsetzen</span>
         <span class="hemm">Blei</span></div>
-      <figure class="mol ziel w-l"><div class="struct">{{S:haem}}</div>
+      <figure class="mol masstab ziel"><div class="struct">{{S:haem}}</div>
         <figcaption>Häm b<span class="iupac">Fe²⁺ im Zentrum des Makrocyclus</span></figcaption></figure>
     </div>
   </div>
 
   <p class="spalte" style="margin-top:18px">Der Abbau verläuft über zwei Enzyme und liefert
-  nebenbei einen der drei Gasotransmitter:</p>
+  nebenbei einen der drei Gasotransmitter. Die Häm-Oxygenase öffnet den Makrocyclus dabei nicht
+  an beliebiger Stelle, sondern an der α-Methinbrücke, also an der Brücke zwischen den beiden
+  Ringen mit den Vinylgruppen. Daher heißen die Abbauprodukte Biliverdin und Bilirubin <b>IXα</b>,
+  und daher sind die beiden Endringe des offenen Tetrapyrrols verschieden substituiert: am einen
+  steht die Vinylgruppe neben der Methinbrücke, am anderen neben der Lactamgruppe.</p>
 
   <div class="kaskade-wrap">
     <div class="kaskade">
-      <figure class="mol w-l"><div class="struct">{{S:haem}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:haem}}</div>
         <figcaption>Häm</figcaption></figure>
       <div class="pfeil pw-l"><span class="enz">HMOX1 / HMOX2<small>Häm-Oxygenase</small></span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">3 O₂ · NADPH</span>
         <span class="hemm">liefert CO + Fe²⁺</span></div>
-      <figure class="mol w-xl"><div class="struct">{{S:biliverdin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:biliverdin}}</div>
         <figcaption>Biliverdin<span class="iupac">grün, Ring geöffnet</span></figcaption></figure>
       <div class="pfeil"><span class="enz">BLVRA</span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">NADPH</span></div>
-      <figure class="mol w-xl"><div class="struct">{{S:bilirubin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:bilirubin}}</div>
         <figcaption>Bilirubin<span class="iupac">unkonjugiert, lipophil, albumingebunden</span></figcaption></figure>
       <div class="pfeil pw-l"><span class="enz">UGT1A1</span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">2 UDP-Glucuronsäure</span>
         <span class="hemm">Gilbert-Syndrom</span></div>
-      <figure class="mol w-s"><div class="struct">{{S:bilirubin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:bilirubindiglucuronid}}</div>
         <figcaption>Bilirubin­diglucuronid<span class="iupac">wasserlöslich, biliär</span></figcaption></figure>
     </div>
   </div>
@@ -276,18 +280,18 @@
   <h4 class="unter">Der NO-Ast</h4>
   <div class="kaskade-wrap">
     <div class="kaskade">
-      <figure class="mol"><div class="struct">{{S:arginin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:arginin}}</div>
         <figcaption>L-Arginin</figcaption></figure>
       <div class="pfeil pw-l"><span class="enz">NOS<small>erste Monooxygenierung</small></span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">BH₄ · Häm · FAD/FMN · NADPH · O₂</span>
         <span class="hemm">L-NMMA</span></div>
-      <figure class="mol w-l"><div class="struct">{{S:noharginin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:noharginin}}</div>
         <figcaption>N<sup>ω</sup>-Hydroxy-L-arginin<span class="iupac">enzymgebundene Zwischenstufe</span></figcaption></figure>
       <div class="pfeil pw-l"><span class="enz">NOS<small>zweite Monooxygenierung</small></span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">½ NADPH · O₂</span></div>
-      <figure class="mol"><div class="struct">{{S:citrullin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:citrullin}}</div>
         <figcaption>L-Citrullin<span class="iupac">+ <b>NO</b></span></figcaption></figure>
       <div class="pfeil pw-l"><span class="enz">lösliche Guanylatcyclase<small>NO bindet am Häm-Fe(II)</small></span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
@@ -306,35 +310,35 @@
   <h4 class="unter">Der Polyamin- und der Creatin-Ast</h4>
   <div class="kaskade-wrap">
     <div class="kaskade">
-      <figure class="mol"><div class="struct">{{S:ornithin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:ornithin}}</div>
         <figcaption>L-Ornithin<span class="iupac">aus Arginin über Arginase</span></figcaption></figure>
       <div class="pfeil pw-l"><span class="enz">ODC<small>Ornithin-Decarboxylase</small></span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">PLP · − CO₂</span>
         <span class="hemm">Eflornithin</span></div>
-      <figure class="mol w-s"><div class="struct">{{S:putrescin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:putrescin}}</div>
         <figcaption>Putrescin</figcaption></figure>
       <div class="pfeil pw-l"><span class="enz">Spermidin-Synthase</span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">decarboxyliertes SAM</span></div>
-      <figure class="mol"><div class="struct">{{S:spermidin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:spermidin}}</div>
         <figcaption>Spermidin</figcaption></figure>
       <div class="pfeil"><span class="enz">Spermin-Synthase</span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">decarboxyliertes SAM</span></div>
-      <figure class="mol w-l"><div class="struct">{{S:spermin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:spermin}}</div>
         <figcaption>Spermin<span class="iupac">stabilisiert DNA und RNA</span></figcaption></figure>
-      <figure class="mol w-s"><div class="struct">{{S:guanidinoacetat}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:guanidinoacetat}}</div>
         <figcaption>Guanidinoacetat<span class="iupac">AGAT, Niere</span></figcaption></figure>
       <div class="pfeil"><span class="enz">GAMT<small>Leber</small></span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">SAM</span></div>
-      <figure class="mol w-s"><div class="struct">{{S:creatin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:creatin}}</div>
         <figcaption>Creatin</figcaption></figure>
       <div class="pfeil"><span class="enz">spontan</span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4" stroke-dasharray="3 3"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">Ringschluss, ca. 1,7 %/Tag</span></div>
-      <figure class="mol w-s"><div class="struct">{{S:creatinin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:creatinin}}</div>
         <figcaption>Creatinin<span class="iupac">Grundlage der Clearance</span></figcaption></figure>
     </div>
   </div>
@@ -416,25 +420,25 @@
 
   <div class="kaskade-wrap">
     <div class="kaskade">
-      <figure class="mol w-s"><div class="struct">{{S:cystein}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:cystein}}</div>
         <figcaption>L-Cystein<span class="iupac">(<i>R</i>), beachte den Deskriptor</span></figcaption></figure>
       <div class="pfeil pw-l"><span class="enz">GCL<small>γ-Glutamylcystein-Ligase</small></span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">ATP · + Glutamat</span>
         <span class="hemm">GSH-Rückkopplung</span></div>
-      <figure class="mol w-l"><div class="struct">{{S:glutathion}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:glutathion}}</div>
         <figcaption>Glutathion (GSH)<span class="iupac">γ-Glu-Cys-Gly</span></figcaption></figure>
-      <figure class="mol w-s"><div class="struct">{{S:cysteinsulfinat}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:cysteinsulfinat}}</div>
         <figcaption>Cystein­sulfinat<span class="iupac">über Cystein-Dioxygenase</span></figcaption></figure>
       <div class="pfeil"><span class="enz">CSAD</span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">PLP · − CO₂</span></div>
-      <figure class="mol w-s"><div class="struct">{{S:hypotaurin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:hypotaurin}}</div>
         <figcaption>Hypotaurin</figcaption></figure>
       <div class="pfeil"><span class="enz">Oxidation</span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">[O]</span></div>
-      <figure class="mol w-s"><div class="struct">{{S:taurin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:taurin}}</div>
         <figcaption>Taurin<span class="iupac">Gallensäurekonjugation</span></figcaption></figure>
     </div>
   </div>
@@ -493,20 +497,20 @@
 
   <div class="kaskade-wrap">
     <div class="kaskade">
-      <figure class="mol"><div class="struct">{{S:paracetamol}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:paracetamol}}</div>
         <figcaption>Paracetamol</figcaption></figure>
       <div class="pfeil pw-l"><span class="enz">CYP2E1 / 1A2 / 3A4</span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">NADPH · O₂ · ca. 5–10 %</span></div>
-      <figure class="mol"><div class="struct">{{S:napqi}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:napqi}}</div>
         <figcaption>NAPQI<span class="iupac">reaktives Chinonimin</span></figcaption></figure>
       <div class="pfeil pw-l"><span class="enz">GST + GSH</span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">Michael-Addition</span>
         <span class="hemm">bei Erschöpfung: Leberzellnekrose</span></div>
-      <figure class="mol w-l"><div class="struct">{{S:glutathion}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:glutathion}}</div>
         <figcaption>Glutathion<span class="iupac">Nachschub aus NAC</span></figcaption></figure>
-      <figure class="mol"><div class="struct">{{S:nac}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:nac}}</div>
         <figcaption>N-Acetylcystein<span class="iupac">Antidot</span></figcaption></figure>
     </div>
   </div>
@@ -599,27 +603,27 @@
 
   <div class="kaskade-wrap">
     <div class="kaskade">
-      <figure class="mol w-s"><div class="struct">{{S:methionin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:methionin}}</div>
         <figcaption>L-Methionin</figcaption></figure>
       <div class="pfeil"><span class="enz">MAT</span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">ATP</span></div>
-      <figure class="mol ziel w-xl"><div class="struct">{{S:sam}}</div>
+      <figure class="mol masstab ziel"><div class="struct">{{S:sam}}</div>
         <figcaption>SAM<span class="iupac">Sulfonium: das aktivierte Methyl <a class="mref" href="#m05">M-05</a></span></figcaption></figure>
       <div class="pfeil pw-l"><span class="enz">Methyltransferase</span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">S<sub>N</sub>2 · − CH₃</span></div>
-      <figure class="mol w-xl"><div class="struct">{{S:sah}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:sah}}</div>
         <figcaption>SAH<span class="iupac">Produkthemmer der Methyltransferasen</span></figcaption></figure>
       <div class="pfeil"><span class="enz">AHCY</span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">− Adenosin</span></div>
-      <figure class="mol w-s"><div class="struct">{{S:homocystein}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:homocystein}}</div>
         <figcaption>L-Homocystein</figcaption></figure>
       <div class="pfeil"><span class="enz">CBS</span>
         <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
         <span class="cof">PLP · + Serin</span></div>
-      <figure class="mol w-l"><div class="struct">{{S:cystathionin}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:cystathionin}}</div>
         <figcaption>Cystathionin</figcaption></figure>
     </div>
   </div>
@@ -670,9 +674,9 @@
         <span class="cof">PLP · + THF</span></div>
       <figure class="mol w-s"><div class="struct">{{S:glycin}}</div>
         <figcaption>Glycin<span class="iupac">+ 5,10-Methylen-THF</span></figcaption></figure>
-      <figure class="mol w-xl"><div class="struct">{{S:thf}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:thf}}</div>
         <figcaption>Tetrahydrofolat<span class="iupac">der C₁-Träger <a class="mref" href="#m04">M-04</a></span></figcaption></figure>
-      <figure class="mol w-xl"><div class="struct">{{S:methylthf}}</div>
+      <figure class="mol masstab"><div class="struct">{{S:methylthf}}</div>
         <figcaption>5-Methyl-THF<span class="iupac">akkumuliert in der Methylfalle</span></figcaption></figure>
     </div>
   </div>

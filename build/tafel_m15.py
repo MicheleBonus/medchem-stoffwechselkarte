@@ -24,25 +24,34 @@ G = "var(--ink-3)"
 t = mech.Tafel(1000, 1260)
 
 # ===================================================== ZONE A · die Carboxylierung
-t.zone(24, "A · DAS PROBLEM — EIN PROTON, DAS NICHT WEG WILL")
+t.zone(24, "A · DAS PROBLEM: EIN PROTON, DAS NICHT WEG WILL")
 t.text(20, 54, "Der γ-Wasserstoff eines Glutamatrests hat einen pK<tspan baseline-shift='sub' "
-               "font-size='9'>a</tspan> um 28. Keine Seitenkette eines Proteins kommt als Base "
-               "dafür in Frage — die stärkste, das Thiolat", size=12.5)
-t.text(20, 73, "des Cysteins, liegt bei 8. Die nötige Basenstärke entsteht erst im Zuge der "
-               "Vitamin-K-Oxygenierung.", size=12.5)
+               "font-size='9'>a</tspan> um 28. Keine Seitenkette eines Proteins reicht als Base "
+               "heran: Selbst dem stärksten", size=12.5)
+t.text(20, 73, "Kandidaten, dem Serin-Alkoholat mit pK<tspan baseline-shift='sub' "
+               "font-size='9'>a</tspan> um 16, fehlen zwölf Zehnerpotenzen. Die nötige "
+               "Basenstärke entsteht erst bei der Vitamin-K-Oxygenierung.", size=12.5)
 
 glu = mech.Molekuel("*CCC(=O)[O-]", 150, 196, labels={0: "Protein"},
                     wasserstoff=[2], zeige={0: "links"}, name="Glutamatrest")
 t.mole.append(glu)
 hg = glu.h_index[2]
-t.atomnummer(glu, 2, "γ-C", winkel=90, abstand=30, size=10.5, farbe=W, gewicht=700)
+# Die Marke sitzt links unter dem Kohlenstoff: genau unter ihm steht der
+# ausgeschriebene γ-Wasserstoff, an dem der Pfeil der Base endet.
+t.atomnummer(glu, 2, "γ-C", winkel=130, abstand=36, size=10.5, farbe=W, gewicht=700)
 
-alkoxid = t.paar(150, 122, 300, "Alkoxid aus Vitamin K")
-t.text(150, 106, "R&#8722;O&#8315;", size=12.5, anchor="middle", gewicht=700, farbe=C)
-t.text(150, 90, "das Alkoxid aus Zone B", size=10, anchor="middle", farbe=G)
-t.pfeil(alkoxid, (glu, 2, hg), bogen=0.26, seite=1, farbe=W)
+# Die Base greift den Wasserstoffkern an, nicht die C-H-Bindung: Der Pfeil endet
+# deshalb am H-Atom selbst. Der Gegenpfeil traegt das Bindungspaar zum Kohlenstoff.
+# RDKit haengt den ausgeschriebenen Wasserstoff unter den Kohlenstoff; das Alkoxid
+# steht deshalb links unter dem Rest und nicht darueber, sonst muesste sein Pfeil
+# quer durch das Geruest greifen.
+alkoxid = t.paar(96, 254, 30, "Alkoxid aus Vitamin K")
+t.text(96, 278, "R&#8722;O&#8315;", size=12.5, anchor="middle", gewicht=700, farbe=C)
+t.text(96, 294, "das Alkoxid aus Zone B", size=10, anchor="middle", farbe=G)
+t.pfeil(alkoxid, (glu, hg), bogen=0.30, seite=1, farbe=W, gap=4)
 t.pfeil((glu, 2, hg), glu.abseits(2, hg), bogen=0.45, seite=-1, farbe=W)
-t.unterschrift(glu, "Glutamatrest im unreifen Gerinnungsfaktor", abstand=30)
+t.ueberschrift(glu, "Glutamatrest im unreifen Gerinnungsfaktor", abstand=26,
+               size=10.5, farbe=G, gewicht=None)
 
 t.reaktionspfeil(258, 196, 326)
 t.text(292, 186, "&#8722; H&#8314;", size=10.5, anchor="middle", gewicht=700, farbe=W)
@@ -51,7 +60,7 @@ carb = mech.Molekuel("*C[CH-]C(=O)[O-]", 420, 196, labels={0: "Protein"},
                      zeige={0: "links"}, name="Carbanion")
 t.mole.append(carb)
 lp_c = t.elektronenpaar(carb, 2, 30)
-t.unterschrift(carb, "das Carbanion — nur kurzlebig,", "aber stark nucleophil", abstand=30)
+t.unterschrift(carb, "das Carbanion: kurzlebig,", "aber stark nucleophil", abstand=30)
 
 # CO2 senkrecht stellen: das Nucleophil greift den Kohlenstoff quer zur
 # O=C=O-Achse an, und der Pfeilkopf landet dann nicht auf einem Sauerstoff.
@@ -66,52 +75,57 @@ t.reaktionspfeil(654, 196, 716)
 gla = mech.Molekuel("*CC(C(=O)[O-])C(=O)[O-]", 830, 196, labels={0: "Protein"},
                     zeige={0: "links"}, name="Gla")
 t.mole.append(gla)
-t.unterschrift(gla, "γ-Carboxyglutamat — zwei Carboxylate",
+t.unterschrift(gla, "γ-Carboxyglutamat: zwei Carboxylate",
                "an einem Kohlenstoff binden Calcium", abstand=30)
 
-t.kasten(20, 300, 960, 58, fill="var(--warn-bg)", stroke=W)
-t.text(38, 322, "Erst der Gla-Rest macht den Gerinnungsfaktor funktionsfähig: Zwei benachbarte "
+t.kasten(20, 312, 960, 58, fill="var(--warn-bg)", stroke=W)
+t.text(38, 334, "Erst der Gla-Rest macht den Gerinnungsfaktor funktionsfähig: Zwei benachbarte "
                 "Carboxylate greifen ein Calciumion, und dieses vermittelt die Bindung", size=12.5)
-t.text(38, 341, "an die negativ geladene Membranoberfläche aktivierter Thrombozyten. Ohne "
+t.text(38, 353, "an die negativ geladene Membranoberfläche aktivierter Thrombozyten. Ohne "
                 "Carboxylierung schwimmt der Faktor wirkungslos im Plasma.", size=12.5)
 
 # ===================================================== ZONE B · der Zyklus
-t.zone(400, "B · WOHER DIE BASENSTÄRKE KOMMT — UND WOHIN DER COFAKTOR GEHT")
-t.text(20, 430, "Die Oxygenierung des Hydrochinons ist stark exergon. Das Enzym nutzt diesen "
-                "Energiegewinn nicht für eine Bindungsknüpfung, sondern um kurzzeitig", size=12.5)
-t.text(20, 449, "eine Base bereitzustellen, die es sonst in keinem Protein gäbe. Carboxylierung "
-                "und Epoxidbildung sind deshalb zwingend gekoppelt.", size=12.5)
+t.zone(400, "B · WOHER DIE BASENSTÄRKE KOMMT UND WOHIN DER COFAKTOR GEHT")
+t.text(20, 430, "Der Sauerstoff addiert sich an das Hydrochinon; über ein Peroxid und ein "
+                "Dioxetan entsteht ein Alkoxid am Ring. Dieser Schritt ist stark exergon,",
+       size=12.5)
+t.text(20, 449, "und weil das Alkoxid in einer wasserfreien Tasche entsteht, steigt seine "
+                "Basenstärke um viele Zehnerpotenzen. Carboxylierung und Epoxidbildung sind "
+                "gekoppelt.", size=12.5)
 
 kh2 = mech.Molekuel("Cc1c(*)c(O)c2ccccc2c1O", 156, 578, labels={3: "R"},
                     zeige={3: "rechts"}, name="Hydrochinon")
 t.mole.append(kh2)
-t.unterschrift(kh2, "KH&#8322; — das Hydrochinon,", "die einzige wirksame Form", abstand=30)
+t.unterschrift(kh2, "KH&#8322;, das Hydrochinon:", "die einzige wirksame Form", abstand=30)
 
 t.reaktionspfeil(268, 578, 396)
 t.text(332, 540, "+ O&#8322;", size=11, anchor="middle", gewicht=700, farbe=C)
-t.text(332, 558, "über ein Peroxid", size=10, anchor="middle", farbe=G)
-t.text(332, 602, "hier entsteht das Alkoxid,", size=10, anchor="middle",
+t.text(332, 558, "über Peroxid und Dioxetan", size=10, anchor="middle", farbe=G)
+t.text(332, 602, "&#8722; H&#8322;O. Hier entsteht das Alkoxid am C2,", size=10, anchor="middle",
        farbe=W, gewicht=700)
 
 epox = mech.Molekuel("CC12OC1(*)C(=O)c1ccccc1C2=O", 520, 578, labels={4: "R"},
                      zeige={4: "rechts"}, name="K-2,3-Epoxid")
 t.mole.append(epox)
-t.unterschrift(epox, "K-2,3-Epoxid — der Cofaktor ist verbraucht", abstand=30)
+t.unterschrift(epox, "K-2,3-Epoxid: der Cofaktor ist verbraucht", abstand=30)
 
 t.reaktionspfeil(632, 578, 750)
 t.text(691, 560, "VKORC1", size=11, anchor="middle", gewicht=700, farbe=E, mono=True)
 t.text(691, 596, "&#8867; Cumarine", size=10.5, anchor="middle", gewicht=700, farbe=R)
+t.text(691, 616, "+ 2 [H], &#8722; H&#8322;O", size=10, anchor="middle", farbe=C)
 
 chin = mech.Molekuel("CC1=C(*)C(=O)c2ccccc2C1=O", 862, 578, labels={3: "R"},
                      zeige={3: "rechts"}, name="Vitamin-K-Chinon")
 t.mole.append(chin)
-t.unterschrift(chin, "Vitamin-K-Chinon — die Form,", "die im Präparat steckt", abstand=30)
+t.unterschrift(chin, "Vitamin-K-Chinon: die Form,", "die im Präparat steckt", abstand=30)
 
 # Rueckweg vom Chinon zum Hydrochinon
 t.stuecke.append((1, "<path d='M 862 676 L 862 716 L 156 716 L 156 664' fill='none' "
                      "stroke='currentColor' stroke-width='1.5' marker-end='url(#rxn)'/>"))
-t.text(509, 734, "VKORC1 — derselbe zweite Schritt, dieselbe Hemmung durch Cumarine",
-       size=11, anchor="middle", gewicht=700, farbe=E)
+t.text(509, 734, "VKORC1 führt auch diesen zweiten Schritt aus und wird ebenso von den "
+                 "Cumarinen gehemmt.", size=11, anchor="middle", gewicht=700, farbe=E)
+t.text(509, 752, "Beide Reduktionen verbrauchen je zwei Reduktionsäquivalente aus dem Dithiol "
+                 "des Enzyms.", size=10.5, anchor="middle", farbe=G)
 
 # Ein langer Pfeil quer ueber die Tafel wuerde durch drei Beschriftungen laufen.
 # Der Verweis steht deshalb auf beiden Seiten im Text.
@@ -126,7 +140,7 @@ t.text(38, 840, "CUMARINE HEMMEN DIE REDUKTASE, NICHT DIE CARBOXYLASE", size=11,
        gewicht=700, farbe=R)
 t.text(38, 862, "Phenprocoumon und Warfarin blockieren die VKORC1 und", size=12.5)
 t.text(38, 881, "damit die Rückgewinnung des Cofaktors. Die Carboxylase", size=12.5)
-t.text(38, 900, "selbst bleibt unberührt — ihr geht nur das Substrat aus.", size=12.5)
+t.text(38, 900, "selbst bleibt unberührt, ihr geht nur das Substrat aus.", size=12.5)
 t.text(38, 923, "Daraus folgt die Antidotwirkung von Vitamin K&#8321;: In hoher", size=12.5)
 t.text(38, 942, "Dosis umgeht es die blockierte VKOR über eine zweite,", size=12.5)
 t.text(38, 961, "NAD(P)H-abhängige Reduktase.", size=12.5)
@@ -135,37 +149,41 @@ t.kasten(510, 818, 470, 158, fill="var(--surface-2)")
 t.text(528, 840, "WARUM DIE WIRKUNG ERST NACH TAGEN EINSETZT", size=11, gewicht=700, farbe=G)
 t.text(528, 862, "Betroffen ist ausschließlich die Neusynthese. Die bereits", size=12.5)
 t.text(528, 881, "carboxylierten Faktoren im Plasma arbeiten weiter, bis sie", size=12.5)
-t.text(528, 900, "abgebaut sind — beim Faktor II dauert das etwa drei Tage.", size=12.5)
+t.text(528, 900, "abgebaut sind. Beim Faktor II dauert das etwa drei Tage.", size=12.5)
 t.text(528, 923, "Bei akuter Blutung nützt Vitamin K deshalb wenig; man", size=12.5)
 t.text(528, 942, "ersetzt die Faktoren direkt durch ein Prothrombin-", size=12.5)
 t.text(528, 961, "komplexkonzentrat.", size=12.5)
 
 t.kasten(20, 1000, 960, 96, fill="var(--warn-bg)", stroke=W)
 t.text(38, 1022, "DIE PRÜFUNGSFALLE", size=11, gewicht=700, farbe=W)
-t.text(38, 1044, "Protein C und Protein S sind ebenfalls Vitamin-K-abhängig und haben eine kürzere "
-                 "Halbwertszeit als die Gerinnungsfaktoren. Zu Beginn einer", size=12.5)
-t.text(38, 1063, "Cumarintherapie fallen die Gerinnungshemmer deshalb zuerst aus — daraus die "
-                 "vorübergehend prokoagulatorische Phase und die Cumarinnekrose.", size=12.5)
+t.text(38, 1044, "Protein C ist ebenfalls Vitamin-K-abhängig und fällt mit einer Halbwertszeit um "
+                 "acht Stunden fast so schnell ab wie Faktor VII, während die", size=12.5)
+t.text(38, 1063, "Faktoren II, IX und X noch vorhanden sind. Zu Beginn einer Cumarintherapie "
+                 "überwiegt deshalb kurzzeitig die gerinnungsfördernde Seite: die "
+                 "Cumarinnekrose.", size=12.5)
 
 t.kasten(20, 1120, 960, 96, fill="var(--surface-2)")
 t.text(38, 1142, "WELCHE FAKTOREN BETROFFEN SIND", size=11, gewicht=700, farbe=G)
-t.text(38, 1164, "II, VII, IX und X, dazu Protein C, S und Z. Merkhilfe: 1972 — die vier Ziffern "
-                 "sind die Faktoren. Faktor VII hat die kürzeste Halbwertszeit und", size=12.5)
-t.text(38, 1183, "bestimmt deshalb den frühen INR-Anstieg, Faktor II die eigentliche "
-                 "antithrombotische Wirkung.", size=12.5)
+t.text(38, 1164, "II, VII, IX und X, dazu Protein C, S und Z. Merkhilfe: 1972, die vier Ziffern "
+                 "sind die Faktoren. Faktor VII hat mit vier bis sechs Stunden die", size=12.5)
+t.text(38, 1183, "kürzeste Halbwertszeit und bestimmt den frühen INR-Anstieg; Faktor II mit rund "
+                 "drei Tagen die eigentliche antithrombotische Wirkung.", size=12.5)
 
 # ===================================================== Ausgabe
 ARIA = (
     "Vitamin K in drei Zonen. Zone A zeigt die Gamma-Carboxylierung an echten Strukturen: Ein "
     "Alkoxid zieht mit einem Elektronenpaarpfeil das Gamma-Wasserstoffatom eines Glutamatrests "
-    "ab, dessen Saeurestaerke mit einem pKa um 28 eigentlich zu gering dafuer ist; das "
-    "entstehende Carbanion greift Kohlendioxid an, und es entsteht Gamma-Carboxyglutamat mit "
-    "zwei Carboxylatgruppen an einem Kohlenstoff. Zone B zeigt den Vitamin-K-Zyklus mit "
-    "gezeichneten Strukturen: Das Hydrochinon reagiert mit Sauerstoff ueber eine "
-    "Peroxid-Zwischenstufe; dabei entsteht das Alkoxid, das in Zone A als Base wirkt, und es "
-    "bleibt das Vitamin-K-2,3-Epoxid zurueck. Die Epoxidreduktase VKORC1 fuehrt es ueber das "
-    "Chinon zum Hydrochinon zurueck; genau diese beiden Schritte hemmen die Cumarine. Zone C "
-    "erklaert Antidotwirkung, Wirklatenz und die Rolle von Protein C und S."
+    "ab, dessen Saeurestaerke mit einem pKa um 28 eigentlich zu gering dafuer ist; selbst das "
+    "Alkoholat eines Serins, die staerkste Base, die ein Protein bereitstellen kann, reicht mit "
+    "einem pKa um 16 nicht heran. Das entstehende Carbanion greift Kohlendioxid an, und es "
+    "entsteht Gamma-Carboxyglutamat mit zwei Carboxylatgruppen an einem Kohlenstoff. Zone B "
+    "zeigt den Vitamin-K-Zyklus mit gezeichneten Strukturen: Das Hydrochinon reagiert mit "
+    "Sauerstoff ueber ein Peroxid und ein Dioxetan; dabei entsteht am Ringkohlenstoff C2 das "
+    "Alkoxid, das in Zone A als Base wirkt und dessen Basenstaerke in der wasserfreien Tasche "
+    "des Enzyms stark erhoeht ist, und es bleibt das Vitamin-K-2,3-Epoxid zurueck. Die "
+    "Epoxidreduktase VKORC1 fuehrt es ueber das Chinon zum Hydrochinon zurueck, jeweils unter "
+    "Verbrauch von zwei Reduktionsaequivalenten; genau diese beiden Schritte hemmen die "
+    "Cumarine. Zone C erklaert Antidotwirkung, Wirklatenz und die Rolle des Protein C."
 )
 
 fehler, bericht = t.pruefe()

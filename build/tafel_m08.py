@@ -21,12 +21,14 @@ E = "var(--enzym)"
 C = "var(--cofaktor)"
 G = "var(--ink-3)"
 
-t = mech.Tafel(1000, 1330)
+t = mech.Tafel(1000, 1400)
 
 # ===================================================== ZONE A · der Zyklus
-t.zone(24, "A · DER KATALYTISCHE ZYKLUS — ACHT ZUSTÄNDE, ZWEI ELEKTRONEN")
-t.text(20, 54, "Alle acht Zustände unterscheiden sich nur in zwei Dingen: der Oxidationsstufe "
-               "des Eisens und dem, was axial daran hängt.", size=12.5)
+t.zone(24, "A · DER KATALYTISCHE ZYKLUS: ACHT ZUSTÄNDE, ZWEI ELEKTRONEN")
+t.text(20, 50, "Alle acht Zustände unterscheiden sich in der Oxidationsstufe des Eisens und in "
+               "dem, was axial daran hängt.", size=12.5)
+t.text(20, 68, "Bei Compound I kommt das Porphyrin hinzu: es trägt dort ein Elektron weniger.",
+       size=12.5)
 
 CX, CY, RG, RA, RL = 300.0, 402.0, 215.0, 132.0, 100.0
 
@@ -45,7 +47,9 @@ STATIONEN = [
     (180, "&#9316;", "Fe(III)", ["O", "O&#8315;"], False, False),
     (225, "&#9317;", "Fe(III)", ["O", "OH"],   False, False),
     (270, "&#9318;", "Fe(IV)",  ["O"],         True,  True),
-    (315, "&#9319;", "Fe(III)", ["OH"],        False, False),
+    # Compound II: das aufgenommene H-Atom reduziert das Porphyrin-Radikalkation,
+    # nicht das Eisen. Erst der Rebound bringt Fe(IV) auf Fe(III) zurueck.
+    (315, "&#9319;", "Fe(IV)",  ["OH"],        False, False),
 ]
 
 zentren = {}
@@ -63,7 +67,7 @@ UEBERGANG = [
     (135, "+ e&#8315;", "aus NADPH"),
     (180, "+ H&#8314;", ""),
     (225, "+ H&#8314;", "&#8722; H&#8322;O"),
-    (270, "&#8722; H&#8226;", "Abstraktion"),
+    (270, "+ H&#8226;", "aus R&#8722;H"),
     (315, "&#8722; ROH", "Rebound"),
 ]
 for grad, oben, unten in UEBERGANG:
@@ -95,8 +99,8 @@ LEGENDE = [
     ("&#9315;", "Fe(II)&#8722;O&#8322;", "Oxy-Komplex, noch harmlos"),
     ("&#9316;", "Fe(III)&#8722;O&#8722;O&#8315;", "Peroxo, nach dem zweiten Elektron"),
     ("&#9317;", "Fe(III)&#8722;OOH", "Hydroperoxo, Compound 0"),
-    ("&#9318;", "Fe(IV)=O, Porphyrin&#8226;&#8314;", "Compound I — das Oxidans"),
-    ("&#9319;", "Fe(III)&#8722;OH, R&#8226;", "Radikalpaar im Käfig"),
+    ("&#9318;", "Fe(IV)=O, Porphyrin&#8226;&#8314;", "Compound I, das Oxidans"),
+    ("&#9319;", "Fe(IV)&#8722;OH, R&#8226;", "Compound II, Radikalpaar im Käfig"),
 ]
 for i, (nr, form, was) in enumerate(LEGENDE):
     y = 128 + i * 31
@@ -115,13 +119,13 @@ t.text(638, 535, "die C&#8722;H-Bindung eines Alkans angreifen kann.", size=12.5
 
 t.kasten(620, 578, 360, 122, fill="var(--drug-bg)", stroke=R)
 t.text(638, 600, "DREI ARTEN VON INTERAKTION", size=11, gewicht=700, farbe=R)
-t.text(638, 622, "Kompetitiv — zwei Substrate am selben Enzym.", size=12.5)
-t.text(638, 645, "Koordinativ — Azole binden mit einem Ring-", size=12.5)
+t.text(638, 622, "Kompetitiv: zwei Substrate am selben Enzym.", size=12.5)
+t.text(638, 645, "Koordinativ: Azole binden mit einem Ring-", size=12.5)
 t.text(638, 664, "Stickstoff direkt ans Häm-Eisen.", size=12.5)
-t.text(638, 687, "Mechanismusbasiert — Ritonavir, Clarithromycin.", size=12.5)
+t.text(638, 687, "Mechanismusbasiert: Ritonavir, Clarithromycin.", size=12.5)
 
 # ===================================================== ZONE B · O-O-Spaltung
-t.zone(748, "B · &#9317; → &#9318;  DIE HETEROLYTISCHE SPALTUNG — HIER ENTSTEHT DAS OXIDANS")
+t.zone(748, "B · &#9317; → &#9318;  DIE HETEROLYTISCHE SPALTUNG: HIER ENTSTEHT DAS OXIDANS")
 t.text(20, 778, "Das distale Sauerstoffatom wird protoniert und geht als Wasser ab. Beide "
                 "Elektronen der O&#8722;O-Bindung nehmen es mit.", size=12.5)
 
@@ -146,7 +150,7 @@ t.text(405, 880, "&#8722; H&#8322;O", size=11, anchor="middle", gewicht=700, far
 z1 = t.zentrum(506, 890, "Fe(IV)", axial=["O"], doppelt=True, radikal=True,
                name="Compound I")
 t.text(506, 946, "Compound I", size=11, anchor="middle", gewicht=700, farbe=W)
-t.text(506, 960, "Fe(IV)=O plus Porphyrin-Radikalkation", size=10.5, anchor="middle", farbe=G)
+t.text(506, 960, "Fe(IV)=O, Porphyrin&#8226;&#8314;", size=10.5, anchor="middle", farbe=G)
 
 t.kasten(578, 800, 402, 168, fill="var(--surface-2)")
 t.text(596, 822, "WARUM NICHT HOMOLYTISCH", size=11, gewicht=700, farbe=G)
@@ -158,49 +162,67 @@ t.text(596, 924, "Weg günstiger wird. Die zweite Oxidationsäquivalenz", size=1
 t.text(596, 943, "lagert das Porphyrin als Radikalkation zwischen.", size=12.5)
 
 # ===================================================== ZONE C · Abstraktion und Rebound
-t.zone(1006, "C · &#9318; → &#9319; → &#9312;  ABSTRAKTION UND REBOUND — BEIDE SCHRITTE RADIKALISCH")
-t.text(20, 1036, "Compound I holt sich zuerst ein Wasserstoffatom, dann fällt die Hydroxylgruppe "
-                 "auf das entstandene Kohlenstoffradikal zurück. Der Rebound ist so", size=12.5)
-t.text(20, 1056, "schnell, dass sich das Radikal in aller Regel nicht umlagert — daran lässt sich "
-                 "der Mechanismus experimentell prüfen.", size=12.5)
+t.zone(1006, "C · &#9318; → &#9319; → &#9312;  ABSTRAKTION UND REBOUND: BEIDE SCHRITTE RADIKALISCH")
+t.text(20, 1036, "Compound I holt sich zuerst ein Wasserstoffatom. Dessen Elektron reduziert das "
+                 "Porphyrin-Radikalkation und nicht das Eisen: es entsteht", size=12.5)
+t.text(20, 1056, "Compound II, Fe(IV)&#8722;OH. Erst der Rebound der Hydroxylgruppe auf das "
+                 "Kohlenstoffradikal bringt das Eisen auf Fe(III) zurück. Wo angegriffen wird,",
+       size=12.5)
+t.text(20, 1076, "entscheidet die Bindetasche und nicht die Bindungsstärke: beim Ibuprofen sind "
+                 "die benzylischen C&#8722;H-Bindungen die schwächeren. Der Rebound läuft",
+       size=12.5)
+t.text(20, 1096, "so schnell, dass sich das Radikal in aller Regel nicht umlagert. Daran lässt "
+                 "sich der Mechanismus experimentell prüfen.", size=12.5)
 
-zc1 = t.zentrum(84, 1150, "Fe(IV)", axial=["O"], doppelt=True, radikal=True,
-                name="Compound I")
-ibu = mech.Molekuel("CC(C)Cc1ccc(cc1)[C@H](C)C(=O)O", 268, 1146,
+zc1 = t.zentrum(84, 1190, "Fe(IV)", axial=["O"], doppelt=True, radikal=True,
+                schritt=56, name="Compound I")
+ibu = mech.Molekuel("CC(C)Cc1ccc(cc1)[C@H](C)C(=O)O", 268, 1186,
                     wasserstoff=[1], zeige={1: "links"}, name="Ibuprofen")
 t.mole.append(ibu)
 hidx = ibu.h_index[1]
 
 t.pfeil((ibu, 1, hidx), zc1.ax(0), bogen=0.20, seite=-1, typ="fischhaken", farbe=R)
-t.pfeil((ibu, 1, hidx), (ibu, 1), bogen=0.55, seite=1, typ="fischhaken", farbe=R,
-        mindestbogen=20)
-t.unterschrift(ibu, "Ibuprofen — angegriffen wird die schwächste C&#8722;H-Bindung,",
-               "das tertiäre Kohlenstoffatom der Isobutylgruppe")
-t.text(84, 1206, "Compound I", size=10.5, anchor="middle", gewicht=700, farbe=W)
+# Der zweite Haken endet nicht im Atom selbst, sondern dicht daneben auf der vom
+# Wasserstoff abgewandten Seite. Endet er im Atom, ist er kuerzer als sein eigener
+# Kopf und entartet zu einer Schleife ueber der C-H-Bindung.
+t.pfeil((ibu, 1, hidx), ibu.abseits(1, 0, 26), bogen=0.30, seite=-1,
+        typ="fischhaken", farbe=R, mindestbogen=14)
+t.unterschrift(ibu, "Ibuprofen: angegriffen wird das tertiäre C-Atom",
+               "der Isobutylgruppe, es entsteht 2-Hydroxyibuprofen")
+t.text(84, 1252, "Compound I", size=10.5, anchor="middle", gewicht=700, farbe=W)
 
-t.reaktionspfeil(432, 1146, 496)
-t.text(464, 1136, "H&#8226;", size=11, anchor="middle", gewicht=700, farbe=E)
+t.reaktionspfeil(432, 1186, 496)
+t.text(464, 1176, "H&#8226;", size=11, anchor="middle", gewicht=700, farbe=E)
 
-zc2 = t.zentrum(566, 1150, "Fe(III)", axial=["OH"], name="Fe(III)-Hydroxo")
-ibr = mech.Molekuel("CC(C)Cc1ccc(cc1)[C@H](C)C(=O)O", 750, 1146,
+zc2 = t.zentrum(566, 1190, "Fe(IV)", axial=["OH"], schritt=56, name="Compound II")
+# Die Radikalstelle steht jetzt im SMILES: das Kohlenstoffatom hat wirklich nur drei
+# Bindungen und ein Einzelelektron, der Fischhaken geht also von einem Radikal aus.
+# Den sichtbaren Punkt setzt weiterhin t.einzelelektron - der Punkt, den RDKit selbst
+# zeichnet, misst bei dieser Bindungslaenge 1,3 px und liegt unter dem Bindungsknick.
+ibr = mech.Molekuel("C[C](C)Cc1ccc(cc1)[C@H](C)C(=O)O", 750, 1186,
                     zeige={1: "links"}, name="Ibuprofen-Radikal")
 t.mole.append(ibr)
 
+# Drei Fischhaken, weil drei Elektronen ihren Platz wechseln: das Radikalelektron
+# und ein Elektron der Fe-O-Bindung bilden die neue C-O-Bindung, das zweite Elektron
+# dieser Bindung bleibt am Eisen und macht aus Fe(IV) wieder Fe(III).
 e1 = t.einzelelektron(ibr, 1, 180)
 t.pfeil(e1, zc2.ax(0), bogen=0.20, seite=-1, typ="fischhaken", farbe=R)
 t.pfeil(zc2.axb(-1, 0), zc2.ax(0), bogen=0.55, seite=1, typ="fischhaken", farbe=R,
         mindestbogen=20)
-t.unterschrift(ibr, "Kohlenstoffradikal — die Hydroxylgruppe fällt zurück,",
-               "es entsteht 2-Hydroxyibuprofen (CYP2C9)")
-t.text(566, 1206, "Fe(III)&#8722;OH", size=10.5, anchor="middle", gewicht=700, farbe=W)
+t.pfeil(zc2.axb(-1, 0), zc2.fe(), bogen=2.0, seite=1, typ="fischhaken", farbe=R)
+t.unterschrift(ibr, "Kohlenstoffradikal: die Hydroxylgruppe fällt zurück,",
+               "das Eisen wird dabei zu Fe(III) reduziert")
+t.text(566, 1252, "Compound II, Fe(IV)&#8722;OH", size=10.5, anchor="middle",
+       gewicht=700, farbe=W)
 
 # ===================================================== ZONE D · Bilanz
-t.zone(1250, "D · WAS SICH DARAUS ABLEITEN LÄSST")
-t.text(20, 1280, "Die Bilanz lautet R&#8722;H + O&#8322; + NADPH + H&#8314; → R&#8722;OH + "
+t.zone(1310, "D · WAS SICH DARAUS ABLEITEN LÄSST")
+t.text(20, 1340, "Die Bilanz lautet R&#8722;H + O&#8322; + NADPH + H&#8314; → R&#8722;OH + "
                  "H&#8322;O + NADP&#8314;. Von den beiden Sauerstoffatomen geht eines ins "
-                 "Substrat, eines ins Wasser — daher der Name", size=12.5)
-t.text(20, 1300, "Monooxygenase, und daher der NADPH-Verbrauch, der die Biotransformation an den "
-                 "Pentosephosphatweg koppelt.", size=12.5)
+                 "Substrat, eines ins Wasser.", size=12.5)
+t.text(20, 1360, "Daher der Name Monooxygenase, und daher der NADPH-Verbrauch, der die "
+                 "Biotransformation an den Pentosephosphatweg koppelt.", size=12.5)
 
 # ===================================================== Ausgabe
 ARIA = (
@@ -209,12 +231,14 @@ ARIA = (
     "axialen Liganden darueber: wassergebundenes Eisen drei, dann Substratbindung, erste "
     "Reduktion zu Eisen zwei, Sauerstoffanlagerung, zweite Reduktion zum Peroxokomplex, "
     "Protonierung zum Hydroperoxo, Compound eins mit Eisen vier gleich Sauerstoff und "
-    "Porphyrin-Radikalkation, schliesslich das Hydroxo-Eisen mit dem Substratradikal. "
-    "Zone B zeigt mit Elektronenpaarpfeilen, wie die Sauerstoff-Sauerstoff-Bindung "
-    "heterolytisch bricht, wobei das Thiolat Elektronendichte auf das Eisen schiebt und "
-    "Wasser abgeht. Zone C zeigt mit Fischhakenpfeilen die Abstraktion eines Wasserstoffatoms "
-    "vom tertiaeren Kohlenstoff des Ibuprofens und den anschliessenden Rebound der "
-    "Hydroxylgruppe auf das Kohlenstoffradikal."
+    "Porphyrin-Radikalkation, schliesslich Compound zwei mit Eisen vier und Hydroxid neben "
+    "dem Substratradikal. Zone B zeigt mit Elektronenpaarpfeilen, wie die "
+    "Sauerstoff-Sauerstoff-Bindung heterolytisch bricht, wobei das Thiolat Elektronendichte "
+    "auf das Eisen schiebt und Wasser abgeht. Zone C zeigt mit Fischhakenpfeilen die "
+    "Abstraktion eines Wasserstoffatoms vom tertiaeren Kohlenstoff des Ibuprofens, wodurch "
+    "aus Compound eins Compound zwei wird, und den anschliessenden Rebound der Hydroxylgruppe "
+    "auf das Kohlenstoffradikal, bei dem ein Elektron der Eisen-Sauerstoff-Bindung am Eisen "
+    "bleibt und es von Eisen vier auf Eisen drei zurueckfuehrt."
 )
 
 fehler, bericht = t.pruefe()
