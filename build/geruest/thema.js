@@ -48,3 +48,23 @@
     setze("light");
   });
 })();
+
+// Auf schmalen Schirmen faengt das Inhaltsverzeichnis zugeklappt an.
+(function () {
+  var knopf = document.querySelector(".railknopf");
+  var inhalt = document.getElementById("railinhalt");
+  if (!knopf || !inhalt) return;
+  knopf.hidden = false;
+  var schmal = window.matchMedia("(max-width: 900px)");
+
+  function stelle(zu) {
+    inhalt.classList.toggle("zu", zu);
+    knopf.setAttribute("aria-expanded", zu ? "false" : "true");
+  }
+
+  stelle(schmal.matches);
+  schmal.addEventListener("change", function (e) { stelle(e.matches); });
+  knopf.addEventListener("click", function () {
+    stelle(!inhalt.classList.contains("zu"));
+  });
+})();

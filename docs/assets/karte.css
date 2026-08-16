@@ -382,6 +382,24 @@ h2.zwischen{font:600 19px/1.3 var(--f-sans); color:var(--ink-2); margin:36px 0 1
 .mol.masstab{width:auto}
 .mol.masstab .struct svg{width:auto; height:auto; max-width:100%}
 
+/* --- Navigation auf schmalen Schirmen ----------------------------------- */
+/* Ohne das steht auf jeder Seite erst eine Bildschirmhoehe Navigation und
+   dann der Text. Der Knopf erscheint nur, wenn das Skript laeuft; ohne
+   Skript bleibt das Verzeichnis offen und nichts geht verloren. */
+.railknopf{display:none}
+@media (max-width:900px){
+  .railknopf{display:block; width:100%; margin:4px 0 0; text-align:left;
+    cursor:pointer; background:var(--surface-2); color:var(--ink);
+    border:1px solid var(--rule); border-radius:6px; padding:10px 12px;
+    font:600 13.5px/1 var(--f-sans)}
+  .railknopf::after{content:" \25BE"; float:right; color:var(--ink-3)}
+  .railknopf[aria-expanded="false"]::after{content:" \25B8"}
+  .railknopf:hover{background:var(--surface-3)}
+  .railinhalt.zu{display:none}
+  .railinhalt{margin-top:14px}
+  .rail .legende{display:none}
+}
+
 
 /* --- Lernfahrplan: gilt nur auf fahrplan.html ------------------ */
 body.fahrplan * {box-sizing:border-box}

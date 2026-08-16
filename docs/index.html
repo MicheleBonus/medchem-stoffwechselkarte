@@ -18,6 +18,9 @@ if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();
 <aside class="rail">
   <a class="marke" href="#start">Stoffwechselkarte der <em>Signalmoleküle</em></a>
   <div class="sub">Pharmazeutische und Medizinische Chemie · 2. Staatsexamen</div>
+  <button type="button" class="railknopf" aria-expanded="true" aria-controls="railinhalt"
+          hidden>Inhaltsverzeichnis</button>
+  <div class="railinhalt" id="railinhalt">
   <nav aria-label="Inhalt">
     <ol class="wege">
       <li><a href="#start">Start</a></li>
@@ -152,6 +155,7 @@ if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}})();
       <li><span class="swatch" style="background:var(--drug)"></span> Arzneistoff am Knoten</li>
       <li><span class="swatch" style="background:var(--warn)"></span> Regulation / Prüfungsfalle</li>
     </ul>
+  </div>
   </div>
   <button type="button" class="thema" data-thema aria-live="polite">Darstellung: automatisch</button>
 </aside>
