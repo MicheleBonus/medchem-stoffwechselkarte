@@ -1,0 +1,457 @@
+<section class="teil band" id="teil1">
+  <div class="teil-kopf">
+    <div class="nr">Teil 1 — Die C₂-Wurzel</div>
+    <h2>Acetyl-CoA: von zwei Kohlenstoffen zum Steroidhormon</h2>
+    <p class="abstract">Achtzehn Moleküle Acetyl-CoA ergeben ein Molekül Cholesterol, und aus Cholesterol gehen
+    sämtliche Steroide des Körpers hervor. An mehreren Schritten dieses Weges greifen
+    therapeutisch genutzte Wirkstoffklassen an.</p>
+  </div>
+
+  <!-- ===================================================== 1.1 -->
+  <h3 class="ast" id="a1-1"><span class="nr">1.1</span> Der Mevalonatweg</h3>
+  <div class="spalte">
+    <p class="intro">Die ersten beiden Schritte sind eine Claisen-Kondensation und eine Aldoladdition. Der dritte,
+    die Reduktion von HMG-CoA zu Mevalonat, ist geschwindigkeitsbestimmend für die gesamte
+    Cholesterolbiosynthese und der Angriffspunkt der Statine.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-s"><div class="struct">{{S:acetyl_coa_abbr}}</div>
+        <figcaption>Acetyl-CoA<span class="iupac">2 ×</span></figcaption></figure>
+      <div class="pfeil"><span class="enz">Thiolase<small>ACAT2</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">− CoA-SH</span></div>
+      <figure class="mol"><div class="struct">{{S:acetoacetyl_coa}}</div>
+        <figcaption>Acetoacetyl-CoA</figcaption></figure>
+      <div class="pfeil"><span class="enz">HMG-CoA-Synthase<small>cytosolisch</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">+ Acetyl-CoA</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:hmg_coa}}</div>
+        <figcaption>(<i>S</i>)-HMG-CoA<span class="iupac">3-Hydroxy-3-methylglutaryl-CoA</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">HMG-CoA-Reduktase<small>ER-Membran</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">2 NADPH + 2 H⁺</span>
+        <span class="hemm">Statine</span></div>
+      <figure class="mol ziel"><div class="struct">{{S:mevalonat}}</div>
+        <figcaption>(<i>R</i>)-Mevalonat<span class="iupac">3,5-Dihydroxy-3-methylpentansäure</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="tab-wrap">
+    <table class="schritte">
+      <thead><tr><th>Nr.</th><th>Umsetzung</th><th>Enzym</th><th>Cofaktor</th><th>Reaktionstyp</th><th>Regulation</th><th>Arzneistoff</th></tr></thead>
+      <tbody>
+        <tr><td class="rk">1.1.1</td>
+          <td class="um">2 Acetyl-CoA → Acetoacetyl-CoA</td>
+          <td><span class="e">ACAT2</span> Thiolase</td><td>—</td>
+          <td>Claisen-Kondensation</td><td>Substratangebot</td><td>—</td></tr>
+        <tr><td class="rk">1.1.2</td>
+          <td class="um">Acetoacetyl-CoA → (<i>S</i>)-HMG-CoA</td>
+          <td><span class="e">HMGCS1</span> <small>cytosolisch</small></td><td>Acetyl-CoA</td>
+          <td>Aldol­addition</td><td>SREBP-2</td><td>—</td></tr>
+        <tr><td class="rk">1.1.3</td>
+          <td class="um">HMG-CoA → (<i>R</i>)-Mevalonat <span class="rate">schrittbestimmend</span></td>
+          <td><span class="e">HMGCR</span></td><td><span class="c">2 NADPH</span></td>
+          <td>zweifache Reduktion, Thioester → prim. Alkohol</td>
+          <td>SREBP-2 ↑, Sterol-vermittelter Abbau ↓, AMPK-Phosphorylierung ↓</td>
+          <td><span class="d">Simvastatin, Atorvastatin</span></td></tr>
+        <tr><td class="rk">1.1.4</td>
+          <td class="um">Mevalonat → Mevalonat-5-diphosphat</td>
+          <td><span class="e">MVK, PMVK</span></td><td>2 ATP</td>
+          <td>zwei Phosphorylierungen</td><td>—</td>
+          <td><small>MVK-Defekt → Hyper-IgD-Syndrom</small></td></tr>
+        <tr><td class="rk">1.1.5</td>
+          <td class="um">Mevalonat-5-PP → IPP</td>
+          <td><span class="e">MVD</span></td><td>ATP</td>
+          <td>decarboxylierende Dehydratisierung</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="boxen">
+    <div class="falle">
+      <b>Prüfungsfalle · zwei HMG-CoA-Synthasen</b>
+      <p>HMG-CoA tritt an <em>zwei</em> Stellen des Stoffwechsels auf. Die <b>cytosolische</b> Synthase (HMGCS1) liefert HMG-CoA für die
+      Cholesterolbiosynthese. Die <b>mitochondriale</b> Synthase (HMGCS2) liefert HMG-CoA für die
+      Ketogenese, wo es von der HMG-CoA-<em>Lyase</em> zu Acetacetat gespalten wird — nicht von der
+      Reduktase reduziert.</p>
+      <p>Statine hemmen die Ketogenese daher nicht: Sie greifen ein cytosolisches Enzym an, während
+      die Ketonkörperbildung mitochondrial abläuft und über die Lyase weitergeführt wird.</p>
+    </div>
+
+    <div class="merk">
+      <b>Statine als Übergangszustandsanaloga</b>
+      <p>Die Statin-Seitenkette ist ein <b>Übergangszustandsanalogon</b>: Der Dihydroxyheptansäure-
+      bzw. β-Hydroxylacton-Rest bildet den Mevaldyl-CoA-Halbthioacetal-Übergangszustand nach, den
+      die Reduktase durchläuft. Daher die außergewöhnlich niedrigen K<sub>i</sub>-Werte im
+      nanomolaren Bereich gegenüber einem K<sub>M</sub> des natürlichen Substrats im mikromolaren.</p>
+      <p>Lactonstatine wie Simvastatin und Lovastatin sind <b>Prodrugs</b>; erst die Hydrolyse des
+      Lactonrings zur offenkettigen β-Hydroxysäure erzeugt die aktive Form. Atorvastatin,
+      Rosuvastatin und Pravastatin liegen bereits offenkettig vor.</p>
+    </div>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-l"><div class="struct">{{S:simvastatin}}</div>
+        <figcaption>Simvastatin <span class="iupac">Lacton-Prodrug</span></figcaption></figure>
+      <figure class="mol w-xl"><div class="struct">{{S:atorvastatin}}</div>
+        <figcaption>Atorvastatin <span class="iupac">offenkettige Dihydroxyheptansäure</span></figcaption></figure>
+      <figure class="mol w-s"><div class="struct">{{S:alendronat}}</div>
+        <figcaption>Alendronat <span class="iupac">hemmt die FPP-Synthase, Schritt 1.2.3</span></figcaption></figure>
+    </div>
+  </div>
+
+  <!-- ===================================================== 1.2 -->
+  <h3 class="ast" id="a1-2"><span class="nr">1.2</span> Die Isoprenoid-Kaskade</h3>
+  <div class="spalte">
+    <p class="intro">Ab hier verläuft der Aufbau in C₅-Einheiten. IPP ist der aktivierte Isopren-Baustein; jede
+    Kettenverlängerung ist eine elektrophile Alkylierung, bei der ein Allyl-Kation aus DMAPP das
+    Alken des IPP angreift. An der Farnesyl-diphosphat-Synthase dieses Wegs greifen die
+    Bisphosphonate an.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-s"><div class="struct">{{S:ipp}}</div><figcaption>IPP</figcaption></figure>
+      <div class="pfeil"><span class="enz">IPP-Isomerase</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="4.5" x2="90" y2="4.5" stroke="currentColor" stroke-width="1.3"/><polygon points="90,1 99,4.5 90,8" fill="currentColor"/><line x1="10" y1="10" x2="98" y2="10" stroke="currentColor" stroke-width="1.3"/><polygon points="10,6.5 1,10 10,13.5" fill="currentColor"/></svg>
+        <span class="cof">Δ³ ⇄ Δ²</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:dmapp}}</div><figcaption>DMAPP</figcaption></figure>
+      <div class="pfeil"><span class="enz">GPP-Synthase</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">+ IPP, − PP<sub>i</sub></span></div>
+      <figure class="mol"><div class="struct">{{S:gpp}}</div><figcaption>Geranyl-PP <span class="iupac">C₁₀</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">FPP-Synthase</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">+ IPP</span>
+        <span class="hemm">N-Bisphosphonate</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:fpp}}</div><figcaption>Farnesyl-PP <span class="iupac">C₁₅</span></figcaption></figure>
+      <div class="pfeil"><span class="enz">Squalen-Synthase</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">2 × FPP, NADPH</span></div>
+      <figure class="mol ziel w-xl"><div class="struct">{{S:squalen}}</div>
+        <figcaption>Squalen <span class="iupac">C₃₀, Kopf-Kopf-Verknüpfung</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="tab-wrap">
+    <table class="schritte">
+      <thead><tr><th>Nr.</th><th>Umsetzung</th><th>Enzym</th><th>Cofaktor</th><th>Reaktionstyp</th><th>Merkpunkt</th><th>Arzneistoff</th></tr></thead>
+      <tbody>
+        <tr><td class="rk">1.2.1</td><td class="um">IPP ⇄ DMAPP</td>
+          <td><span class="e">IDI1</span></td><td>—</td><td>Allyl­isomerisierung</td>
+          <td>schafft erst das Elektrophil</td><td>—</td></tr>
+        <tr><td class="rk">1.2.2</td><td class="um">DMAPP + IPP → GPP (C₁₀)</td>
+          <td><span class="e">FDPS</span></td><td>—</td><td>elektrophile Alkylierung</td>
+          <td>Kopf-Schwanz</td><td>—</td></tr>
+        <tr><td class="rk">1.2.3</td><td class="um">GPP + IPP → FPP (C₁₅)</td>
+          <td><span class="e">FDPS</span> Farnesyl-PP-Synthase</td><td>—</td>
+          <td>elektrophile Alkylierung</td>
+          <td>Verzweigungspunkt zu Prenylierung und Ubichinon</td>
+          <td><span class="d">Alendronat, Zoledronat, Risedronat</span></td></tr>
+        <tr><td class="rk">1.2.4</td><td class="um">2 FPP → Squalen (C₃₀)</td>
+          <td><span class="e">FDFT1</span> Squalen-Synthase</td><td><span class="c">NADPH</span></td>
+          <td>Kopf-Kopf, über Präsqualen-PP</td>
+          <td>erster committed step ausschließlich zum Sterol</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="boxen">
+    <div class="merk">
+      <b>Warum Bisphosphonate am Knochen wirken</b>
+      <p>Stickstoffhaltige Bisphosphonate hemmen die FPP-Synthase. Die Folge ist nicht in erster
+      Linie ein Cholesterolmangel, sondern das Ausbleiben von <b>Farnesyl-</b> und
+      <b>Geranylgeranyl-PP</b>, und damit der posttranslationalen Prenylierung kleiner GTPasen wie
+      Rab, Rho und Rac. Ohne Prenylanker können diese GTPasen nicht mehr in die Membran inserieren;
+      der Osteoklast verliert seinen Bürstensaum und geht in Apoptose.</p>
+      <p>Die P–C–P-Struktur erklärt zugleich die Pharmakokinetik: Als nicht hydrolysierbares
+      Pyrophosphat-Analogon adsorbiert das Molekül an Hydroxylapatit und reichert sich selektiv im
+      Knochen an. Daraus erklären sich die lange Verweildauer und die Möglichkeit wöchentlicher
+      oder jährlicher Gabe.</p>
+    </div>
+ </div>
+
+  <!-- ===================================================== 1.3 -->
+  <h3 class="ast" id="a1-3"><span class="nr">1.3</span> Von Squalen zum Cholesterol</h3>
+  <div class="spalte">
+    <p class="intro">Die Oxidosqualen-Cyclase faltet das offenkettige Squalenepoxid in eine definierte Konformation
+    und löst eine <b>kationische Kaskadenzyklisierung</b> aus. In einem Schritt entstehen vier Ringe
+    und sieben Stereozentren, stereospezifisch und ohne Cofaktor.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-xl"><div class="struct">{{S:squalen}}</div><figcaption>Squalen</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">Squalen-Monooxygenase<small>SQLE</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">FAD, NADPH, O₂</span>
+        <span class="hemm">Terbinafin <small>(Pilz-SQLE)</small></span></div>
+      <figure class="mol w-xl"><div class="struct">{{S:squalenepoxid}}</div>
+        <figcaption>(3<i>S</i>)-Squalen-2,3-epoxid</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">Lanosterol-Synthase<small>Oxidosqualen-Cyclase</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">kein Cofaktor</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:lanosterol}}</div>
+        <figcaption>Lanosterol <span class="iupac">C₃₀, drei „überzählige“ Methylgruppen</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">CYP51A1 u. a.<small>19 Einzelschritte</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 3"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">NADPH, O₂</span>
+        <span class="hemm">Azol-Antimykotika <small>(Pilz-CYP51)</small></span></div>
+      <figure class="mol ziel w-l"><div class="struct">{{S:cholesterol}}</div>
+        <figcaption>Cholesterol <span class="iupac">C₂₇, Δ⁵, 3β-OH</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="boxen">
+    <div class="falle">
+      <b>Prüfungsfalle · warum Antimykotika selektiv sind</b>
+      <p>Sowohl die Squalen-Epoxidase als auch die 14α-Demethylase (CYP51) existieren im Menschen
+      <em>und</em> im Pilz. Die Selektivität von Terbinafin und den Azolen beruht nicht darauf, dass
+      dem Menschen das Enzym fehlt, sondern auf einer um Größenordnungen höheren Affinität zur
+      Pilzisoform. Die unerwünschten Wirkungen der Azole sind deshalb dosisabhängig endokrin:
+      Ketoconazol hemmt in höherer Dosis auch das humane CYP17A1 und CYP11A1 und wurde historisch
+      als Antiandrogen eingesetzt.</p>
+      <p>Maßgeblich ist also nicht das Fehlen eines Enzyms beim Menschen, sondern die Größe des
+      Affinitätsunterschieds zwischen den Isoformen. Dasselbe gilt für antibakterielle Wirkstoffe
+      mit humanen Homologen.</p>
+    </div>
+ </div>
+
+  <!-- ===================================================== 1.4 -->
+  <h3 class="ast" id="a1-4"><span class="nr">1.4</span> Steroidogenese — die große CYP-Verzweigung</h3>
+  <div class="spalte">
+    <p class="intro">Alle Steroidhormonklassen gehen auf Pregnenolon zurück. Welche davon eine Zelle bildet, hängt
+    allein davon ab, welche CYP-Enzyme sie exprimiert: Die Zona glomerulosa besitzt CYP11B2 und
+    bildet Aldosteron, die Zona fasciculata CYP17A1 und CYP11B1 und bildet Cortisol, das Ovar
+    CYP19A1 und bildet Estradiol. Der Syntheseweg ist derselbe und wird lediglich an
+    unterschiedlicher Stelle beendet.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-l"><div class="struct">{{S:cholesterol}}</div><figcaption>Cholesterol</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">CYP11A1<small>P450scc, innere Mito-Membran</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">3 × (NADPH + O₂)</span>
+        <span class="hemm">Aminoglutethimid</span></div>
+      <figure class="mol ziel w-l"><div class="struct">{{S:pregnenolon}}</div>
+        <figcaption>Pregnenolon <span class="iupac">C₂₁ — die Drehscheibe</span></figcaption></figure>
+      <div class="pfeil"><span class="enz">3β-HSD</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">NAD⁺</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:progesteron}}</div>
+        <figcaption>Progesteron <span class="iupac">Δ⁴-3-Keton</span></figcaption></figure>
+    </div>
+  </div>
+
+  <p class="spalte" style="margin-top:18px">Ab Progesteron trennen sich die Wege. Nach links führt
+  die 21-Hydroxylierung zu den Corticoiden, nach rechts die 17,20-Lyase-Aktivität zu den
+  Sexualhormonen:</p>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-l"><div class="struct">{{S:hydroxyprogesteron}}</div>
+        <figcaption>17α-OH-Progesteron</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">CYP17A1<small>17,20-Lyase-Aktivität</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">NADPH, O₂ · − C₂-Rest</span>
+        <span class="hemm">Abirateron</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:androstendion}}</div>
+        <figcaption>Androstendion <span class="iupac">C₁₉</span></figcaption></figure>
+      <div class="pfeil"><span class="enz">17β-HSD</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">NADPH</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:testosteron}}</div><figcaption>Testosteron</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">CYP19A1<small>Aromatase</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">3 × (NADPH + O₂)</span>
+        <span class="hemm">Anastrozol, Letrozol, Exemestan</span></div>
+      <figure class="mol ziel w-l"><div class="struct">{{S:estradiol}}</div>
+        <figcaption>Estradiol <span class="iupac">C₁₈, aromatischer Ring A</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="tab-wrap">
+    <table class="schritte">
+      <thead><tr><th>Nr.</th><th>Umsetzung</th><th>Enzym</th><th>Cofaktor</th><th>Reaktionstyp</th><th>Klinik / Regulation</th><th>Arzneistoff</th></tr></thead>
+      <tbody>
+        <tr><td class="rk">1.4.1</td>
+          <td class="um">Cholesterol → Pregnenolon <span class="rate">schrittbestimmend</span></td>
+          <td><span class="e">CYP11A1</span></td><td><span class="c">3 NADPH, 3 O₂</span></td>
+          <td>20α- und 22-Hydroxylierung, dann C20–C22-Lyase; Abgang von Isocapronaldehyd</td>
+          <td>ACTH ↑ über StAR-Protein (Cholesterol-Transport, der eigentliche Engpass)</td>
+          <td><span class="d">Aminoglutethimid</span>, Ketoconazol <small>(off-target)</small></td></tr>
+        <tr><td class="rk">1.4.2</td><td class="um">Pregnenolon → Progesteron</td>
+          <td><span class="e">HSD3B2</span></td><td><span class="c">NAD⁺</span></td>
+          <td>3β-Oxidation + Δ⁵→Δ⁴-Isomerisierung</td><td>—</td><td>—</td></tr>
+        <tr><td class="rk">1.4.3</td><td class="um">Progesteron → 11-Desoxycorticosteron</td>
+          <td><span class="e">CYP21A2</span></td><td><span class="c">NADPH, O₂</span></td>
+          <td>21-Hydroxylierung</td>
+          <td><b>Defekt = adrenogenitales Syndrom</b> (95 % aller AGS-Fälle); Stau vor dem Block
+              lenkt Vorstufen in den Androgenast</td><td>—</td></tr>
+        <tr><td class="rk">1.4.4</td><td class="um">11-Desoxycortisol → Cortisol</td>
+          <td><span class="e">CYP11B1</span></td><td><span class="c">NADPH, O₂</span></td>
+          <td>11β-Hydroxylierung</td><td>ACTH-gesteuert</td>
+          <td><span class="d">Metyrapon</span> <small>(diagnostischer Test)</small></td></tr>
+        <tr><td class="rk">1.4.5</td><td class="um">Corticosteron → Aldosteron</td>
+          <td><span class="e">CYP11B2</span> Aldosteron-Synthase</td><td><span class="c">NADPH, O₂</span></td>
+          <td>18-Hydroxylierung + 18-Oxidation</td>
+          <td>Angiotensin II und K⁺, <em>nicht</em> ACTH</td>
+          <td><span class="d">Spironolacton, Eplerenon</span> <small>(Rezeptor, nicht Enzym)</small></td></tr>
+        <tr><td class="rk">1.4.6</td><td class="um">Testosteron → 5α-Dihydrotestosteron</td>
+          <td><span class="e">SRD5A2</span></td><td><span class="c">NADPH</span></td>
+          <td>Δ⁴-Reduktion</td><td>DHT bindet den AR ~5× stärker als Testosteron</td>
+          <td><span class="d">Finasterid, Dutasterid</span></td></tr>
+        <tr><td class="rk">1.4.7</td><td class="um">Androstendion / Testosteron → Estron / Estradiol</td>
+          <td><span class="e">CYP19A1</span> Aromatase</td><td><span class="c">3 NADPH, 3 O₂</span></td>
+          <td>drei Zyklen; C19 wird als <b>Formiat</b> abgespalten, Ring A aromatisiert</td>
+          <td>im Fettgewebe exprimiert; erklärt die Estrogenlast bei Adipositas</td>
+          <td><span class="d">Anastrozol, Letrozol</span> <small>(nichtsteroidal, reversibel)</small>;
+              <span class="d">Exemestan, Formestan</span> <small>(steroidal, irreversibel)</small></td></tr>
+        <tr><td class="rk">1.4.8</td><td class="um">Cortisol → Cortison</td>
+          <td><span class="e">HSD11B2</span></td><td><span class="c">NAD⁺</span></td>
+          <td>11β-Oxidation, inaktivierend</td>
+          <td>schützt den Mineralocorticoidrezeptor vor Cortisol</td>
+          <td><span class="d">Glycyrrhizin</span> <small>(Lakritz → Pseudohyperaldosteronismus)</small></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="boxen">
+    <div class="falle">
+      <b>Prüfungsfalle · CYP17A1 hat zwei Aktivitäten</b>
+      <p>Ein einziges Enzym, zwei Reaktionen: Die <b>17α-Hydroxylase</b>-Aktivität führt Progesteron
+      zu 17α-OH-Progesteron; die <b>17,20-Lyase</b>-Aktivität spaltet anschließend die
+      C₂-Seitenkette ab und macht daraus das C₁₉-Androstendion. Beide laufen am selben Häm, aber
+      die Lyase-Aktivität benötigt zusätzlich Cytochrom b₅.</p>
+      <p>Abirateron schaltet als CYP17A1-Hemmer daher die Androgensynthese aus und löst zugleich
+      einen Mineralocorticoid-Exzess aus: Der Block staut Vorstufen in den
+      CYP21A2-Ast, wo sie zu Desoxycorticosteron werden. Deshalb wird Abirateron immer mit
+      Prednisolon kombiniert.</p>
+      <p>Zweite häufige Verwechslung: <b>Aromatase</b> (CYP19A1) macht aus Androgen ein Estrogen —
+      C₁₉ → C₁₈. <b>5α-Reduktase</b> (SRD5A2) macht aus Testosteron das stärkere DHT — beide C₁₉.
+      Anastrozol und Finasterid greifen also an völlig verschiedenen Stellen an, obwohl beide
+      „Antiandrogene“ genannt werden.</p>
+    </div>
+ </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol"><div class="struct">{{S:anastrozol}}</div>
+        <figcaption>Anastrozol <span class="iupac">Triazol koordiniert das Häm-Eisen</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:letrozol}}</div><figcaption>Letrozol</figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:exemestan}}</div>
+        <figcaption>Exemestan <span class="iupac">6-Methylen: Suizidsubstrat</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:finasterid}}</div>
+        <figcaption>Finasterid <span class="iupac">4-Aza-Steroid</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:abirateron}}</div>
+        <figcaption>Abirateron <span class="iupac">Pyridin-N koordiniert das Häm</span></figcaption></figure>
+    </div>
+  </div>
+
+  <!-- ===================================================== 1.5 -->
+  <h3 class="ast" id="a1-5"><span class="nr">1.5</span> Der Vitamin-D-Ast</h3>
+  <div class="spalte">
+    <p class="intro">Vitamin D ist chemisch ein <b>Secosteroid</b>, also ein Steroid mit geöffnetem Ring B. Die
+    Ringöffnung erfolgt photochemisch statt enzymatisch: eine konrotatorische Elektrocyclisierung
+    unter UV-B, gefolgt von einer [1,7]-sigmatropen Wasserstoffverschiebung.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-l"><div class="struct">{{S:dehydrocholesterol}}</div>
+        <figcaption>7-Dehydrocholesterol <span class="iupac">Provitamin D₃, in der Epidermis</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">UV-B 290–315 nm<small>nicht enzymatisch</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="var(--cofaktor)" stroke-width="1.6"/><polygon points="90,2.5 99,6.5 90,10.5" fill="var(--cofaktor)"/></svg>
+        <span class="cof">konrotatorische Ringöffnung, dann [1,7]-H-Shift</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:cholecalciferol}}</div>
+        <figcaption>Cholecalciferol (D₃) <span class="iupac">Secosteroid, Ring B offen</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">CYP2R1 → CYP27B1<small>Leber → Niere</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 3"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">25-, dann 1α-Hydroxylierung</span></div>
+      <figure class="mol ziel w-l"><div class="struct">{{S:calcitriol}}</div>
+        <figcaption>Calcitriol <span class="iupac">1α,25-(OH)₂-D₃ — das eigentliche Hormon</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="boxen">
+    <div class="merk">
+      <b>Die zwei Hydroxylierungen als Regelkreis</b>
+      <p>Die 25-Hydroxylierung in der Leber ist praktisch unreguliert; <b>25-OH-D₃ (Calcidiol)</b>
+      ist deshalb der Laborparameter für den Versorgungszustand. Die 1α-Hydroxylierung
+      in der Niere dagegen ist streng reguliert: PTH ↑, Phosphat ↓ und Calcitriol selbst über
+      negative Rückkopplung. Calcitriol ist deshalb <em>kein</em> geeigneter Parameter für einen Vitamin-D-Mangel; bei
+      Mangel kann es durch den PTH-Anstieg sogar normal oder erhöht sein.</p>
+      <p>Bei dialysepflichtiger Niereninsuffizienz fällt die 1α-Hydroxylase aus. Dann hilft keine
+      Cholecalciferol-Gabe mehr, sondern nur bereits 1α-hydroxylierte Präparate wie
+      <b>Alfacalcidol</b> oder Calcitriol selbst.</p>
+    </div>
+ </div>
+
+  <!-- ===================================================== 1.6 -->
+  <h3 class="ast" id="a1-6"><span class="nr">1.6</span> Gallensäuren — der einzige Weg hinaus</h3>
+  <div class="spalte">
+    <p class="intro">Der Mensch kann das Steroidgerüst nicht zu CO₂ abbauen. Cholesterol wird deshalb überwiegend
+    nach Umwandlung in Gallensäuren ausgeschieden; an diesem Kreislauf setzen die
+    Gallensäurebinder an.</p>
+    <div class="tab-wrap">
+      <table class="schritte">
+        <thead><tr><th>Nr.</th><th>Umsetzung</th><th>Enzym</th><th>Cofaktor</th><th>Merkpunkt</th><th>Arzneistoff</th></tr></thead>
+        <tbody>
+          <tr><td class="rk">1.6.1</td><td class="um">Cholesterol → 7α-Hydroxycholesterol
+            <span class="rate">schrittbestimmend</span></td>
+            <td><span class="e">CYP7A1</span></td><td><span class="c">NADPH, O₂</span></td>
+            <td>Hemmung durch Gallensäuren über FXR</td>
+            <td><span class="d">Colestyramin</span> <small>unterbricht den enterohepatischen
+              Kreislauf → CYP7A1 ↑ → LDL-Rezeptor ↑</small></td></tr>
+          <tr><td class="rk">1.6.2</td><td class="um">→ Cholsäure / Chenodesoxycholsäure</td>
+            <td>mehrstufig</td><td>NADPH</td>
+            <td>Seitenkettenverkürzung C₂₇ → C₂₄</td><td>—</td></tr>
+          <tr><td class="rk">1.6.3</td><td class="um">Konjugation mit Glycin oder Taurin</td>
+            <td><span class="e">BAAT</span></td><td>CoA, ATP</td>
+            <td>senkt den pK<sub>a</sub> → auch im sauren Duodenum ionisiert</td>
+            <td><span class="d">Ursodesoxycholsäure</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===================================================== 1.7 -->
+  <h3 class="ast" id="a1-7"><span class="nr">1.7</span> Nebenäste und Ketonkörper</h3>
+  <div class="spalte">
+    <p class="intro">Zwei kleinere Äste, die zur Beurteilung von Nebenwirkungen gebraucht werden.</p>
+
+    <h4 class="unter">Ubichinon und der Statin-Mythos</h4>
+    <p>Die Polyprenylseitenkette des Ubichinons (Coenzym Q₁₀) stammt aus FPP. Weil Statine oberhalb
+    dieser Verzweigung hemmen, sinkt unter Statintherapie tatsächlich der Q₁₀-Spiegel, was gemeinhin als Erklärung für Statin-Myopathien gilt. Ein Nutzen der Q₁₀-Substitution ist allerdings nicht
+    belegt; die Myopathie korreliert besser mit SLCO1B1-Polymorphismen, also mit der hepatischen
+    Aufnahme.</p>
+
+    <h4 class="unter">Ketonkörper</h4>
+    <p>Bei Insulinmangel oder Kohlenhydratkarenz läuft der C₂-Strom nicht in den Citratzyklus,
+    sondern in die mitochondriale Ketogenese. Physiologisch relevant ist, dass
+    <b>(<i>R</i>)-3-Hydroxybutyrat</b> mengenmäßig dominiert und Aceton lediglich durch spontane,
+    nichtenzymatische Decarboxylierung aus Acetacetat entsteht — daher der Geruch, nicht die
+    Funktion.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-s"><div class="struct">{{S:acetacetat}}</div><figcaption>Acetacetat</figcaption></figure>
+      <div class="pfeil"><span class="enz">BDH1</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">NADH</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:hydroxybutyrat}}</div>
+        <figcaption>(<i>R</i>)-3-Hydroxybutyrat</figcaption></figure>
+      <div class="pfeil"><span class="enz">spontan</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4" stroke-dasharray="3 3"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">− CO₂, nicht enzymatisch</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:aceton}}</div><figcaption>Aceton</figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:ubichinon}}</div>
+        <figcaption>Ubichinon <span class="iupac">gezeichnet mit n = 3; physiologisch n = 10</span></figcaption></figure>
+    </div>
+  </div>
+</section>

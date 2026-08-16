@@ -1,0 +1,188 @@
+<section class="teil band" id="teil0">
+  <div class="teil-kopf">
+    <div class="nr">Teil 0 — Orientierung</div>
+    <h2>Die fünf Wurzeln</h2>
+    <p class="abstract">Fünf Ausgangsstoffe genügen, um sämtliche körpereigenen Signalmoleküle aufzubauen. Alles
+    Weitere sind Verzweigungen, und jede Verzweigung wird von einem Enzym katalysiert, an dem
+    Arzneistoffe angreifen.</p>
+  </div>
+
+  <div class="spalte">
+    <p>Die Karte ist von links nach rechts zu lesen: links der Ausgangsstoff, in der Mitte das
+    verzweigende Enzym, rechts die Produktklasse. Die mittlere Spalte trägt den größten Teil des
+    prüfungsrelevanten Stoffs, weil sich dort die Angriffspunkte der Arzneistoffe befinden.</p>
+  </div>
+
+  <figure class="karte">
+    <svg viewBox="0 0 1120 664" role="img"
+      aria-label="Übersichtskarte: fünf biosynthetische Wurzeln — Acetyl-CoA, aromatische Aminosäuren, nicht-aromatische Aminosäuren, Glucose und das Cofaktor-Netz — verzweigen über benannte Schlüsselenzyme in die physiologischen Signalstoffklassen.">
+      <defs>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+        </marker>
+        <marker id="arc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--cofaktor)"/>
+        </marker>
+      </defs>
+
+      <g font-family="Corbel, Segoe UI, system-ui, sans-serif">
+
+      <!-- ============ Spaltenüberschriften ============ -->
+      <g font-size="10.5" letter-spacing="1.4" fill="var(--ink-3)" text-transform="uppercase">
+        <text x="16" y="18">WURZEL</text>
+        <text x="204" y="18">VERZWEIGENDES ENZYM</text>
+        <text x="352" y="18">PRODUKTKLASSE  ·  ARZNEISTOFF AM KNOTEN</text>
+      </g>
+      <line x1="16" y1="26" x2="1104" y2="26" stroke="currentColor" stroke-width="1" opacity=".28"/>
+
+      <!-- ================= 1  ACETYL-CoA ================= -->
+      <rect x="16" y="34" width="184" height="112" rx="7" fill="var(--surface-3)" stroke="currentColor" stroke-width="1.4"/>
+      <text x="108" y="80" text-anchor="middle" font-size="15" font-weight="700" fill="currentColor">Acetyl-CoA</text>
+      <text x="108" y="98" text-anchor="middle" font-size="11" fill="var(--ink-3)">die C₂-Wurzel</text>
+      <text x="108" y="118" text-anchor="middle" font-size="10.5" fill="var(--ink-3)">aus Glykolyse, β-Oxidation,</text>
+      <text x="108" y="131" text-anchor="middle" font-size="10.5" fill="var(--ink-3)">ketogenen Aminosäuren</text>
+
+      <g stroke="currentColor" stroke-width="1.3" marker-end="url(#ar)" opacity=".75">
+        <line x1="206" y1="52" x2="342" y2="52"/>
+        <line x1="206" y1="90" x2="342" y2="90"/>
+        <line x1="206" y1="128" x2="342" y2="128"/>
+      </g>
+      <g font-size="11" font-weight="700" fill="var(--enzym)" font-family="Consolas, monospace" text-anchor="middle">
+        <text x="274" y="46">HMG-CoA-Reduktase</text>
+        <text x="274" y="84">FAS / Δ-Desaturasen</text>
+        <text x="274" y="122">HMG-CoA-Lyase</text>
+      </g>
+      <g font-size="12.5" fill="currentColor">
+        <text x="352" y="49">Isoprenoide → <tspan font-weight="700">Cholesterol</tspan> → Steroidhormone,
+          Gallensäuren, Vitamin D, Ubichinon</text>
+        <text x="352" y="63" font-size="11" fill="var(--drug)">Statine · Bisphosphonate (FPP-Synthase) · Aromatasehemmer · Finasterid</text>
+        <text x="352" y="87">Arachidonsäure → <tspan font-weight="700">Eicosanoide</tspan>,
+          Endocannabinoide, PAF</text>
+        <text x="352" y="101" font-size="11" fill="var(--drug)">NSAR · Coxibe · Zileuton · Montelukast</text>
+        <text x="352" y="125"><tspan font-weight="700">Ketonkörper</tspan> — Acetacetat, (R)-3-Hydroxybutyrat</text>
+        <text x="352" y="139" font-size="11" fill="var(--drug)">SGLT2-Hemmer (euglykäme Ketoazidose)</text>
+      </g>
+
+      <!-- ================= 2  AROMATISCHE AS ================= -->
+      <rect x="16" y="162" width="184" height="112" rx="7" fill="var(--surface-3)" stroke="currentColor" stroke-width="1.4"/>
+      <text x="108" y="206" text-anchor="middle" font-size="15" font-weight="700" fill="currentColor">Aromatische</text>
+      <text x="108" y="224" text-anchor="middle" font-size="15" font-weight="700" fill="currentColor">Aminosäuren</text>
+      <text x="108" y="245" text-anchor="middle" font-size="11" fill="var(--ink-3)">Phe · Tyr · Trp · His</text>
+      <text x="108" y="261" text-anchor="middle" font-size="10.5" fill="var(--ink-3)">alle essenziell außer Tyr</text>
+
+      <g stroke="currentColor" stroke-width="1.3" marker-end="url(#ar)" opacity=".75">
+        <line x1="206" y1="180" x2="342" y2="180"/>
+        <line x1="206" y1="218" x2="342" y2="218"/>
+        <line x1="206" y1="256" x2="342" y2="256"/>
+      </g>
+      <g font-size="11" font-weight="700" fill="var(--enzym)" font-family="Consolas, monospace" text-anchor="middle">
+        <text x="274" y="174">TH → AADC → DBH</text>
+        <text x="274" y="212">TPH → AADC</text>
+        <text x="274" y="250">HDC</text>
+      </g>
+      <g font-size="12.5" fill="currentColor">
+        <text x="352" y="177">Tyr → <tspan font-weight="700">Catecholamine</tspan>; daneben Melanin und Thyroxin</text>
+        <text x="352" y="191" font-size="11" fill="var(--drug)">L-Dopa + Carbidopa · Entacapon · Selegilin · Thiamazol</text>
+        <text x="352" y="215">Trp → <tspan font-weight="700">Serotonin → Melatonin</tspan>; Nebenast Kynurenin → NAD⁺</text>
+        <text x="352" y="229" font-size="11" fill="var(--drug)">SSRI · Triptane · Setrone · Ramelteon</text>
+        <text x="352" y="253">His → <tspan font-weight="700">Histamin</tspan></text>
+        <text x="352" y="267" font-size="11" fill="var(--drug)">H₁-Antihistaminika · H₂-Blocker</text>
+      </g>
+
+      <!-- ================= 3  NICHT-AROMATISCHE AS ================= -->
+      <rect x="16" y="290" width="184" height="150" rx="7" fill="var(--surface-3)" stroke="currentColor" stroke-width="1.4"/>
+      <text x="108" y="342" text-anchor="middle" font-size="15" font-weight="700" fill="currentColor">Nicht-aromatische</text>
+      <text x="108" y="360" text-anchor="middle" font-size="15" font-weight="700" fill="currentColor">Aminosäuren</text>
+      <text x="108" y="382" text-anchor="middle" font-size="11" fill="var(--ink-3)">Glu · Gly · Arg · Cys</text>
+      <text x="108" y="397" text-anchor="middle" font-size="11" fill="var(--ink-3)">Met · Ser</text>
+
+      <g stroke="currentColor" stroke-width="1.3" marker-end="url(#ar)" opacity=".75">
+        <line x1="206" y1="308" x2="342" y2="308"/>
+        <line x1="206" y1="346" x2="342" y2="346"/>
+        <line x1="206" y1="384" x2="342" y2="384"/>
+        <line x1="206" y1="422" x2="342" y2="422"/>
+      </g>
+      <g font-size="11" font-weight="700" fill="var(--enzym)" font-family="Consolas, monospace" text-anchor="middle">
+        <text x="274" y="302">GAD</text>
+        <text x="274" y="340">ALA-Synthase</text>
+        <text x="274" y="378">NO-Synthase / ODC</text>
+        <text x="274" y="416">MAT · γ-GCS · CBS</text>
+      </g>
+      <g font-size="12.5" fill="currentColor">
+        <text x="352" y="305">Glu ⇄ <tspan font-weight="700">GABA</tspan> — das exzitatorisch/inhibitorische Paar</text>
+        <text x="352" y="319" font-size="11" fill="var(--drug)">Vigabatrin · Tiagabin · Benzodiazepine · Memantin</text>
+        <text x="352" y="343">Gly + Succinyl-CoA → <tspan font-weight="700">Häm</tspan> → CO, Bilirubin</text>
+        <text x="352" y="357" font-size="11" fill="var(--drug)">Hämin bei Porphyrie · ALA in der photodynamischen Therapie</text>
+        <text x="352" y="381">Arg → <tspan font-weight="700">NO</tspan>, Polyamine, Creatin, Agmatin</text>
+        <text x="352" y="395" font-size="11" fill="var(--drug)">Nitrate · PDE-5-Hemmer · Eflornithin (ODC)</text>
+        <text x="352" y="419">Met → <tspan font-weight="700">SAM</tspan>; Cys → Glutathion, Taurin, H₂S</text>
+        <text x="352" y="433" font-size="11" fill="var(--drug)">N-Acetylcystein · Acetylcystein bei Paracetamol-Intoxikation</text>
+      </g>
+
+      <!-- ================= 4  GLUCOSE ================= -->
+      <rect x="16" y="456" width="184" height="112" rx="7" fill="var(--surface-3)" stroke="currentColor" stroke-width="1.4"/>
+      <text x="108" y="502" text-anchor="middle" font-size="15" font-weight="700" fill="currentColor">Glucose</text>
+      <text x="108" y="520" text-anchor="middle" font-size="11" fill="var(--ink-3)">Glykolyse · Pentosephosphatweg</text>
+      <text x="108" y="540" text-anchor="middle" font-size="10.5" fill="var(--ink-3)">liefert Ribose-5-P</text>
+      <text x="108" y="553" text-anchor="middle" font-size="10.5" fill="var(--ink-3)">und das NADPH für alles andere</text>
+
+      <g stroke="currentColor" stroke-width="1.3" marker-end="url(#ar)" opacity=".75">
+        <line x1="206" y1="474" x2="342" y2="474"/>
+        <line x1="206" y1="512" x2="342" y2="512"/>
+        <line x1="206" y1="550" x2="342" y2="550"/>
+      </g>
+      <g font-size="11" font-weight="700" fill="var(--enzym)" font-family="Consolas, monospace" text-anchor="middle">
+        <text x="274" y="468">PRPP-Synthetase</text>
+        <text x="274" y="506">UGT</text>
+        <text x="274" y="544">PLC β/γ</text>
+      </g>
+      <g font-size="12.5" fill="currentColor">
+        <text x="352" y="471">Ribose-5-P → <tspan font-weight="700">Nucleotide</tspan> → ATP, cAMP, cGMP, Adenosin, Harnsäure</text>
+        <text x="352" y="485" font-size="11" fill="var(--drug)">Allopurinol (XO) · Methotrexat · Coffein (A₂A) · Clopidogrel (P2Y₁₂)</text>
+        <text x="352" y="509">UDP-Glucuronsäure → <tspan font-weight="700">Phase-II-Konjugation</tspan></text>
+        <text x="352" y="523" font-size="11" fill="var(--drug)">bestimmt die Elimination fast aller Steroide und Catecholamine</text>
+        <text x="352" y="547">myo-Inositol → <tspan font-weight="700">IP₃ / DAG</tspan> — der zweite Botenstoffarm</text>
+        <text x="352" y="561" font-size="11" fill="var(--drug)">Lithium (Inositolmonophosphatase)</text>
+      </g>
+
+      <!-- ================= 5  COFAKTOREN ================= -->
+      <rect x="16" y="584" width="184" height="62" rx="7" fill="var(--cofaktor-bg)" stroke="var(--cofaktor)" stroke-width="1.6"/>
+      <text x="108" y="609" text-anchor="middle" font-size="14.5" font-weight="700" fill="var(--cofaktor)">Cofaktor-Netz</text>
+      <text x="108" y="628" text-anchor="middle" font-size="10.5" fill="var(--cofaktor)">PLP · THF · SAM · BH₄ · FAD · NAD⁺ · TPP</text>
+
+      <path d="M 206 615 L 342 615" stroke="var(--cofaktor)" stroke-width="1.5" marker-end="url(#arc)"/>
+      <text x="274" y="609" text-anchor="middle" font-size="11" font-weight="700" fill="var(--cofaktor)" font-family="Consolas, monospace">quer zu allem</text>
+      <text x="352" y="612" font-size="12.5" fill="currentColor">Kein eigener Ast, sondern die
+        <tspan font-weight="700">Währung</tspan> aller vier Wurzeln darüber</text>
+      <text x="352" y="627" font-size="11" fill="var(--drug)">Isoniazid (B₆) · Methotrexat (THF) · Cumarine (Vitamin K)</text>
+
+      <!-- gestrichelte Rückkopplung: Cofaktoren speisen alle Wurzeln -->
+      <path d="M 8 615 L 8 90 M 8 615 L 8 615" stroke="var(--cofaktor)" stroke-width="1.2"
+            stroke-dasharray="4 4" fill="none" opacity=".55"/>
+      <path d="M 8 92 L 14 92" stroke="var(--cofaktor)" stroke-width="1.2" marker-end="url(#arc)" opacity=".55"/>
+      <path d="M 8 218 L 14 218" stroke="var(--cofaktor)" stroke-width="1.2" marker-end="url(#arc)" opacity=".55"/>
+      <path d="M 8 360 L 14 360" stroke="var(--cofaktor)" stroke-width="1.2" marker-end="url(#arc)" opacity=".55"/>
+      <path d="M 8 508 L 14 508" stroke="var(--cofaktor)" stroke-width="1.2" marker-end="url(#arc)" opacity=".55"/>
+
+      </g>
+    </svg>
+    <figcaption>Die fünf Wurzeln und ihre Verzweigungsenzyme. Die gestrichelte Linie links zeigt,
+    warum das Cofaktor-Netz quer zu den übrigen vier liegt: es speist sie alle. Ein B₆-Mangel
+    trifft daher gleichzeitig die Catecholamin-, GABA-, Häm- und Cystein-Synthese. Isoniazid, das
+    Pyridoxalphosphat bindet, löst ohne Pyridoxin-Substitution eine Polyneuropathie aus.</figcaption>
+  </figure>
+
+  <div class="boxen">
+    <div class="merk">
+      <b>Arbeit mit der Karte</b>
+      <p>Die Karte einmal aus dem Gedächtnis nachzuzeichnen zeigt zuverlässig an, welche Kapitel
+      noch nachzuarbeiten sind: Wo die Rekonstruktion stockt, fehlt in der Regel kein Einzelfakt,
+      sondern der Zusammenhang.</p>
+      <p>Beim Durchgehen fallen drei wiederkehrende chemische Grundoperationen auf. Fast jeder
+      Pfeil in diesem Skript ist eine davon: <b>Decarboxylierung</b> (Aminosäure → biogenes Amin,
+      immer PLP-abhängig), <b>Hydroxylierung</b> (immer O₂-abhängig, aber mit drei verschiedenen
+      Cofaktor-Systemen: BH₄, Häm-Eisen oder Kupfer) und <b>Methylierung</b> (immer SAM). Wer diese
+      drei Operationen und ihre Cofaktoren kennt, kann einen großen Teil der Karte herleiten.</p>
+    </div>
+ </div>
+</section>

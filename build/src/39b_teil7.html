@@ -1,0 +1,514 @@
+<section class="teil band" id="teil7">
+  <div class="teil-kopf">
+    <div class="nr">Teil 7 — Peptid- und Proteohormone</div>
+    <h2>Botenstoffe, die man nicht schlucken kann</h2>
+    <p class="abstract">Peptidhormone entstehen nicht durch Biosynthese aus kleinen Vorstufen,
+    sondern durch <em>Zerschneiden</em> größerer Vorläuferproteine. Das ändert alles: die
+    Regulation, die Wirkdauer und vor allem die Frage, wie man daraus einen Arzneistoff macht.
+    Dieser Teil ist deshalb weniger Biosynthesechemie als angewandte Wirkstoffentwicklung.</p>
+  </div>
+
+  <!-- ===================================================== 7.1 -->
+  <h3 class="ast" id="a7-1"><span class="nr">7.1</span> Das gemeinsame Bauprinzip</h3>
+  <div class="spalte">
+    <p class="intro">Jedes Peptidhormon durchläuft denselben Weg: Ein Gen codiert ein
+    Präprohormon, das Signalpeptid führt es ins endoplasmatische Retikulum und wird dort
+    abgespalten, und erst im sekretorischen Vesikel schneiden Konvertasen das fertige Hormon
+    heraus. Die Schnittstellen liegen fast immer an <b>Paaren basischer Aminosäuren</b> —
+    Lys-Arg oder Arg-Arg.</p>
+  </div>
+
+  <figure class="karte">
+    <svg viewBox="0 0 1000 300" role="img"
+      aria-label="Reifung eines Peptidhormons am Beispiel des Insulins: Das Präproinsulin trägt ein Signalpeptid, das im endoplasmatischen Retikulum abgespalten wird. Das verbleibende Proinsulin faltet sich und bildet Disulfidbrücken. Prohormonkonvertasen schneiden an zwei dibasischen Stellen, die Carboxypeptidase E trimmt die Enden. Es entstehen Insulin aus A- und B-Kette sowie das C-Peptid in gleicher Menge.">
+      <defs>
+        <marker id="h7a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+        </marker>
+      </defs>
+      <g font-family="Corbel, Segoe UI, system-ui, sans-serif" fill="currentColor">
+
+      <!-- Praeproinsulin -->
+      <rect x="20" y="60" width="90" height="26" rx="4" fill="var(--surface-3)" stroke="currentColor" stroke-width="1"/>
+      <text x="65" y="78" text-anchor="middle" font-size="11">Signal</text>
+      <rect x="110" y="60" width="120" height="26" rx="4" fill="var(--enzym-bg)" stroke="var(--enzym)" stroke-width="1.3"/>
+      <text x="170" y="78" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--enzym)">B-Kette</text>
+      <rect x="230" y="60" width="110" height="26" rx="4" fill="var(--cofaktor-bg)" stroke="var(--cofaktor)" stroke-width="1.3"/>
+      <text x="285" y="78" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--cofaktor)">C-Peptid</text>
+      <rect x="340" y="60" width="100" height="26" rx="4" fill="var(--enzym-bg)" stroke="var(--enzym)" stroke-width="1.3"/>
+      <text x="390" y="78" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--enzym)">A-Kette</text>
+      <text x="20" y="48" font-size="12" font-weight="700">Präproinsulin</text>
+      <text x="452" y="78" font-size="11" fill="var(--ink-3)">110 Aminosäuren</text>
+
+      <line x1="240" y1="100" x2="240" y2="130" stroke="currentColor" stroke-width="1.4" marker-end="url(#h7a)"/>
+      <text x="254" y="120" font-size="11" font-weight="700" fill="var(--enzym)" font-family="Consolas, monospace">Signalpeptidase</text>
+      <text x="380" y="120" font-size="11" fill="var(--ink-3)">im ER, cotranslational</text>
+
+      <!-- Proinsulin -->
+      <rect x="110" y="142" width="120" height="26" rx="4" fill="var(--enzym-bg)" stroke="var(--enzym)" stroke-width="1.3"/>
+      <text x="170" y="160" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--enzym)">B-Kette</text>
+      <rect x="230" y="142" width="110" height="26" rx="4" fill="var(--cofaktor-bg)" stroke="var(--cofaktor)" stroke-width="1.3"/>
+      <text x="285" y="160" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--cofaktor)">C-Peptid</text>
+      <rect x="340" y="142" width="100" height="26" rx="4" fill="var(--enzym-bg)" stroke="var(--enzym)" stroke-width="1.3"/>
+      <text x="390" y="160" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--enzym)">A-Kette</text>
+      <text x="20" y="160" font-size="12" font-weight="700">Proinsulin</text>
+      <text x="452" y="160" font-size="11" fill="var(--ink-3)">Faltung, drei Disulfidbrücken</text>
+      <!-- Schnittstellen -->
+      <text x="212" y="136" font-size="10" text-anchor="end" fill="var(--warn)" font-weight="700">Arg-Arg</text>
+      <text x="340" y="136" font-size="10" text-anchor="middle" fill="var(--warn)" font-weight="700">Lys-Arg</text>
+
+      <line x1="240" y1="182" x2="240" y2="212" stroke="currentColor" stroke-width="1.4" marker-end="url(#h7a)"/>
+      <text x="254" y="202" font-size="11" font-weight="700" fill="var(--enzym)" font-family="Consolas, monospace">PC1/3, PC2, CPE</text>
+      <text x="380" y="202" font-size="11" fill="var(--ink-3)">im sekretorischen Vesikel</text>
+
+      <!-- Produkte -->
+      <rect x="110" y="224" width="120" height="26" rx="4" fill="var(--enzym-bg)" stroke="var(--enzym)" stroke-width="1.3"/>
+      <text x="170" y="242" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--enzym)">B-Kette</text>
+      <rect x="240" y="224" width="100" height="26" rx="4" fill="var(--enzym-bg)" stroke="var(--enzym)" stroke-width="1.3"/>
+      <text x="290" y="242" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--enzym)">A-Kette</text>
+      <text x="350" y="242" font-size="11.5" font-weight="700">= Insulin</text>
+      <rect x="440" y="224" width="110" height="26" rx="4" fill="var(--cofaktor-bg)" stroke="var(--cofaktor)" stroke-width="1.3"/>
+      <text x="495" y="242" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--cofaktor)">C-Peptid</text>
+      <text x="20" y="242" font-size="12" font-weight="700">Produkte</text>
+
+      <rect x="580" y="212" width="400" height="76" rx="8" fill="var(--surface-2)" stroke="currentColor" stroke-width="1" opacity=".9"/>
+      <text x="600" y="236" font-size="11.5" font-weight="700" fill="var(--warn)">WARUM DAS C-PEPTID GEMESSEN WIRD</text>
+      <text x="600" y="258" font-size="12.5">Es entsteht in genau gleicher Stoffmenge wie Insulin,</text>
+      <text x="600" y="276" font-size="12.5">unterliegt aber keinem First-Pass in der Leber.</text>
+      </g>
+    </svg>
+    <figcaption>Die Reifung am Beispiel des Insulins. Weil das C-Peptid äquimolar entsteht und
+    anders als Insulin nicht hepatisch extrahiert wird, zeigt sein Spiegel die körpereigene
+    Sekretion an — auch dann, wenn Insulin von außen zugeführt wird. Genau das unterscheidet einen
+    Typ-1-Diabetes von einer Hypoglycaemia factitia.</figcaption>
+  </figure>
+
+  <div class="boxen">
+    <div class="merk">
+      <b>Die C-terminale Amidierung braucht Kupfer und Ascorbat</b>
+      <p>Viele Peptidhormone — Oxytocin, Vasopressin, Gastrin, Calcitonin, CGRP — enden nicht auf
+      eine Carboxylgruppe, sondern auf ein <b>Säureamid</b>. Diese Modifikation ist für die
+      Rezeptorbindung meist unverzichtbar.</p>
+      <p>Sie entsteht durch die <b>peptidylglycin-α-amidierende Monooxygenase</b> (PAM), die einen
+      C-terminalen Glycinrest hydroxyliert und anschließend spaltet. PAM ist eine
+      Kupfer-Monooxygenase und benötigt <b>Ascorbat</b> als Elektronendonor — dasselbe Enzympaar
+      wie die Dopamin-β-Hydroxylase (2.2.3). Damit taucht Vitamin C ein zweites Mal in diesem
+      Skript auf.</p>
+    </div>
+  </div>
+
+  <!-- ===================================================== 7.2 -->
+  <h3 class="ast" id="a7-2"><span class="nr">7.2</span> Die Achsen des Hypothalamus</h3>
+  <div class="spalte">
+    <p class="intro">Fünf Achsen, ein Bauplan: Ein Releasing-Hormon aus dem Hypothalamus steuert
+    ein glandotropes Hormon der Hypophyse, dieses das periphere Zielorgan, und das periphere Hormon
+    hemmt beide oberen Ebenen zurück. Nur eine Achse folgt diesem Muster nicht — und genau sie
+    liefert die pharmakologisch interessanteste Konstellation.</p>
+  </div>
+
+  <div class="tab-wrap">
+    <table class="schritte">
+      <thead><tr><th>Hypothalamus</th><th>Hypophyse</th><th>Zielorgan / Effektor</th><th>Rückkopplung</th><th>Arzneistoffe</th></tr></thead>
+      <tbody>
+        <tr><td class="um">GnRH</td><td><span class="e">LH, FSH</span></td>
+          <td>Gonaden → Testosteron, Estradiol (1.4)</td>
+          <td>negativ; beim Estradiolgipfel kurzzeitig positiv</td>
+          <td><span class="d">Leuprorelin, Goserelin</span> <small>(Agonisten)</small>;
+              <span class="d">Degarelix, Cetrorelix</span> <small>(Antagonisten)</small></td></tr>
+        <tr><td class="um">TRH</td><td><span class="e">TSH</span></td>
+          <td>Schilddrüse → T₃, T₄ (2.5)</td><td>negativ</td>
+          <td><span class="d">Levothyroxin</span>; <span class="d">Thyreostatika</span></td></tr>
+        <tr><td class="um">CRH</td><td><span class="e">ACTH</span></td>
+          <td>Nebennierenrinde → Cortisol (1.4)</td><td>negativ</td>
+          <td><span class="d">Glucocorticoide</span> <small>(Suppression der Achse — daher
+            Ausschleichen)</small></td></tr>
+        <tr><td class="um">GHRH ↔ Somatostatin</td><td><span class="e">GH</span></td>
+          <td>Leber → IGF-1</td><td>negativ über IGF-1</td>
+          <td><span class="d">Octreotid, Lanreotid</span> <small>(Somatostatin-Analoga)</small>;
+              <span class="d">Pegvisomant</span> <small>(GH-Rezeptorantagonist)</small></td></tr>
+        <tr><td class="um"><b>Dopamin</b> <small>hemmend</small></td><td><span class="e">Prolaktin</span></td>
+          <td>Mamma</td>
+          <td><b>tonische Hemmung</b> statt Stimulation</td>
+          <td><span class="d">Cabergolin, Bromocriptin</span> <small>(D₂-Agonisten, 2.2)</small>;
+              Neuroleptika lösen die Hemmung und erzeugen Hyperprolaktinämie</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="boxen">
+    <div class="falle">
+      <b>Prüfungsfalle · warum ein GnRH-Agonist die Hormone senkt</b>
+      <p>GnRH wird physiologisch <b>pulsatil</b> freigesetzt, etwa alle neunzig Minuten. Der
+      Rezeptor der gonadotropen Zelle ist auf diesen Takt angewiesen: Bei kontinuierlicher
+      Stimulation wird er phosphoryliert, internalisiert und herunterreguliert.</p>
+      <p>Ein Depotpräparat wie Leuprorelin liefert genau diese kontinuierliche Stimulation. In den
+      ersten sieben bis zehn Tagen steigen LH, FSH und Testosteron zunächst an — der
+      <b>Flare-up</b> —, danach fällt die Achse ab und das Testosteron erreicht Kastrationsniveau.
+      Beim fortgeschrittenen Prostatakarzinom kann dieser Anstieg gefährlich sein und wird durch
+      ein Antiandrogen abgeschirmt.</p>
+      <p>Die <b>GnRH-Antagonisten</b> umgehen das Problem: Degarelix blockiert den Rezeptor
+      unmittelbar und senkt das Testosteron innerhalb von drei Tagen ohne jeden Anstieg.</p>
+    </div>
+    <div class="merk">
+      <b>Dopamin verbindet Teil 2 mit Teil 7</b>
+      <p>Prolaktin ist das einzige Hypophysenhormon, dessen Sekretion überwiegend <em>gehemmt</em>
+      wird — durch Dopamin aus dem tuberoinfundibulären System. Daraus folgen unmittelbar zwei
+      klinische Beobachtungen.</p>
+      <p>Erstens: Jeder <b>D₂-Antagonist</b> — klassische Neuroleptika, aber auch Metoclopramid —
+      hebt die Hemmung auf und erzeugt eine Hyperprolaktinämie mit Galaktorrhö und Amenorrhö.
+      Zweitens: Ein <b>Prolaktinom</b> wird nicht operiert, sondern mit einem D₂-<em>Agonisten</em>
+      behandelt; Cabergolin lässt den Tumor schrumpfen.</p>
+    </div>
+  </div>
+
+  <!-- ===================================================== 7.3 -->
+  <h3 class="ast" id="a7-3"><span class="nr">7.3</span> POMC: ein Gen, viele Hormone</h3>
+  <div class="spalte">
+    <p class="intro">Das Proopiomelanocortin ist das eindrucksvollste Beispiel für gewebespezifische
+    Prozessierung. Aus demselben Vorläufer entstehen je nach Zelltyp ein Stresshormon, ein
+    Pigmentierungssignal oder ein körpereigenes Opioid — allein dadurch, welche Konvertase die
+    Zelle exprimiert.</p>
+  </div>
+
+  <figure class="karte">
+    <svg viewBox="0 0 1000 240" role="img"
+      aria-label="Aus dem Vorläufer Proopiomelanocortin entstehen je nach Gewebe verschiedene Hormone: Im Hypophysenvorderlappen schneidet die Konvertase PC1/3 vor allem ACTH und beta-Lipotropin heraus, im Hypothalamus und Intermediärlappen zerlegt PC2 diese weiter zu alpha-Melanozyten-stimulierendem Hormon und beta-Endorphin. Weil ACTH und alpha-MSH dieselben ersten dreizehn Aminosäuren tragen, wirkt ein ACTH-Überschuss auch am Melanocortin-1-Rezeptor und erzeugt eine Hyperpigmentierung.">
+      <g font-family="Corbel, Segoe UI, system-ui, sans-serif" fill="currentColor">
+      <text x="20" y="34" font-size="12" font-weight="700">POMC — 241 Aminosäuren</text>
+      <rect x="20" y="46" width="150" height="24" rx="4" fill="var(--surface-3)" stroke="currentColor" stroke-width="1"/>
+      <text x="95" y="63" text-anchor="middle" font-size="10.5">γ-MSH</text>
+      <rect x="170" y="46" width="200" height="24" rx="4" fill="var(--drug-bg)" stroke="var(--drug)" stroke-width="1.3"/>
+      <text x="270" y="63" text-anchor="middle" font-size="11" font-weight="700" fill="var(--drug)">ACTH (1–39)</text>
+      <rect x="370" y="46" width="260" height="24" rx="4" fill="var(--enzym-bg)" stroke="var(--enzym)" stroke-width="1.3"/>
+      <text x="500" y="63" text-anchor="middle" font-size="11" font-weight="700" fill="var(--enzym)">β-Lipotropin</text>
+
+      <line x1="270" y1="76" x2="270" y2="106" stroke="currentColor" stroke-width="1.3"/>
+      <line x1="500" y1="76" x2="500" y2="106" stroke="currentColor" stroke-width="1.3"/>
+      <text x="20" y="100" font-size="11" font-weight="700" fill="var(--enzym)" font-family="Consolas, monospace">PC2</text>
+      <text x="20" y="116" font-size="10.5" fill="var(--ink-3)">Hypothalamus,</text>
+      <text x="20" y="130" font-size="10.5" fill="var(--ink-3)">Intermediärlappen</text>
+
+      <rect x="196" y="112" width="120" height="24" rx="4" fill="var(--cofaktor-bg)" stroke="var(--cofaktor)" stroke-width="1.3"/>
+      <text x="256" y="129" text-anchor="middle" font-size="11" font-weight="700" fill="var(--cofaktor)">α-MSH (1–13)</text>
+      <rect x="430" y="112" width="140" height="24" rx="4" fill="var(--enzym-bg)" stroke="var(--enzym)" stroke-width="1.3"/>
+      <text x="500" y="129" text-anchor="middle" font-size="11" font-weight="700" fill="var(--enzym)">β-Endorphin</text>
+
+      <text x="196" y="160" font-size="11.5">MC1R der Melanozyten → Eumelanin (2.4)</text>
+      <text x="196" y="178" font-size="11.5">MC4R im Hypothalamus → Sättigung</text>
+      <text x="196" y="196" font-size="11" fill="var(--drug)">Setmelanotid bei POMC- und MC4R-Defekten</text>
+      <text x="600" y="160" font-size="11.5">μ-Opioidrezeptor → Analgesie</text>
+      <text x="600" y="178" font-size="11" fill="var(--ink-3)">dieselbe Bindetasche, die Morphin trifft</text>
+
+      <rect x="20" y="200" width="960" height="32" rx="7" fill="var(--warn-bg)" stroke="var(--warn)" stroke-width="1.2"/>
+      <text x="40" y="221" font-size="12.5" fill="currentColor">ACTH und α-MSH teilen die ersten
+        dreizehn Aminosäuren. Deshalb erzeugt der ACTH-Überschuss beim Morbus Addison eine
+        <tspan font-weight="700">Hyperpigmentierung</tspan> — das Hormon wirkt am MC1R mit.</text>
+      </g>
+    </svg>
+    <figcaption>Gewebespezifische Prozessierung eines einzigen Vorläufers. Welche Hormone eine
+    Zelle abgibt, hängt nicht vom Gen ab, sondern davon, welche Prohormonkonvertase sie
+    exprimiert.</figcaption>
+  </figure>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-l"><div class="struct">{{S:morphin}}</div>
+        <figcaption>Morphin<span class="iupac">trifft dieselbe Tasche wie β-Endorphin</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:naloxon}}</div>
+        <figcaption>Naloxon<span class="iupac">N-Allyl statt N-Methyl kehrt die Wirkung um</span></figcaption></figure>
+    </div>
+  </div>
+
+  <!-- ===================================================== 7.4 -->
+  <h3 class="ast" id="a7-4"><span class="nr">7.4</span> Insulin und Inkretine: Strukturmodifikation als Prinzip</h3>
+  <div class="spalte">
+    <p class="intro">Peptide sind als Arzneistoffe schwierig: nicht oral verfügbar, rasch von
+    Peptidasen abgebaut, kurze Halbwertszeit. Die moderne Peptidchemie beantwortet das mit einer
+    überschaubaren Zahl von Kunstgriffen — und die Insulin- und GLP-1-Analoga sind das
+    Lehrbuchbeispiel dafür.</p>
+  </div>
+
+  <div class="tab-wrap">
+    <table class="schritte">
+      <thead><tr><th>Wirkstoff</th><th>Strukturänderung</th><th>Physikochemische Folge</th><th>Klinisches Profil</th></tr></thead>
+      <tbody>
+        <tr><td class="um"><span class="d">Insulin lispro</span></td>
+          <td>B28 Prolin und B29 Lysin <b>vertauscht</b></td>
+          <td>die Kontaktfläche für die Dimerbildung ist gestört; das Hexamer zerfällt nach der
+              Injektion sofort</td>
+          <td>schnellwirksam, Wirkeintritt nach 15 min</td></tr>
+        <tr><td class="um"><span class="d">Insulin aspart</span></td>
+          <td>B28 Prolin → <b>Asparaginsäure</b></td>
+          <td>die negative Ladung stößt das Nachbarmolekül ab</td>
+          <td>schnellwirksam</td></tr>
+        <tr><td class="um"><span class="d">Insulin glargin</span></td>
+          <td>A21 Asparagin → Glycin, zwei <b>Arginine</b> am B-Kettenende angehängt</td>
+          <td>der isoelektrische Punkt verschiebt sich von 5,4 auf 6,7 — bei Gewebe-pH fällt das
+              Peptid als Mikropräzipitat aus</td>
+          <td>Depot ohne Wirkspitze, 24 h</td></tr>
+        <tr><td class="um"><span class="d">Insulin detemir</span></td>
+          <td>B30 entfernt, <b>Myristinsäure</b> an B29-Lysin</td>
+          <td>die Fettsäure bindet reversibel an Albumin</td>
+          <td>verzögert, gut steuerbar</td></tr>
+        <tr><td class="um"><span class="d">Insulin degludec</span></td>
+          <td><b>Hexadecandisäure</b> über einen γ-Glutamat-Abstandhalter</td>
+          <td>bildet im Gewebe lange Multihexamer-Ketten, aus denen einzelne Moleküle langsam
+              abdissoziieren</td>
+          <td>Halbwertszeit über 24 h, sehr flaches Profil</td></tr>
+        <tr><td class="um"><span class="d">Exenatid</span></td>
+          <td>Exendin-4 aus dem Speichel der Gila-Krustenechse; <b>Glycin statt Alanin</b>
+              an Position 2</td>
+          <td>DPP-4 kann nicht mehr schneiden</td>
+          <td>zweimal täglich</td></tr>
+        <tr><td class="um"><span class="d">Liraglutid</span></td>
+          <td><b>Palmitinsäure</b> an Lys26 über γ-Glutamat</td>
+          <td>Albuminbindung plus Selbstassoziation im Depot</td>
+          <td>einmal täglich</td></tr>
+        <tr><td class="um"><span class="d">Semaglutid</span></td>
+          <td><b>Aib</b> an Position 8 gegen DPP-4, dazu eine C18-Disäure mit längerem Abstandhalter</td>
+          <td>sehr feste Albuminbindung; als Tablette mit dem Resorptionsverstärker SNAC</td>
+          <td>einmal wöchentlich; erste oral verfügbare GLP-1-Analogie</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="boxen">
+    <div class="merk">
+      <b>Vier Kunstgriffe, mit denen Peptide haltbar gemacht werden</b>
+      <p><b>Unnatürliche Aminosäuren an der Schnittstelle.</b> DPP-4 schneidet nach Position 2.
+      Ein Austausch dort — Glycin bei Exenatid, α-Aminoisobuttersäure bei Semaglutid — macht das
+      Peptid unangreifbar, ohne die Rezeptorbindung zu stören.</p>
+      <p><b>Fettsäureacylierung als Albuminanker.</b> Eine langkettige Fett- oder Disäure an einem
+      Lysinrest bindet reversibel an Albumin. Das gebundene Peptid entgeht der glomerulären
+      Filtration und dient als zirkulierendes Depot. Dieser Kunstgriff trägt Detemir, Degludec,
+      Liraglutid und Semaglutid gleichermaßen.</p>
+      <p><b>Verschiebung des isoelektrischen Punkts.</b> Bringt man ihn in die Nähe des
+      Gewebe-pH, fällt das Peptid an der Injektionsstelle aus und löst sich langsam wieder auf —
+      das Prinzip des Glargins.</p>
+      <p><b>Störung der Selbstassoziation.</b> Umgekehrt beschleunigt man die Wirkung, indem man
+      die Kontaktflächen der Hexamerbildung zerstört. Lispro und Aspart nutzen das.</p>
+    </div>
+  </div>
+
+  <!-- ===================================================== 7.5 -->
+  <h3 class="ast" id="a7-5"><span class="nr">7.5</span> Das Renin-Angiotensin-System und die Kinine</h3>
+  <div class="spalte">
+    <p class="intro">Eine Proteasekaskade mit vier Angriffspunkten und einer chemischen Pointe:
+    Das Enzym, das Angiotensin II bildet, baut zugleich das gefäßerweiternde Bradykinin ab. Aus
+    dieser Doppelfunktion folgt die charakteristische Nebenwirkung der ACE-Hemmer.</p>
+  </div>
+
+  <figure class="karte">
+    <svg viewBox="0 0 1020 330" role="img"
+      aria-label="Das Renin-Angiotensin-System: Renin spaltet aus Angiotensinogen das Decapeptid Angiotensin I ab, das Angiotensin-Converting-Enzyme entfernt zwei weitere Aminosäuren zum Oktapeptid Angiotensin II, das am AT1-Rezeptor Vasokonstriktion und Aldosteronfreisetzung auslöst. Dasselbe Enzym baut als Kininase II auch Bradykinin ab; seine Hemmung erhöht daher die Bradykininkonzentration und erklärt Husten und Angioödem. Angriffspunkte sind Renin durch Aliskiren, das ACE durch Captopril und Enalapril, der AT1-Rezeptor durch Sartane und der Mineralocorticoidrezeptor durch Spironolacton.">
+      <defs>
+        <marker id="r7a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+        </marker>
+      </defs>
+      <g font-family="Corbel, Segoe UI, system-ui, sans-serif" fill="currentColor">
+
+      <g font-size="13" font-weight="700">
+        <text x="20" y="72">Angiotensinogen</text>
+        <text x="280" y="72">Angiotensin I</text>
+        <text x="520" y="72">Angiotensin II</text>
+        <text x="760" y="72">AT₁-Rezeptor</text>
+      </g>
+      <g font-size="10.5" fill="var(--ink-3)">
+        <text x="20" y="88">aus der Leber, 452 AS</text>
+        <text x="280" y="88">Decapeptid, unwirksam</text>
+        <text x="520" y="88">Oktapeptid</text>
+        <text x="760" y="88">Vasokonstriktion, Aldosteron, Durst</text>
+      </g>
+
+      <g stroke="currentColor" stroke-width="1.5" marker-end="url(#r7a)">
+        <line x1="150" y1="66" x2="266" y2="66"/>
+        <line x1="382" y1="66" x2="506" y2="66"/>
+        <line x1="624" y1="66" x2="746" y2="66"/>
+      </g>
+      <g font-size="11.5" font-weight="700" fill="var(--enzym)" font-family="Consolas, monospace" text-anchor="middle">
+        <text x="208" y="56">Renin</text>
+        <text x="444" y="56">ACE</text>
+      </g>
+      <text x="208" y="106" font-size="10.5" text-anchor="middle" fill="var(--ink-3)">Niere, juxtaglomerulärer Apparat</text>
+      <text x="444" y="106" font-size="10.5" text-anchor="middle" fill="var(--ink-3)">Lunge, Endothel · Zink-Peptidase</text>
+      <text x="208" y="124" font-size="11" text-anchor="middle" fill="var(--drug)">⊣ Aliskiren</text>
+      <text x="444" y="124" font-size="11" text-anchor="middle" fill="var(--drug)">⊣ Captopril, Enalapril, Lisinopril</text>
+      <text x="800" y="124" font-size="11" text-anchor="middle" fill="var(--drug)">⊣ Losartan, Valsartan, Candesartan</text>
+
+      <!-- Kinin-Arm -->
+      <line x1="20" y1="190" x2="180" y2="190" stroke="currentColor" stroke-width="1.5" marker-end="url(#r7a)"/>
+      <text x="20" y="180" font-size="13" font-weight="700">Kininogen</text>
+      <text x="100" y="208" font-size="11" text-anchor="middle" font-weight="700" fill="var(--enzym)" font-family="Consolas, monospace">Kallikrein</text>
+      <text x="200" y="196" font-size="13" font-weight="700">Bradykinin</text>
+      <text x="200" y="212" font-size="10.5" fill="var(--ink-3)">Vasodilatation über NO und Prostacyclin</text>
+
+      <line x1="330" y1="190" x2="470" y2="190" stroke="currentColor" stroke-width="1.5" marker-end="url(#r7a)"/>
+      <text x="400" y="180" font-size="11.5" text-anchor="middle" font-weight="700" fill="var(--enzym)" font-family="Consolas, monospace">ACE = Kininase II</text>
+      <text x="400" y="228" font-size="10.5" text-anchor="middle" fill="var(--drug)">dieselbe Hemmung</text>
+      <text x="490" y="196" font-size="12.5">unwirksame Bruchstücke</text>
+
+      <path d="M 444 132 L 444 168" stroke="var(--drug)" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <text x="452" y="154" font-size="11" font-weight="700" fill="var(--drug)">ein Enzym, zwei Substrate</text>
+
+      <rect x="640" y="160" width="360" height="150" rx="8" fill="var(--warn-bg)" stroke="var(--warn)" stroke-width="1.3"/>
+      <text x="660" y="184" font-size="11.5" font-weight="700" fill="var(--warn)">WAS DARAUS FOLGT</text>
+      <text x="660" y="208" font-size="12.5">ACE-Hemmer senken Angiotensin II <tspan font-weight="700">und</tspan></text>
+      <text x="660" y="226" font-size="12.5">erhöhen Bradykinin. Der zweite Effekt trägt</text>
+      <text x="660" y="244" font-size="12.5">zur Blutdrucksenkung bei, verursacht aber</text>
+      <text x="660" y="262" font-size="12.5">auch <tspan font-weight="700">Reizhusten</tspan> und das seltene, gefährliche</text>
+      <text x="660" y="280" font-size="12.5"><tspan font-weight="700">Angioödem</tspan>.</text>
+      <text x="660" y="302" font-size="11.5" fill="var(--warn)" font-style="italic">Sartane haben beides nicht — sie wirken am Rezeptor.</text>
+      </g>
+    </svg>
+    <figcaption>Zwei Kaskaden, ein Enzym. Das ACE ist eine zinkabhängige Dipeptidylcarboxypeptidase
+    und schneidet von beiden Substraten je zwei Aminosäuren ab — aus Angiotensin I entsteht dabei
+    der aktive Vasokonstriktor, aus Bradykinin ein unwirksames Bruchstück.</figcaption>
+  </figure>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol"><div class="struct">{{S:captopril}}</div>
+        <figcaption>Captopril<span class="iupac">Thiol koordiniert das Zink</span></figcaption></figure>
+      <figure class="mol w-xl"><div class="struct">{{S:enalapril}}</div>
+        <figcaption>Enalapril<span class="iupac">Ethylester-Prodrug</span></figcaption></figure>
+      <figure class="mol w-xl"><div class="struct">{{S:enalaprilat}}</div>
+        <figcaption>Enalaprilat<span class="iupac">Carboxylat koordiniert das Zink</span></figcaption></figure>
+      <figure class="mol w-xl"><div class="struct">{{S:lisinopril}}</div>
+        <figcaption>Lisinopril<span class="iupac">kein Prodrug, Lysin-Seitenkette</span></figcaption></figure>
+      <figure class="mol w-xl"><div class="struct">{{S:losartan}}</div>
+        <figcaption>Losartan<span class="iupac">Tetrazol als Carboxylat-Bioisoster</span></figcaption></figure>
+      <figure class="mol w-xl"><div class="struct">{{S:valsartan}}</div>
+        <figcaption>Valsartan</figcaption></figure>
+      <figure class="mol w-xl"><div class="struct">{{S:sacubitril}}</div>
+        <figcaption>Sacubitril<span class="iupac">Neprilysin-Hemmer, Prodrug</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="boxen">
+    <div class="merk">
+      <b>Alle ACE-Hemmer greifen dasselbe Zinkion an</b>
+      <p>Das ACE trägt im aktiven Zentrum ein <b>Zn²⁺</b>, das die zu spaltende Peptidbindung
+      polarisiert. Jeder ACE-Hemmer bringt eine Gruppe mit, die dieses Zink koordiniert — und die
+      Wahl dieser Gruppe erklärt die Unterschiede der Substanzklasse.</p>
+      <p><b>Captopril</b> nutzt eine <b>Thiolgruppe</b>. Sie bindet das Zink besonders fest, ist
+      aber zugleich für die typischen Nebenwirkungen verantwortlich: Geschmacksstörungen,
+      Exantheme und Proteinurie werden auf das freie Thiol zurückgeführt. Außerdem oxidiert es
+      leicht zum Disulfid, was die kurze Wirkdauer erklärt.</p>
+      <p>Die Nachfolger ersetzten das Thiol durch ein <b>Carboxylat</b> (Enalaprilat, Lisinopril)
+      oder ein <b>Phosphinat</b> (Fosinopril). Weil ein Carboxylat weniger lipophil ist, wurden die
+      meisten als Ester-Prodrug formuliert — daher die Endung <i>-pril</i> beim Prodrug und
+      <i>-prilat</i> beim aktiven Metaboliten. <b>Lisinopril</b> ist die Ausnahme: Die
+      Lysin-Seitenkette macht es auch ohne Veresterung ausreichend resorbierbar.</p>
+    </div>
+    <div class="falle">
+      <b>Prüfungsfalle · warum Sacubitril nicht mit einem ACE-Hemmer kombiniert wird</b>
+      <p>Sacubitril hemmt die <b>Neprilysin</b>, eine Peptidase, die natriuretische Peptide,
+      Bradykinin und Adrenomedullin abbaut. Die Erhöhung von ANP und BNP ist erwünscht — sie wirkt
+      dem RAAS entgegen.</p>
+      <p>Neprilysin baut aber auch <b>Bradykinin</b> ab, und zwar auf einem anderen Weg als das
+      ACE. Werden beide Enzyme gleichzeitig gehemmt, fehlen dem Bradykinin die zwei wichtigsten
+      Abbauwege; das Risiko eines Angioödems steigt erheblich. Deshalb wird Sacubitril nur mit
+      einem <b>Sartan</b> kombiniert, und beim Umstellen von einem ACE-Hemmer ist eine Pause von
+      36 Stunden vorgeschrieben.</p>
+    </div>
+  </div>
+
+  <!-- ===================================================== 7.6 -->
+  <h3 class="ast" id="a7-6"><span class="nr">7.6</span> Weitere Peptidsysteme</h3>
+  <div class="spalte">
+    <div class="tab-wrap">
+      <table class="schritte">
+        <thead><tr><th>System</th><th>Bau</th><th>Wirkung</th><th>Arzneistoffe</th></tr></thead>
+        <tbody>
+          <tr><td class="um">ANP / BNP</td><td>28 bzw. 32 AS mit einem Disulfidring</td>
+            <td>Natriurese, Vasodilatation, Hemmung des RAAS; wirken über die
+                <b>partikuläre Guanylatcyclase</b> und cGMP (3.3)</td>
+            <td><span class="d">Sacubitril</span> <small>(hemmt den Abbau)</small>;
+                NT-proBNP als Herzinsuffizienz-Marker</td></tr>
+          <tr><td class="um">Endothelin-1</td><td>21 AS, zwei Disulfidbrücken</td>
+            <td>stärkster bekannter endogener Vasokonstriktor, über ET<sub>A</sub></td>
+            <td><span class="d">Bosentan, Ambrisentan, Macitentan</span> <small>(pulmonale
+              Hypertonie)</small></td></tr>
+          <tr><td class="um">Vasopressin</td><td>9 AS, Ringschluss über eine Disulfidbrücke</td>
+            <td>V₂ in der Niere: Einbau von Aquaporin-2; V₁ₐ: Vasokonstriktion</td>
+            <td><span class="d">Desmopressin</span> <small>(deamino, D-Arg8 → V₂-selektiv und
+              länger wirksam)</small>; <span class="d">Tolvaptan</span> <small>(V₂-Antagonist)</small></td></tr>
+          <tr><td class="um">Oxytocin</td><td>9 AS; unterscheidet sich von Vasopressin in nur
+              <b>zwei</b> Positionen</td>
+            <td>Uteruskontraktion, Milchejektion</td>
+            <td><span class="d">Oxytocin</span>; <span class="d">Atosiban</span>
+              <small>(Antagonist, Tokolyse)</small></td></tr>
+          <tr><td class="um">Calcitonin / PTH</td><td>32 bzw. 84 AS</td>
+            <td>Gegenspieler im Calciumhaushalt</td>
+            <td><span class="d">Teriparatid</span> <small>(PTH 1–34; <b>intermittierend</b> gegeben
+              wirkt es osteoanabol, kontinuierlich dagegen katabol)</small></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===================================================== 7.7 -->
+  <h3 class="ast" id="a7-7"><span class="nr">7.7</span> Die Gerinnungskaskade als Proteasesystem</h3>
+  <div class="spalte">
+    <p class="intro">Die Hämostase ist die größte Proteasekaskade des Körpers: Jeder Faktor ist ein
+    Zymogen, das vom vorhergehenden durch begrenzte Proteolyse aktiviert wird. Vier dieser Faktoren
+    und drei Inhibitoren teilen eine Besonderheit — sie tragen eine Domäne, die es ohne Vitamin K
+    nicht gibt.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-s"><div class="struct">{{S:glutamat}}</div>
+        <figcaption>Glutamatrest<span class="iupac">im unreifen Faktor</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">γ-Glutamyl-Carboxylase<small>ER-Membran</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">Vitamin-K-Hydrochinon · O₂ · CO₂</span>
+        <span class="hemm">indirekt durch Cumarine</span></div>
+      <figure class="mol ziel w-s"><div class="struct">{{S:gla}}</div>
+        <figcaption>γ-Carboxyglutamat<span class="iupac">Gla — zwei Carboxylgruppen greifen Ca²⁺</span></figcaption></figure>
+      <figure class="mol w-xl"><div class="struct">{{S:phyllochinon}}</div>
+        <figcaption>Vitamin K₁</figcaption></figure>
+      <figure class="mol w-xl"><div class="struct">{{S:vitk_epoxid}}</div>
+        <figcaption>Vitamin-K-2,3-epoxid<span class="iupac">das verbrauchte Coenzym <a class="mref" href="#m15">M-15</a></span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:phenprocoumon}}</div>
+        <figcaption>Phenprocoumon<span class="iupac">hemmt die VKOR</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="boxen">
+    <div class="merk">
+      <b>Warum aus einem Glutamat zwei Carboxylgruppen werden müssen</b>
+      <p>Ein einzelnes Carboxylat bindet Calcium nur schwach. Erst die <b>Malonat-Anordnung</b> aus
+      zwei benachbarten Carboxylgruppen bildet eine Chelattasche, die Ca²⁺ fest genug greift.</p>
+      <p>Zehn bis zwölf solcher Gla-Reste in der N-terminalen Domäne der Faktoren II, VII, IX und X
+      bilden zusammen eine <b>calciumvermittelte Brücke zur negativ geladenen Membran</b>
+      aktivierter Thrombozyten. Ohne diese Verankerung finden die Faktoren ihre Partner nicht — die
+      Reaktionsgeschwindigkeit sinkt um mehrere Zehnerpotenzen.</p>
+      <p>Genau das erklärt, warum Cumarine wirken, obwohl die Faktoren weiterhin gebildet und
+      sezerniert werden: Sie sind vorhanden, aber nicht membranbindungsfähig. Man nennt sie
+      <b>PIVKA</b> — <i>proteins induced by vitamin K absence</i>.</p>
+    </div>
+    <div class="falle">
+      <b>Prüfungsfalle · die Pharmakogenetik der Cumarine</b>
+      <p>Zwei Gene bestimmen den Dosisbedarf gemeinsam. <b>VKORC1</b> codiert das Zielenzym;
+      eine häufige Promotorvariante senkt dessen Expression, sodass weniger Wirkstoff für dieselbe
+      Hemmung nötig ist. <b>CYP2C9</b> baut das Cumarin ab; die Varianten *2 und *3 verlangsamen
+      das erheblich.</p>
+      <p>Beide zusammen erklären etwa die Hälfte der Dosisvariabilität, die zwischen einzelnen
+      Patienten um mehr als das Zehnfache schwanken kann. Daraus erklärt sich die engmaschige
+      INR-Kontrolle in der Einstellphase — und ebenso, warum die direkten oralen
+      Antikoagulanzien wie <b>Rivaroxaban</b>, die ohne Cofaktor auskommen und den Faktor Xa direkt
+      binden, in fester Dosis gegeben werden können.</p>
+    </div>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-xl"><div class="struct">{{S:rivaroxaban}}</div>
+        <figcaption>Rivaroxaban<span class="iupac">direkter Faktor-Xa-Hemmer, feste Dosis</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:tranexamsaeure}}</div>
+        <figcaption>Tranexamsäure<span class="iupac"><i>trans</i>-Konfiguration; Lysin-Analogon am Plasminogen</span></figcaption></figure>
+    </div>
+  </div>
+</section>

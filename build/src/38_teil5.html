@@ -1,0 +1,540 @@
+<section class="teil band" id="teil5">
+  <div class="teil-kopf">
+    <div class="nr">Teil 5 — Die Kohlenhydrat- und Nucleotidwurzel</div>
+    <h2>Glucose liefert Bausteine, Reduktionskraft und Signale</h2>
+    <p class="abstract">Aus Glucose entstehen nicht nur ATP, sondern auch die Ribose aller
+    Nucleotide, das NADPH für sämtliche Reduktionen des Körpers und die Glucuronsäure, über die
+    die meisten Arzneistoffe ausgeschieden werden. Der Nucleotid-Ast liefert darüber hinaus die
+    zweiten Botenstoffe und mit der Harnsäure ein Endprodukt, das eine eigene Krankheit begründet.</p>
+  </div>
+
+  <div class="boxen">
+    <div class="merk">
+      <b>Drei Produktströme aus einem Zucker</b>
+      <p>Glucose-6-phosphat steht an einer Weiche mit drei Ausgängen. Die <b>Glykolyse</b> liefert
+      ATP und Pyruvat, der <b>oxidative Pentosephosphatweg</b> liefert NADPH und Ribose-5-phosphat,
+      und die <b>UDP-Glucuronsäure</b> zweigt über UDP-Glucose ab.</p>
+      <p>Welcher Ausgang bedient wird, entscheidet der Bedarf der Zelle: Der Erythrozyt schickt
+      etwa ein Zehntel seiner Glucose in den Pentosephosphatweg, weil er NADPH ausschließlich
+      dort gewinnen kann; die Nebennierenrinde und das Fettgewebe deutlich mehr, weil sie NADPH
+      für Steroid- und Fettsäuresynthese brauchen.</p>
+    </div>
+  </div>
+
+  <!-- ===================================================== 5.1 -->
+  <h3 class="ast" id="a5-1"><span class="nr">5.1</span> Glucose und die Arzneistoffe am Zuckerstoffwechsel</h3>
+  <div class="spalte">
+    <p class="intro">Die Glykolyse selbst ist kein ergiebiges Arzneistoff-Target — sie läuft in
+    jeder Zelle. Angegriffen wird stattdessen die Regulation: Aufnahme, Rückresorption und die
+    hormonelle Steuerung.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol"><div class="struct">{{S:glucose}}</div>
+        <figcaption>β-D-Glucopyranose</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">Hexokinase / Glucokinase<small>irreversibel</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">ATP · Mg²⁺</span></div>
+      <figure class="mol ziel w-l"><div class="struct">{{S:g6p}}</div>
+        <figcaption>Glucose-6-phosphat<span class="iupac">die Weiche mit drei Ausgängen</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">PFK-1<small>Schrittmacher der Glykolyse</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 3"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">ATP · ⊣ Citrat</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:fbp}}</div>
+        <figcaption>Fructose-1,6-bisphosphat</figcaption></figure>
+      <div class="pfeil"><span class="enz">Pyruvatkinase</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 3"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">ADP → ATP</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:pyruvat}}</div>
+        <figcaption>Pyruvat</figcaption></figure>
+      <div class="pfeil"><span class="enz">LDH</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="4.5" x2="90" y2="4.5" stroke="currentColor" stroke-width="1.3"/><polygon points="90,1 99,4.5 90,8" fill="currentColor"/><line x1="10" y1="10" x2="98" y2="10" stroke="currentColor" stroke-width="1.3"/><polygon points="10,6.5 1,10 10,13.5" fill="currentColor"/></svg>
+        <span class="cof">NADH <a class="mref" href="#m07">M-07</a></span></div>
+      <figure class="mol w-s"><div class="struct">{{S:lactat}}</div>
+        <figcaption>L-Lactat<span class="iupac">(<i>S</i>)</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="tab-wrap">
+    <table class="schritte">
+      <thead><tr><th>Angriffspunkt</th><th>Wirkstoff</th><th>Mechanismus</th><th>Besonderheit</th><th>Hypoglykämie?</th></tr></thead>
+      <tbody>
+        <tr><td><span class="e">SGLT2</span> <small>proximaler Tubulus S1</small></td>
+          <td><span class="d">Empagliflozin, Dapagliflozin</span></td>
+          <td>hemmen die Rückresorption von etwa 90 % der filtrierten Glucose</td>
+          <td>wirken insulinunabhängig; senken zusätzlich Blutdruck und Gewicht, kardio- und nephroprotektiv</td>
+          <td>nein <small>(aber euglykäme Ketoazidose)</small></td></tr>
+        <tr><td><span class="e">K<sub>ATP</sub></span> <small>SUR1 der β-Zelle</small></td>
+          <td><span class="d">Glibenclamid, Glimepirid</span></td>
+          <td>schließen den Kanal, depolarisieren die Zelle, Ca²⁺ strömt ein, Insulin wird freigesetzt</td>
+          <td>wirkt <b>glucoseunabhängig</b> — auch bei normalem Blutzucker</td>
+          <td><b>ja</b></td></tr>
+        <tr><td><span class="e">DPP-4</span></td>
+          <td><span class="d">Sitagliptin, Linagliptin</span></td>
+          <td>verhindern den Abbau von GLP-1 und GIP</td>
+          <td>Inkretinwirkung ist <b>glucoseabhängig</b>; die Insulinfreisetzung endet mit der Normoglykämie</td>
+          <td>nein</td></tr>
+        <tr><td><span class="e">Atmungskettenkomplex I</span></td>
+          <td><span class="d">Metformin</span></td>
+          <td>ATP ↓, AMP ↑ → AMPK-Aktivierung → Gluconeogenese ↓</td>
+          <td>Laktatazidose bei Niereninsuffizienz, weil Pyruvat vermehrt zu Lactat reduziert wird</td>
+          <td>nein</td></tr>
+        <tr><td><span class="e">α-Glucosidase</span> <small>Bürstensaum</small></td>
+          <td><span class="d">Acarbose, Miglitol</span></td>
+          <td>verzögern die Spaltung von Oligosacchariden</td>
+          <td>Blähungen durch bakterielle Vergärung im Kolon; bei Hypoglykämie hilft nur Glucose, kein Haushaltszucker</td>
+          <td>nein</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-xl"><div class="struct">{{S:empagliflozin}}</div>
+        <figcaption>Empagliflozin<span class="iupac"><i>C</i>-Glycosid — nicht hydrolysierbar</span></figcaption></figure>
+      <figure class="mol w-xl"><div class="struct">{{S:glibenclamid}}</div>
+        <figcaption>Glibenclamid<span class="iupac">Sulfonylharnstoff</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:sitagliptin}}</div>
+        <figcaption>Sitagliptin<span class="iupac">(<i>R</i>)-β-Aminosäureamid</span></figcaption></figure>
+      <figure class="mol w-s"><div class="struct">{{S:metformin}}</div>
+        <figcaption>Metformin<span class="iupac">Biguanid, stark basisch</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="boxen">
+    <div class="merk">
+      <b>Warum Empagliflozin ein C-Glycosid ist</b>
+      <p>Die ersten SGLT2-Hemmer leiteten sich vom Naturstoff <b>Phlorizin</b> ab, einem
+      <i>O</i>-Glycosid. Dessen glycosidische Bindung wird jedoch von den β-Glucosidasen des
+      Darms rasch gespalten, sodass die Substanz oral kaum wirksam war.</p>
+      <p>Der Austausch des glycosidischen Sauerstoffs gegen eine <b>C–C-Bindung</b> löste das
+      Problem: Ein <i>C</i>-Glycosid ist hydrolysestabil und wird von keiner Glycosidase erkannt.
+      Die Zuckererkennung am Transporter bleibt erhalten, weil dieser die Hydroxylgruppen des
+      Pyranoserings abtastet, nicht den glycosidischen Sauerstoff.</p>
+    </div>
+  </div>
+
+  <!-- ===================================================== 5.2 -->
+  <h3 class="ast" id="a5-2"><span class="nr">5.2</span> Der Pentosephosphatweg</h3>
+  <div class="spalte">
+    <p class="intro">Zwei Aufgaben in einem Weg: Der oxidative Teil erzeugt NADPH, der
+    nicht-oxidative stellt Ribose-5-phosphat bereit oder führt überschüssige Pentosen in die
+    Glykolyse zurück. Beide Teile lassen sich unabhängig voneinander betreiben.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-l"><div class="struct">{{S:g6p}}</div>
+        <figcaption>Glucose-6-phosphat</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">G6PD<small>schrittbestimmend</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">NADP⁺ → NADPH <a class="mref" href="#m07">M-07</a></span></div>
+      <figure class="mol w-l"><div class="struct">{{S:ribose5p}}</div>
+        <figcaption>Ribose-5-phosphat<span class="iupac">nach Decarboxylierung</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">PRPP-Synthetase</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">ATP → AMP</span></div>
+      <figure class="mol ziel w-xl"><div class="struct">{{S:prpp}}</div>
+        <figcaption>PRPP<span class="iupac">5-Phospho-α-D-ribose-1-diphosphat</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="boxen">
+    <div class="falle">
+      <b>Prüfungsfalle · warum der G6PD-Mangel gerade Erythrozyten trifft</b>
+      <p>Der Erythrozyt hat weder Mitochondrien noch einen Zellkern. Er kann NADPH ausschließlich
+      über den oxidativen Pentosephosphatweg gewinnen und das defekte Enzym nicht nachbilden.
+      NADPH aber ist die einzige Quelle für die Regeneration von Glutathion (3.4.4).</p>
+      <p>Bei oxidativer Belastung bricht der Glutathionvorrat zusammen; Hämoglobin denaturiert zu
+      <b>Heinz-Innenkörpern</b>, die Milz baut die Zellen ab. Auslöser sind
+      <b>Primaquin</b>, Sulfonamide, Nitrofurantoin, Rasburicase und die Favabohne.</p>
+      <p>Der zweite, nicht-oxidative Teil des Weges ist davon nicht betroffen — er läuft
+      unabhängig und ist <b>TPP-abhängig</b> (Transketolase). Deshalb sinkt bei Thiaminmangel die
+      Transketolaseaktivität im Erythrozyten, was als Funktionstest auf B₁-Mangel dient.</p>
+    </div>
+  </div>
+
+  <!-- ===================================================== 5.3 -->
+  <h3 class="ast" id="a5-3"><span class="nr">5.3</span> Purine: Aufbau, Wiederverwertung, Abbau</h3>
+  <div class="spalte">
+    <p class="intro">Die Purinsynthese ist energetisch aufwendig — elf Schritte, sechs Moleküle
+    ATP. Der Körper betreibt sie deshalb nur, soweit nötig, und deckt den Bedarf überwiegend durch
+    Wiederverwertung. Am Ende des Abbaus steht beim Menschen die Harnsäure, weil ihm die Uricase
+    fehlt.</p>
+  </div>
+
+  <figure class="karte">
+    <svg viewBox="0 0 1040 470" role="img"
+      aria-label="Der Purinstoffwechsel in drei Abschnitten: Die De-novo-Synthese baut aus PRPP über elf Schritte Inosinmonophosphat auf, aus dem AMP und GMP hervorgehen. Der Wiederverwertungsweg über HGPRT und APRT führt freie Basen direkt zurück zu den Nucleotiden. Der Abbau verläuft über Inosin, Hypoxanthin und Xanthin zur Harnsäure; beide letzten Schritte katalysiert die Xanthinoxidase. Allopurinol und Febuxostat hemmen die Xanthinoxidase, Probenecid hemmt die tubuläre Rückresorption der Harnsäure über URAT1.">
+      <defs>
+        <marker id="p5a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+        </marker>
+      </defs>
+      <g font-family="Corbel, Segoe UI, system-ui, sans-serif" fill="currentColor">
+
+      <text x="20" y="24" font-size="11" letter-spacing="1.4" font-weight="700" fill="var(--ink-3)">DE-NOVO-SYNTHESE</text>
+      <line x1="20" y1="32" x2="1020" y2="32" stroke="currentColor" stroke-width="1" opacity=".2"/>
+
+      <text x="40" y="76" font-size="13.5" font-weight="700">PRPP</text>
+      <line x1="90" y1="70" x2="210" y2="70" stroke="currentColor" stroke-width="1.5" marker-end="url(#p5a)"/>
+      <text x="150" y="60" text-anchor="middle" font-size="11" font-weight="700" fill="var(--enzym)" font-family="Consolas, monospace">PPAT</text>
+      <text x="150" y="88" text-anchor="middle" font-size="10.5" fill="var(--warn)">schrittbestimmend</text>
+      <text x="150" y="103" text-anchor="middle" font-size="10.5" fill="var(--ink-3)">Rückkopplung durch AMP und GMP</text>
+
+      <text x="228" y="76" font-size="12.5">10 weitere Schritte</text>
+      <text x="228" y="94" font-size="10.5" fill="var(--cofaktor)">2 × Formyl-THF · 2 × Gln · Gly · Asp · CO₂</text>
+      <line x1="404" y1="70" x2="470" y2="70" stroke="currentColor" stroke-width="1.5" marker-end="url(#p5a)"/>
+      <text x="486" y="76" font-size="14" font-weight="700" fill="var(--cofaktor)">IMP</text>
+      <line x1="536" y1="70" x2="600" y2="70" stroke="currentColor" stroke-width="1.5" marker-end="url(#p5a)"/>
+      <text x="620" y="62" font-size="13.5" font-weight="700">AMP</text>
+      <text x="620" y="86" font-size="13.5" font-weight="700">GMP</text>
+      <text x="690" y="62" font-size="10.5" fill="var(--ink-3)">braucht GTP</text>
+      <text x="690" y="86" font-size="10.5" fill="var(--ink-3)">braucht ATP — die beiden Äste regeln sich gegenseitig</text>
+
+      <text x="20" y="150" font-size="11" letter-spacing="1.4" font-weight="700" fill="var(--ink-3)">WIEDERVERWERTUNG — DECKT DEN GRÖSSTEN TEIL DES BEDARFS</text>
+      <line x1="20" y1="158" x2="1020" y2="158" stroke="currentColor" stroke-width="1" opacity=".2"/>
+      <text x="40" y="188" font-size="12.5">Hypoxanthin, Guanin</text>
+      <line x1="196" y1="182" x2="300" y2="182" stroke="currentColor" stroke-width="1.5" marker-end="url(#p5a)"/>
+      <text x="248" y="172" text-anchor="middle" font-size="11" font-weight="700" fill="var(--enzym)" font-family="Consolas, monospace">HGPRT</text>
+      <text x="248" y="200" text-anchor="middle" font-size="10.5" fill="var(--cofaktor)">+ PRPP</text>
+      <text x="318" y="188" font-size="12.5">IMP, GMP</text>
+      <text x="430" y="188" font-size="11.5" fill="var(--warn)">Vollständiger HGPRT-Ausfall = Lesch-Nyhan-Syndrom:</text>
+      <text x="430" y="205" font-size="11.5" fill="var(--warn)">Hyperurikämie, Choreoathetose, Selbstverstümmelung</text>
+
+      <text x="20" y="256" font-size="11" letter-spacing="1.4" font-weight="700" fill="var(--ink-3)">ABBAU — UND WO DIE GICHTTHERAPIE ANGREIFT</text>
+      <line x1="20" y1="264" x2="1020" y2="264" stroke="currentColor" stroke-width="1" opacity=".2"/>
+
+      <g font-size="13" font-weight="700">
+        <text x="40" y="316">AMP</text>
+        <text x="176" y="316">Inosin</text>
+        <text x="330" y="316">Hypoxanthin</text>
+        <text x="530" y="316">Xanthin</text>
+        <text x="690" y="316">Harnsäure</text>
+      </g>
+      <g stroke="currentColor" stroke-width="1.5" marker-end="url(#p5a)">
+        <line x1="86" y1="310" x2="164" y2="310"/>
+        <line x1="230" y1="310" x2="318" y2="310"/>
+        <line x1="424" y1="310" x2="516" y2="310"/>
+        <line x1="586" y1="310" x2="676" y2="310"/>
+      </g>
+      <g font-size="11" font-weight="700" fill="var(--enzym)" font-family="Consolas, monospace" text-anchor="middle">
+        <text x="125" y="302">5'-NT</text>
+        <text x="274" y="302">PNP</text>
+        <text x="470" y="302">XO</text>
+        <text x="631" y="302">XO</text>
+      </g>
+      <text x="470" y="336" text-anchor="middle" font-size="10.5" fill="var(--cofaktor)">Molybdopterin · FAD · Fe-S</text>
+      <text x="631" y="336" text-anchor="middle" font-size="10.5" fill="var(--cofaktor)">liefert dabei H₂O₂</text>
+      <text x="550" y="360" text-anchor="middle" font-size="11.5" fill="var(--drug)">⊣ Allopurinol · Febuxostat</text>
+
+      <line x1="740" y1="322" x2="740" y2="366" stroke="currentColor" stroke-width="1.4" marker-end="url(#p5a)"/>
+      <text x="756" y="348" font-size="11" fill="var(--ink-3)">renale Elimination</text>
+      <text x="690" y="388" font-size="12.5" font-weight="700">URAT1 resorbiert 90 % zurück</text>
+      <text x="690" y="408" font-size="11.5" fill="var(--drug)">⊣ Probenecid, Benzbromaron (urikosurisch)</text>
+
+      <rect x="30" y="376" width="620" height="76" rx="8" fill="var(--warn-bg)" stroke="var(--warn)" stroke-width="1.3"/>
+      <text x="50" y="400" font-size="11.5" font-weight="700" fill="var(--warn)">WARUM AUSGERECHNET HARNSÄURE</text>
+      <text x="50" y="422" font-size="12.5">Den meisten Säugern spaltet die <tspan font-weight="700">Uricase</tspan> die Harnsäure weiter zum gut löslichen Allantoin.</text>
+      <text x="50" y="442" font-size="12.5">Beim Menschen ist das Gen defekt. Harnsäure ist schwer löslich — daraus entsteht die Gicht.</text>
+      </g>
+    </svg>
+    <figcaption>Der Purinstoffwechsel mit den vier Angriffspunkten der Gichttherapie: Hemmung der
+    Bildung (Xanthinoxidase), Förderung der Ausscheidung (URAT1), enzymatischer Abbau des
+    Überschusses (Rasburicase als rekombinante Uricase) und Unterdrückung der Entzündungsreaktion
+    auf die Kristalle (Colchicin am Tubulin).</figcaption>
+  </figure>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-s"><div class="struct">{{S:hypoxanthin}}</div>
+        <figcaption>Hypoxanthin</figcaption></figure>
+      <figure class="mol w-s"><div class="struct">{{S:xanthin}}</div>
+        <figcaption>Xanthin</figcaption></figure>
+      <figure class="mol w-s"><div class="struct">{{S:harnsaeure}}</div>
+        <figcaption>Harnsäure<span class="iupac">pK<sub>a</sub> 5,8 — im Urin protoniert und schwer löslich</span></figcaption></figure>
+      <figure class="mol w-s"><div class="struct">{{S:allopurinol}}</div>
+        <figcaption>Allopurinol<span class="iupac">Isomer des Hypoxanthins</span></figcaption></figure>
+      <figure class="mol w-s"><div class="struct">{{S:oxypurinol}}</div>
+        <figcaption>Oxypurinol<span class="iupac">der eigentliche Hemmstoff</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:febuxostat}}</div>
+        <figcaption>Febuxostat<span class="iupac">nichtpurinerg, kein Kreuzrisiko</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:probenecid}}</div>
+        <figcaption>Probenecid<span class="iupac">URAT1</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:colchicin}}</div>
+        <figcaption>Colchicin<span class="iupac">Tubulin — wirkt nicht auf die Harnsäure</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="boxen">
+    <div class="falle">
+      <b>Prüfungsfalle · Allopurinol ist ein Suizidsubstrat</b>
+      <p>Allopurinol ist ein Isomer des Hypoxanthins — die Stickstoffe an Position 7 und 8 sind
+      vertauscht. Die Xanthinoxidase erkennt es als Substrat und oxidiert es zu <b>Oxypurinol</b>.
+      Dieses bleibt jedoch am reduzierten Molybdän gebunden und blockiert das Enzym.</p>
+      <p>Daraus folgt die Pharmakokinetik: Allopurinol selbst hat eine Halbwertszeit von ein bis
+      zwei Stunden, Oxypurinol dagegen von etwa achtzehn — deshalb genügt die einmal tägliche Gabe.
+      Und weil Oxypurinol renal eliminiert wird, muss bei Niereninsuffizienz die Dosis reduziert
+      werden.</p>
+      <p>Zu Therapiebeginn kann Allopurinol paradoxerweise einen Gichtanfall auslösen, weil die
+      sinkende Serumkonzentration bereits abgelagerte Kristalle mobilisiert. Deshalb wird in den
+      ersten Monaten mit Colchicin oder einem NSAR abgeschirmt — und niemals im akuten Anfall neu
+      begonnen.</p>
+    </div>
+    <div class="merk">
+      <b>Die wichtigste Interaktion dieses Kapitels</b>
+      <p><b>Azathioprin</b> ist ein Prodrug, das nichtenzymatisch durch Glutathion zu
+      <b>6-Mercaptopurin</b> gespalten wird. Dieses hat drei konkurrierende Wege: Aktivierung durch
+      HGPRT zum Thio-IMP, Inaktivierung durch die <b>Xanthinoxidase</b> und Inaktivierung durch die
+      <b>Thiopurin-S-Methyltransferase</b> (TPMT), die dafür SAM verwendet
+      <a class="mref" href="#m05">M-05</a>.</p>
+      <p>Wird gleichzeitig <b>Allopurinol</b> gegeben, entfällt der Abbau über die Xanthinoxidase.
+      Der Spiegel des aktiven Metaboliten steigt um ein Vielfaches; ohne Dosisreduktion auf etwa
+      ein Viertel droht eine schwere Myelosuppression.</p>
+      <p>Dieselbe Gefahr besteht bei den etwa 0,3 % der Bevölkerung mit einem vollständigen
+      <b>TPMT-Defekt</b>. Die Bestimmung der TPMT-Aktivität vor Therapiebeginn ist deshalb ein
+      Standardbeispiel für pharmakogenetische Diagnostik.</p>
+    </div>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol"><div class="struct">{{S:azathioprin}}</div>
+        <figcaption>Azathioprin<span class="iupac">Prodrug, Imidazol als Abgangsgruppe</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">Glutathion<small>nichtenzymatisch</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">nucleophile Substitution</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:mercaptopurin}}</div>
+        <figcaption>6-Mercaptopurin<span class="iupac">drei konkurrierende Wege</span></figcaption></figure>
+      <figure class="mol w-s"><div class="struct">{{S:allopurinol}}</div>
+        <figcaption>Allopurinol<span class="iupac">blockiert einen davon</span></figcaption></figure>
+    </div>
+  </div>
+
+  <!-- ===================================================== 5.4 -->
+  <h3 class="ast" id="a5-4"><span class="nr">5.4</span> Pyrimidine</h3>
+  <div class="spalte">
+    <p class="intro">Die Pyrimidinsynthese verläuft umgekehrt zur Purinsynthese: Hier wird zuerst
+    der Ring gebaut und erst am Ende die Ribose angehängt. Der einzige mitochondriale Schritt des
+    Weges ist zugleich der einzige, an dem ein Arzneistoff angreift.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-s"><div class="struct">{{S:carbamoylphosphat}}</div>
+        <figcaption>Carbamoylphosphat<span class="iupac">aus CPS II, cytosolisch</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">CAD<small>Trifunktionelles Enzym</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 3"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">+ Aspartat</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:orotat}}</div>
+        <figcaption>Orotat<span class="iupac">nach DHODH-Oxidation</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">UMP-Synthase</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">+ PRPP · − CO₂</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:ump}}</div>
+        <figcaption>UMP</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">Ribonucleotid-Reduktase<small>und Kinasen</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 3"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">Thioredoxin</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:dump}}</div>
+        <figcaption>dUMP</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">Thymidylat-Synthase</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">Methylen-THF <a class="mref" href="#m04">M-04</a></span>
+        <span class="hemm">5-Fluoruracil</span></div>
+      <figure class="mol ziel w-l"><div class="struct">{{S:dtmp}}</div>
+        <figcaption>dTMP<span class="iupac">der einzige Weg zum Thymin</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="tab-wrap">
+    <table class="schritte">
+      <thead><tr><th>Nr.</th><th>Umsetzung</th><th>Enzym</th><th>Cofaktor</th><th>Merkpunkt</th><th>Arzneistoff</th></tr></thead>
+      <tbody>
+        <tr><td class="rk">5.4.1</td>
+          <td class="um">Gln + CO₂ + 2 ATP → Carbamoylphosphat <span class="rate">schrittbestimmend</span></td>
+          <td><span class="e">CAD</span> <small>CPS-II-Domäne</small></td><td>2 ATP</td>
+          <td><b>cytosolisch</b> — im Gegensatz zur mitochondrialen CPS I des Harnstoffzyklus, die
+              Ammoniak statt Glutamin verwendet</td>
+          <td>—</td></tr>
+        <tr><td class="rk">5.4.2</td><td class="um">Dihydroorotat → Orotat</td>
+          <td><span class="e">DHODH</span></td>
+          <td><span class="c">FMN, Ubichinon</span></td>
+          <td>einziger <b>mitochondrialer</b> Schritt; hängt direkt an der Atmungskette</td>
+          <td><span class="d">Teriflunomid</span> <small>(aktiver Metabolit des Leflunomids)</small></td></tr>
+        <tr><td class="rk">5.4.3</td><td class="um">Orotat + PRPP → UMP</td>
+          <td><span class="e">UMPS</span></td><td>PRPP</td>
+          <td>Defekt = hereditäre Orotazidurie, behandelbar mit Uridin</td><td>—</td></tr>
+        <tr><td class="rk">5.4.4</td><td class="um">Ribonucleotid → Desoxyribonucleotid</td>
+          <td><span class="e">RRM1/RRM2</span></td>
+          <td><span class="c">Thioredoxin, Tyrosylradikal</span></td>
+          <td>radikalischer Mechanismus mit einem stabilen Tyrosylradikal am Fe-Zentrum</td>
+          <td><span class="d">Hydroxycarbamid</span> <small>(zerstört das Radikal)</small>;
+              <span class="d">Gemcitabin</span></td></tr>
+        <tr><td class="rk">5.4.5</td><td class="um">dUMP → dTMP</td>
+          <td><span class="e">TYMS</span></td>
+          <td><span class="c">5,10-Methylen-THF</span> <a class="mref" href="#m04">M-04</a></td>
+          <td>der Cofaktor liefert Methylgruppe <em>und</em> Hydrid — daher entsteht DHF</td>
+          <td><span class="d">5-Fluoruracil</span> <small>(über FdUMP, ternärer Komplex)</small></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="boxen">
+    <div class="merk">
+      <b>Warum Leucovorin die Wirkung von 5-Fluoruracil verstärkt</b>
+      <p>5-Fluoruracil wird zu <b>FdUMP</b> aktiviert und bildet mit der Thymidylat-Synthase und
+      dem Cofaktor einen <b>ternären Komplex</b>. Weil das Fluoratom an Position 5 nicht
+      abstrahiert werden kann, bleibt der Komplex kovalent stehen und das Enzym blockiert.</p>
+      <p>Die Stabilität dieses Komplexes hängt von der Verfügbarkeit des Cofaktors ab. Genau hier
+      setzt die Kombination mit <b>Folinsäure (Leucovorin)</b> an: Sie erhöht den Vorrat an
+      5,10-Methylen-THF und stabilisiert damit die Hemmung. Bei Methotrexat wirkt dieselbe Substanz
+      umgekehrt — dort dient sie als Rescue, weil sie die durch die DHFR-Blockade fehlende
+      reduzierte Folatform ersetzt.</p>
+      <p>Dieselbe Substanz, zwei entgegengesetzte Rollen: Das ergibt sich unmittelbar daraus, an
+      welcher Stelle des Folatzyklus der jeweilige Wirkstoff angreift.</p>
+    </div>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-s"><div class="struct">{{S:fluorouracil}}</div>
+        <figcaption>5-Fluoruracil</figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:leflunomid}}</div>
+        <figcaption>Leflunomid<span class="iupac">Isoxazol-Prodrug</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:teriflunomid}}</div>
+        <figcaption>Teriflunomid<span class="iupac">offenkettiges Enol, DHODH</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:cytarabin}}</div>
+        <figcaption>Cytarabin<span class="iupac">Arabinose statt Ribose</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:gemcitabin}}</div>
+        <figcaption>Gemcitabin<span class="iupac">2′,2′-Difluor</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:aciclovir}}</div>
+        <figcaption>Aciclovir<span class="iupac">acyclischer „Zucker“</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:tenofovir}}</div>
+        <figcaption>Tenofovir<span class="iupac">Phosphonat — die erste Kinase entfällt</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="boxen">
+    <div class="merk">
+      <b>Drei Wege, einen Nucleosidbaustein zu verfälschen</b>
+      <p><b>Der Zucker wird verändert.</b> Cytarabin trägt Arabinose statt Ribose — die
+      2′-Hydroxylgruppe steht auf der anderen Seite und behindert die Kettenverlängerung.
+      Gemcitabin trägt zwei Fluoratome an C2′ und hemmt zusätzlich die Ribonucleotid-Reduktase.</p>
+      <p><b>Der Zucker wird weggelassen.</b> Aciclovir besitzt nur noch einen offenkettigen
+      Etherrest. Da ihm die 3′-Hydroxylgruppe fehlt, bricht die Kette nach dem Einbau ab. Seine
+      Selektivität beruht darauf, dass nur die <b>virale Thymidinkinase</b> die erste
+      Phosphorylierung leistet — in nicht infizierten Zellen bleibt es ein unwirksames Prodrug.</p>
+      <p><b>Die erste Phosphorylierung wird umgangen.</b> Tenofovir trägt statt des Phosphatesters
+      eine hydrolysestabile <b>Phosphonatgruppe</b> mit direkter C–P-Bindung. Damit ist der oft
+      geschwindigkeitsbestimmende erste Kinaseschritt bereits erledigt.</p>
+    </div>
+  </div>
+
+  <!-- ===================================================== 5.5 -->
+  <h3 class="ast" id="a5-5"><span class="nr">5.5</span> Nucleotide als Signalmoleküle</h3>
+  <div class="spalte">
+    <p class="intro">Dieselben Moleküle, die als Energieträger und Bausteine dienen, wirken
+    extrazellulär als Transmitter und intrazellulär als zweite Botenstoffe. Die Rezeptoren
+    unterscheiden dabei genau nach der Zahl der Phosphatgruppen.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-xl"><div class="struct">{{S:atp}}</div>
+        <figcaption>ATP<span class="iupac">P2X-Ionenkanäle, P2Y₂</span></figcaption></figure>
+      <figure class="mol w-xl"><div class="struct">{{S:adp}}</div>
+        <figcaption>ADP<span class="iupac">P2Y₁₂ am Thrombozyten</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:camp}}</div>
+        <figcaption>cAMP<span class="iupac">3′,5′-cyclisch — PKA</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:cgmp}}</div>
+        <figcaption>cGMP<span class="iupac">PKG</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:adenosin}}</div>
+        <figcaption>Adenosin<span class="iupac">A₁, A₂A, A₂B, A₃</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:coffein}}</div>
+        <figcaption>Coffein<span class="iupac">Adenosin-Antagonist</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:clopidogrel}}</div>
+        <figcaption>Clopidogrel<span class="iupac">Prodrug, CYP2C19 → aktiver Thiolmetabolit</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="boxen">
+    <div class="falle">
+      <b>Prüfungsfalle · Clopidogrel und CYP2C19</b>
+      <p>Clopidogrel ist ein Thienopyridin-Prodrug. Etwa 85 % werden von Esterasen zu einer
+      unwirksamen Carbonsäure hydrolysiert; nur der Rest wird in <b>zwei aufeinanderfolgenden
+      CYP-Schritten</b> — maßgeblich über CYP2C19 — zu einem reaktiven Thiol umgesetzt. Dieses
+      bildet eine <b>Disulfidbrücke</b> mit einem Cysteinrest des P2Y₁₂-Rezeptors und blockiert
+      ihn irreversibel.</p>
+      <p>Daraus ergeben sich zwei klinisch bedeutsame Konsequenzen. Erstens wirken
+      <b>CYP2C19-Poor-Metabolizer</b> schlechter auf Clopidogrel an, was in manchen Ländern eine
+      Genotypisierung vor Stentimplantation begründet. Zweitens schwächen starke
+      CYP2C19-Hemmer — insbesondere <b>Omeprazol</b> — die Wirkung ab; Pantoprazol gilt als
+      unproblematischer.</p>
+      <p><b>Prasugrel</b> umgeht das Problem durch eine effizientere Aktivierung,
+      <b>Ticagrelor</b> ganz, weil es kein Prodrug ist und reversibel bindet.</p>
+    </div>
+    <div class="merk">
+      <b>Adenosin — dasselbe Molekül, zwei Anwendungen</b>
+      <p>Adenosin wirkt am <b>A₁-Rezeptor</b> des AV-Knotens G<sub>i</sub>-vermittelt: Die
+      Adenylatcyclase wird gehemmt, K⁺-Kanäle öffnen sich, die Überleitung wird blockiert. Bei der
+      supraventrikulären Tachykardie beendet ein rascher Bolus die kreisende Erregung. Die
+      Halbwertszeit von wenigen Sekunden macht die Anwendung sicher.</p>
+      <p>Am <b>A₂A-Rezeptor</b> der Gefäße wirkt es dagegen G<sub>s</sub>-vermittelt
+      vasodilatierend, was in der Myokardperfusionsdiagnostik genutzt wird.</p>
+      <p><b>Coffein</b> und <b>Theophyllin</b> sind kompetitive Antagonisten an beiden Rezeptoren.
+      Daraus erklärt sich zweierlei: die zentral anregende Wirkung — Adenosin ist ein Schlafsignal —
+      und die Tatsache, dass Theophyllin die Wirkung von Adenosin als Antiarrhythmikum aufheben
+      kann.</p>
+    </div>
+  </div>
+
+  <!-- ===================================================== 5.6 -->
+  <h3 class="ast" id="a5-6"><span class="nr">5.6</span> Glucuronsäure und Inositol</h3>
+  <div class="spalte">
+    <p class="intro">Zwei Abzweige, die zwar aus dem Zuckerstoffwechsel stammen, aber mit Energie
+    nichts zu tun haben: Der eine entsorgt Arzneistoffe, der andere überträgt Signale.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-xl"><div class="struct">{{S:udp_glucuronat}}</div>
+        <figcaption>UDP-Glucuronsäure<span class="iupac">der Cosubstrat aller UGT</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:inositol}}</div>
+        <figcaption><i>myo</i>-Inositol<span class="iupac">Cyclohexanhexol</span></figcaption></figure>
+      <figure class="mol w-xl"><div class="struct">{{S:ip3}}</div>
+        <figcaption>IP₃<span class="iupac">setzt Ca²⁺ aus dem ER frei</span></figcaption></figure>
+      <figure class="mol w-xl"><div class="struct">{{S:dag}}</div>
+        <figcaption>Diacylglycerol<span class="iupac">aktiviert die Proteinkinase C</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="boxen">
+    <div class="merk">
+      <b>Glucuronidierung: die quantitativ wichtigste Phase-II-Reaktion</b>
+      <p>Die UDP-Glucuronosyltransferasen übertragen den Glucuronylrest auf Hydroxyl-, Carboxyl-,
+      Amino- und Thiolgruppen. Das Produkt ist bei physiologischem pH geladen, gut wasserlöslich
+      und wird biliär oder renal ausgeschieden.</p>
+      <p>Drei Punkte lohnen sich zu merken. <b>UGT1A1</b> konjugiert Bilirubin (3.2.8) und wird
+      von Atazanavir gehemmt. Ein Teil der Glucuronide unterliegt dem
+      <b>enterohepatischen Kreislauf</b>: Bakterielle β-Glucuronidasen spalten sie im Darm wieder,
+      der Wirkstoff wird rückresorbiert — der Grund für die verlängerte Wirkdauer mancher Stoffe
+      und für die Wirkabschwächung oraler Kontrazeptiva unter Antibiotika. Und schließlich gibt es
+      <b>aktive Glucuronide</b>: Morphin-6-glucuronid ist stärker analgetisch wirksam als Morphin
+      selbst und kumuliert bei Niereninsuffizienz.</p>
+    </div>
+    <div class="merk">
+      <b>Warum Lithium am Inositol angreift</b>
+      <p>Phospholipase C spaltet PIP₂ in <b>IP₃</b> und <b>DAG</b>. IP₃ öffnet Calciumkanäle des
+      endoplasmatischen Retikulums, DAG aktiviert zusammen mit dem freigesetzten Ca²⁺ die
+      Proteinkinase C. Damit der Kreislauf weiterläuft, muss IP₃ schrittweise dephosphoryliert und
+      das Inositol wiederverwendet werden.</p>
+      <p><b>Lithium</b> hemmt die Inositolmonophosphatase, den letzten Schritt dieser
+      Rückgewinnung. Weil das Gehirn Inositol kaum aus dem Blut aufnehmen kann, erschöpft sich der
+      Vorrat gerade dort, wo die Signalkaskade besonders aktiv ist. Diese
+      <b>Inositol-Verarmungs-Hypothese</b> erklärt, warum die Wirkung selektiv auf überaktive
+      Neurone zielt — und warum sie erst nach Tagen einsetzt.</p>
+    </div>
+  </div>
+</section>

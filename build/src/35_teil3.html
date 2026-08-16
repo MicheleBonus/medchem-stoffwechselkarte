@@ -1,0 +1,713 @@
+<section class="teil band" id="teil3">
+  <div class="teil-kopf">
+    <div class="nr">Teil 3 — Die nicht-aromatische Aminosäure-Wurzel</div>
+    <h2>Sechs Aminosäuren, sechs völlig verschiedene Produkte</h2>
+    <p class="abstract">Aus Glutamat wird der wichtigste hemmende Neurotransmitter, aus Glycin der
+    rote Blutfarbstoff, aus Arginin ein Gas, aus Cystein das zentrale Redoxsystem und aus
+    Methionin die universelle Methylgruppen-Währung. Anders als bei den aromatischen
+    Aminosäuren gibt es hier kein gemeinsames Bauprinzip; jeder Ast folgt seiner eigenen Logik.</p>
+  </div>
+
+  <div class="boxen">
+    <div class="merk">
+      <b>Was diese sechs Äste verbindet</b>
+      <p>Ein Cofaktor taucht in fast jedem Ast dieses Teils wieder auf: <b>Pyridoxal-5′-phosphat</b>.
+      Er decarboxyliert Glutamat zu GABA (3.1), kondensiert Glycin mit Succinyl-CoA zur
+      δ-Aminolävulinsäure (3.2), decarboxyliert Ornithin zu Putrescin (3.3), spaltet Cystathionin
+      (3.4, 3.5) und startet die Sphingosinsynthese (3.6). Wer <a class="mref" href="#m01">M-01</a>
+      verstanden hat, kann sich die Reaktionstypen dieser sechs Äste weitgehend herleiten.</p>
+      <p>Der zweite verbindende Faden ist der C₁-Stoffwechsel: Der SAM-Zyklus (3.5) liefert die
+      Methylgruppen für Creatin (3.3), für die Polyamine (3.3) und für die Adrenalinsynthese
+      (2.2.4), und er hängt seinerseits an Folat und Cobalamin (3.6).</p>
+    </div>
+  </div>
+
+  <!-- ===================================================== 3.1 -->
+  <h3 class="ast" id="a3-1"><span class="nr">3.1</span> Glutamat und GABA</h3>
+  <div class="spalte">
+    <p class="intro">Der wichtigste erregende und der wichtigste hemmende Neurotransmitter des ZNS
+    unterscheiden sich um genau ein Kohlendioxid. Diese Nähe ist kein Zufall: Das Gleichgewicht
+    zwischen beiden wird über die Aktivität eines einzigen Enzyms eingestellt.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol"><div class="struct">{{S:glutamin}}</div>
+        <figcaption>L-Glutamin<span class="iupac">Transportform aus dem Astrozyten</span></figcaption></figure>
+      <div class="pfeil"><span class="enz">Glutaminase<small>neuronal</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">H₂O · − NH₃</span></div>
+      <figure class="mol ziel"><div class="struct">{{S:glutamat}}</div>
+        <figcaption>L-Glutamat<span class="iupac">exzitatorisch</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">GAD65 / GAD67<small>Glutamat-Decarboxylase</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">PLP · − CO₂</span></div>
+      <figure class="mol ziel"><div class="struct">{{S:gaba}}</div>
+        <figcaption>GABA<span class="iupac">4-Aminobutansäure, inhibitorisch</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">GABA-T<small>GABA-Transaminase</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">PLP · + α-Ketoglutarat</span>
+        <span class="hemm">Vigabatrin</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:succinatsemi}}</div>
+        <figcaption>Succinat­semialdehyd</figcaption></figure>
+      <div class="pfeil"><span class="enz">SSADH</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">NAD⁺</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:succinat}}</div>
+        <figcaption>Succinat<span class="iupac">zurück in den Citratzyklus</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="tab-wrap">
+    <table class="schritte">
+      <thead><tr><th>Nr.</th><th>Umsetzung</th><th>Enzym</th><th>Cofaktor</th><th>Reaktionstyp</th><th>Regulation / Merkpunkt</th><th>Arzneistoff</th></tr></thead>
+      <tbody>
+        <tr><td class="rk">3.1.1</td><td class="um">L-Glutamin → L-Glutamat</td>
+          <td><span class="e">GLS</span> Glutaminase</td><td>H₂O</td>
+          <td>Hydrolyse der Säureamidgruppe</td>
+          <td>Glutamat-Glutamin-Zyklus zwischen Astrozyt und Neuron; Glutamin ist die untoxische Transportform</td>
+          <td>—</td></tr>
+        <tr><td class="rk">3.1.2</td><td class="um">L-Glutamat → GABA</td>
+          <td><span class="e">GAD65, GAD67</span></td>
+          <td><span class="c">PLP</span> <a class="mref" href="#m01">M-01</a></td>
+          <td>α-Decarboxylierung</td>
+          <td>GAD65 ist an Vesikel gebunden und deckt den Bedarf bei Aktivität; Autoantikörper gegen GAD65 beim Typ-1-Diabetes und Stiff-Person-Syndrom</td>
+          <td>—</td></tr>
+        <tr><td class="rk">3.1.3</td><td class="um">GABA → Succinatsemialdehyd</td>
+          <td><span class="e">ABAT</span> GABA-T</td>
+          <td><span class="c">PLP</span></td>
+          <td>Transaminierung auf α-Ketoglutarat</td>
+          <td>schließt den <b>GABA-Shunt</b>, einen Nebenweg um zwei Schritte des Citratzyklus</td>
+          <td><span class="d">Vigabatrin</span> <small>(mechanismusbasierter Suizidinhibitor)</small></td></tr>
+        <tr><td class="rk">3.1.4</td><td class="um">Succinatsemialdehyd → Succinat</td>
+          <td><span class="e">ALDH5A1</span> SSADH</td><td><span class="c">NAD⁺</span></td>
+          <td>Oxidation zur Carbonsäure</td>
+          <td>Defekt führt zur Akkumulation von γ-Hydroxybutyrat (GHB)</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="boxen">
+    <div class="falle">
+      <b>Prüfungsfalle · Gabapentin und Pregabalin wirken nicht über GABA</b>
+      <p>Beide tragen GABA im Namen und wurden als GABA-Analoga entwickelt, doch weder binden sie
+      an GABA-Rezeptoren noch hemmen sie die GABA-Transaminase noch erhöhen sie messbar die
+      GABA-Konzentration. Ihr Angriffspunkt ist die <b>α₂δ-Untereinheit spannungsabhängiger
+      Calciumkanäle</b>; die Folge ist eine verminderte präsynaptische Freisetzung erregender
+      Transmitter.</p>
+      <p>Die Namensverwandtschaft ist also rein historisch. Prüfungsfragen zielen häufig genau auf
+      diese Diskrepanz zwischen Name und Mechanismus.</p>
+    </div>
+    <div class="merk">
+      <b>Vier Angriffspunkte am GABA-System</b>
+      <p>Die GABAerge Übertragung lässt sich an vier Stellen verstärken, und für jede gibt es
+      Wirkstoffe: <b>Synthese</b> (kein etablierter Wirkstoff), <b>Abbau</b> (Vigabatrin hemmt die
+      GABA-T), <b>Wiederaufnahme</b> (Tiagabin hemmt den Transporter GAT-1) und <b>Rezeptor</b>
+      (Benzodiazepine und Barbiturate am GABA<sub>A</sub>-Kanal, Baclofen am
+      GABA<sub>B</sub>-Rezeptor).</p>
+      <p>Der Unterschied zwischen Benzodiazepinen und Barbituraten liegt dabei in der Art der
+      Modulation: Benzodiazepine erhöhen die <b>Öffnungswahrscheinlichkeit</b> des Chloridkanals
+      und benötigen dafür GABA, Barbiturate verlängern die <b>Öffnungsdauer</b> und können den
+      Kanal in hoher Dosis auch ohne GABA öffnen. Daraus folgt die deutlich geringere
+      therapeutische Breite der Barbiturate.</p>
+    </div>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol"><div class="struct">{{S:vigabatrin}}</div>
+        <figcaption>Vigabatrin<span class="iupac">γ-Vinyl-GABA, GABA-T</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:tiagabin}}</div>
+        <figcaption>Tiagabin<span class="iupac">GAT-1-Hemmer</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:baclofen}}</div>
+        <figcaption>(<i>R</i>)-Baclofen<span class="iupac">GABA<sub>B</sub>-Agonist</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:gabapentin}}</div>
+        <figcaption>Gabapentin<span class="iupac">α₂δ — nicht GABAerg</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:pregabalin}}</div>
+        <figcaption>Pregabalin<span class="iupac">α₂δ — nicht GABAerg</span></figcaption></figure>
+    </div>
+  </div>
+
+  <!-- ===================================================== 3.2 -->
+  <h3 class="ast" id="a3-2"><span class="nr">3.2</span> Glycin und Succinyl-CoA: der Häm-Ast</h3>
+  <div class="spalte">
+    <p class="intro">Acht Enzyme führen von zwei einfachen Molekülen zum Häm. Der Weg pendelt
+    dabei zweimal zwischen Mitochondrium und Cytosol, und praktisch jeder seiner Defekte hat einen
+    eigenen Krankheitsnamen: Die Porphyrien sind nach dem jeweils blockierten Enzym benannt.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-s"><div class="struct">{{S:glycin}}</div>
+        <figcaption>Glycin</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">ALAS1 / ALAS2<small>Mitochondrium</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">PLP · + Succinyl-CoA</span>
+        <span class="hemm">Häm-Rückkopplung</span></div>
+      <figure class="mol"><div class="struct">{{S:ala}}</div>
+        <figcaption>δ-Aminolävulinsäure<span class="iupac">ALA</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">ALAD<small>Cytosol</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">Zn²⁺ · 2 ALA − 2 H₂O</span>
+        <span class="hemm">Blei</span></div>
+      <figure class="mol"><div class="struct">{{S:porphobilinogen}}</div>
+        <figcaption>Porphobilinogen<span class="iupac">PBG, das Pyrrol</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">HMBS → UROS → UROD<small>vier Pyrrole, dann Decarboxylierung</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 3"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">vier Zwischenstufen</span></div>
+      <figure class="mol w-xl"><div class="struct">{{S:protoporphyrin}}</div>
+        <figcaption>Protoporphyrin IX<span class="iupac">konjugiertes Makrocyclus-System</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">FECH<small>Ferrochelatase</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">Fe²⁺ einsetzen</span>
+        <span class="hemm">Blei</span></div>
+      <figure class="mol ziel w-l"><div class="struct">{{S:haem}}</div>
+        <figcaption>Häm b<span class="iupac">Fe²⁺ im Zentrum des Makrocyclus</span></figcaption></figure>
+    </div>
+  </div>
+
+  <p class="spalte" style="margin-top:18px">Der Abbau verläuft über zwei Enzyme und liefert
+  nebenbei einen der drei Gasotransmitter:</p>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-l"><div class="struct">{{S:haem}}</div>
+        <figcaption>Häm</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">HMOX1 / HMOX2<small>Häm-Oxygenase</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">3 O₂ · NADPH</span>
+        <span class="hemm">liefert CO + Fe²⁺</span></div>
+      <figure class="mol w-xl"><div class="struct">{{S:biliverdin}}</div>
+        <figcaption>Biliverdin<span class="iupac">grün, Ring geöffnet</span></figcaption></figure>
+      <div class="pfeil"><span class="enz">BLVRA</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">NADPH</span></div>
+      <figure class="mol w-xl"><div class="struct">{{S:bilirubin}}</div>
+        <figcaption>Bilirubin<span class="iupac">unkonjugiert, lipophil, albumingebunden</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">UGT1A1</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">2 UDP-Glucuronsäure</span>
+        <span class="hemm">Gilbert-Syndrom</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:bilirubin}}</div>
+        <figcaption>Bilirubin­diglucuronid<span class="iupac">wasserlöslich, biliär</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="tab-wrap">
+    <table class="schritte">
+      <thead><tr><th>Nr.</th><th>Umsetzung</th><th>Enzym</th><th>Cofaktor</th><th>Ort</th><th>Defekt / Klinik</th><th>Arzneistoff</th></tr></thead>
+      <tbody>
+        <tr><td class="rk">3.2.1</td>
+          <td class="um">Glycin + Succinyl-CoA → ALA <span class="rate">schrittbestimmend</span></td>
+          <td><span class="e">ALAS1</span> <small>Leber</small>, <span class="e">ALAS2</span> <small>erythroid</small></td>
+          <td><span class="c">PLP</span> <a class="mref" href="#m01">M-01</a></td>
+          <td>Mitochondrium</td>
+          <td>ALAS1 wird durch freies Häm rückgekoppelt gehemmt; ALAS2-Defekt = sideroblastische Anämie, oft B₆-responsiv</td>
+          <td><span class="d">Hämin</span> <small>(unterdrückt ALAS1 im Porphyrieschub)</small></td></tr>
+        <tr><td class="rk">3.2.2</td><td class="um">2 ALA → Porphobilinogen</td>
+          <td><span class="e">ALAD</span> PBG-Synthase</td><td><span class="c">Zn²⁺</span></td>
+          <td>Cytosol</td>
+          <td><b>bleiempfindlich</b> — Blei verdrängt das Zink; ALA steigt im Urin</td><td>—</td></tr>
+        <tr><td class="rk">3.2.3</td><td class="um">4 PBG → Hydroxymethylbilan</td>
+          <td><span class="e">HMBS</span> PBG-Desaminase</td><td>—</td><td>Cytosol</td>
+          <td><b>Defekt = akute intermittierende Porphyrie</b>; Schübe mit Bauchschmerz, Neuropathie, Psychose</td>
+          <td><span class="d">Givosiran</span> <small>(siRNA gegen ALAS1)</small></td></tr>
+        <tr><td class="rk">3.2.4</td><td class="um">→ Uroporphyrinogen III → Coproporphyrinogen III</td>
+          <td><span class="e">UROS, UROD</span></td><td>—</td><td>Cytosol</td>
+          <td>UROD-Defekt = Porphyria cutanea tarda, die häufigste Porphyrie; ausgeprägte Photosensibilität</td>
+          <td>—</td></tr>
+        <tr><td class="rk">3.2.5</td><td class="um">→ Protoporphyrin IX</td>
+          <td><span class="e">CPOX, PPOX</span></td><td>O₂</td><td>Mitochondrium</td>
+          <td>erst hier entsteht das durchkonjugierte System, das Licht absorbiert</td>
+          <td><span class="d">ALA, Methyl-ALA</span> <small>(photodynamische Therapie)</small></td></tr>
+        <tr><td class="rk">3.2.6</td><td class="um">Protoporphyrin IX + Fe²⁺ → Häm</td>
+          <td><span class="e">FECH</span> Ferrochelatase</td><td><span class="c">Fe²⁺</span></td>
+          <td>Mitochondrium</td>
+          <td><b>bleiempfindlich</b>; Zinkprotoporphyrin steigt — ein Marker der Bleibelastung</td>
+          <td>—</td></tr>
+        <tr><td class="rk">3.2.7</td><td class="um">Häm → Biliverdin + <b>CO</b> + Fe²⁺</td>
+          <td><span class="e">HMOX1</span></td><td><span class="c">3 O₂, NADPH</span></td>
+          <td>ER, Milz</td>
+          <td>einzige endogene CO-Quelle des Körpers; HMOX1 ist stressinduzierbar und zytoprotektiv</td>
+          <td>—</td></tr>
+        <tr><td class="rk">3.2.8</td><td class="um">Bilirubin → Diglucuronid</td>
+          <td><span class="e">UGT1A1</span></td><td><span class="c">UDP-Glucuronsäure</span></td>
+          <td>Leber</td>
+          <td>Gilbert-Syndrom (Aktivität ↓ ca. 30 %), Crigler-Najjar (Ausfall); beim Neugeborenen Kernikterus-Gefahr</td>
+          <td><span class="d">Phenobarbital</span> <small>(Enzyminduktion)</small>;
+              <span class="d">Atazanavir, Irinotecan</span> <small>(UGT1A1-Interaktion)</small></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="boxen">
+    <div class="falle">
+      <b>Prüfungsfalle · warum Arzneistoffe einen Porphyrieschub auslösen</b>
+      <p>Der Zusammenhang ist rein regulatorisch und lässt sich aus der Tabelle ablesen. Enzyminduktoren
+      wie Barbiturate, Carbamazepin, Rifampicin, Griseofulvin und Sulfonamide steigern die Synthese
+      von Cytochrom-P450-Enzymen. Deren prosthetische Gruppe ist Häm, der freie Häm-Pool sinkt.</p>
+      <p>Damit entfällt die Rückkopplungshemmung auf die <b>ALAS1</b>, die Synthese läuft hoch — und
+      staut sich beim Porphyrie-Patienten vor dem defekten Enzym. Es akkumulieren ALA und
+      Porphobilinogen, die neurotoxisch wirken. Auch Fasten und Alkohol wirken über denselben
+      Mechanismus, weil sie ALAS1 induzieren.</p>
+      <p>Therapeutisch folgt daraus unmittelbar: <b>Hämin</b> intravenös stellt den Häm-Pool wieder
+      her und schaltet ALAS1 ab. Glucose in hoher Dosis wirkt in dieselbe Richtung.</p>
+    </div>
+    <div class="merk">
+      <b>Blei trifft den Häm-Weg an zwei Stellen</b>
+      <p>Die Bleivergiftung ist ein Lehrbeispiel dafür, wie ein Schwermetall gezielt Metalloenzyme
+      angreift. Blei verdrängt das <b>Zink</b> aus der ALA-Dehydratase (3.2.2) und das
+      <b>Eisen</b> aus der Ferrochelatase (3.2.6).</p>
+      <p>Daraus ergibt sich das Laborbild: ALA steigt im Urin, weil der zweite Schritt blockiert ist,
+      und Zinkprotoporphyrin steigt in den Erythrozyten, weil die Ferrochelatase ersatzweise Zink
+      statt Eisen einbaut. Hinzu kommen die basophile Tüpfelung der Erythrozyten und eine
+      mikrozytäre Anämie.</p>
+    </div>
+  </div>
+
+  <!-- ===================================================== 3.3 -->
+  <h3 class="ast" id="a3-3"><span class="nr">3.3</span> Arginin: Stickstoffmonoxid, Polyamine, Creatin</h3>
+  <div class="spalte">
+    <p class="intro">Arginin trägt in der Guanidinogruppe die höchste Stickstoffdichte aller
+    proteinogenen Aminosäuren, und alle drei Äste dieses Abschnitts nutzen genau diese Gruppe:
+    einmal wird sie oxidiert, einmal abgespalten, einmal weitergereicht.</p>
+  </div>
+
+  <h4 class="unter">Der NO-Ast</h4>
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol"><div class="struct">{{S:arginin}}</div>
+        <figcaption>L-Arginin</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">NOS<small>erste Monooxygenierung</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">BH₄ · Häm · FAD/FMN · NADPH · O₂</span>
+        <span class="hemm">L-NMMA</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:noharginin}}</div>
+        <figcaption>N<sup>ω</sup>-Hydroxy-L-arginin<span class="iupac">enzymgebundene Zwischenstufe</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">NOS<small>zweite Monooxygenierung</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">½ NADPH · O₂</span></div>
+      <figure class="mol"><div class="struct">{{S:citrullin}}</div>
+        <figcaption>L-Citrullin<span class="iupac">+ <b>NO</b></span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">lösliche Guanylatcyclase<small>NO bindet am Häm-Fe(II)</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">GTP → cGMP</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:cgmp}}</div>
+        <figcaption>cGMP<span class="iupac">→ PKG → Vasodilatation</span></figcaption></figure>
+      <div class="pfeil"><span class="enz">PDE5</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">Hydrolyse zu GMP</span>
+        <span class="hemm">Sildenafil</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:sildenafil}}</div>
+        <figcaption>Sildenafil</figcaption></figure>
+    </div>
+  </div>
+
+  <h4 class="unter">Der Polyamin- und der Creatin-Ast</h4>
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol"><div class="struct">{{S:ornithin}}</div>
+        <figcaption>L-Ornithin<span class="iupac">aus Arginin über Arginase</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">ODC<small>Ornithin-Decarboxylase</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">PLP · − CO₂</span>
+        <span class="hemm">Eflornithin</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:putrescin}}</div>
+        <figcaption>Putrescin</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">Spermidin-Synthase</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">decarboxyliertes SAM</span></div>
+      <figure class="mol"><div class="struct">{{S:spermidin}}</div>
+        <figcaption>Spermidin</figcaption></figure>
+      <div class="pfeil"><span class="enz">Spermin-Synthase</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">decarboxyliertes SAM</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:spermin}}</div>
+        <figcaption>Spermin<span class="iupac">stabilisiert DNA und RNA</span></figcaption></figure>
+      <figure class="mol w-s"><div class="struct">{{S:guanidinoacetat}}</div>
+        <figcaption>Guanidinoacetat<span class="iupac">AGAT, Niere</span></figcaption></figure>
+      <div class="pfeil"><span class="enz">GAMT<small>Leber</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">SAM</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:creatin}}</div>
+        <figcaption>Creatin</figcaption></figure>
+      <div class="pfeil"><span class="enz">spontan</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4" stroke-dasharray="3 3"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">Ringschluss, ca. 1,7 %/Tag</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:creatinin}}</div>
+        <figcaption>Creatinin<span class="iupac">Grundlage der Clearance</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="tab-wrap">
+    <table class="schritte">
+      <thead><tr><th>Nr.</th><th>Umsetzung</th><th>Enzym</th><th>Cofaktor</th><th>Reaktionstyp</th><th>Merkpunkt</th><th>Arzneistoff</th></tr></thead>
+      <tbody>
+        <tr><td class="rk">3.3.1</td><td class="um">L-Arginin → NO + L-Citrullin</td>
+          <td><span class="e">NOS1, NOS2, NOS3</span></td>
+          <td><span class="c">BH₄, Häm, FAD, FMN, NADPH, O₂, Calmodulin</span></td>
+          <td>zwei Monooxygenierungen über N<sup>ω</sup>-Hydroxy-L-arginin; insgesamt 1,5 NADPH</td>
+          <td>eNOS und nNOS Ca²⁺-abhängig, iNOS nicht; <b>BH₄-Mangel entkoppelt</b> das Enzym, das dann Superoxid statt NO bildet</td>
+          <td><span class="d">L-NMMA, L-NAME</span> <small>(experimentell)</small></td></tr>
+        <tr><td class="rk">3.3.2</td><td class="um">GTP → cGMP</td>
+          <td><span class="e">sGC</span> lösliche Guanylatcyclase</td>
+          <td><span class="c">Häm-Fe(II), Mg²⁺</span></td>
+          <td>NO koordiniert am Eisen und aktiviert allosterisch</td>
+          <td>Nitrate liefern NO exogen; Toleranz durch Aldehyddehydrogenase-2-Erschöpfung</td>
+          <td><span class="d">Glyceroltrinitrat</span>; <span class="d">Riociguat</span> <small>(sGC-Stimulator)</small></td></tr>
+        <tr><td class="rk">3.3.3</td><td class="um">cGMP → 5′-GMP</td>
+          <td><span class="e">PDE5</span></td><td>—</td><td>Hydrolyse der Phosphodiesterbindung</td>
+          <td>Hemmung verlängert das cGMP-Signal, erzeugt es aber nicht — deshalb wirkt Sildenafil nur bei intakter NO-Freisetzung</td>
+          <td><span class="d">Sildenafil, Tadalafil</span></td></tr>
+        <tr><td class="rk">3.3.4</td><td class="um">L-Ornithin → Putrescin</td>
+          <td><span class="e">ODC</span></td>
+          <td><span class="c">PLP</span> <a class="mref" href="#m01">M-01</a></td>
+          <td>α-Decarboxylierung</td>
+          <td>ODC hat die kürzeste Halbwertszeit aller Säugerenzyme (ca. 10 min) und wird über Antizym reguliert</td>
+          <td><span class="d">Eflornithin</span> <small>(Suizidsubstrat; Schlafkrankheit, Hirsutismus)</small></td></tr>
+        <tr><td class="rk">3.3.5</td><td class="um">Putrescin → Spermidin → Spermin</td>
+          <td><span class="e">SRM, SMS</span></td>
+          <td><span class="c">decarboxyliertes SAM</span></td>
+          <td>Übertragung von Aminopropylgruppen</td>
+          <td>hier liefert SAM nicht eine Methyl-, sondern eine <b>Aminopropylgruppe</b> — die Verbindung zu 3.5</td>
+          <td>—</td></tr>
+        <tr><td class="rk">3.3.6</td><td class="um">Arginin + Glycin → Guanidinoacetat → Creatin</td>
+          <td><span class="e">GATM</span> <small>Niere</small>, <span class="e">GAMT</span> <small>Leber</small></td>
+          <td><span class="c">SAM</span></td>
+          <td>Guanidinogruppen-Übertragung, dann N-Methylierung</td>
+          <td>Creatin verbraucht einen erheblichen Anteil des gesamten SAM-Umsatzes des Körpers</td>
+          <td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="boxen">
+    <div class="falle">
+      <b>Prüfungsfalle · warum Nitrate und PDE-5-Hemmer nicht kombiniert werden dürfen</b>
+      <p>Beide greifen in dieselbe Signalkaskade ein, aber an verschiedenen Stellen. Nitrate erhöhen
+      das Angebot an <b>NO</b> und damit die cGMP-<em>Bildung</em>; PDE-5-Hemmer blockieren den
+      cGMP-<em>Abbau</em>. In Kombination steigt die cGMP-Konzentration multiplikativ statt additiv,
+      mit schwerer, therapierefraktärer Hypotonie als Folge.</p>
+      <p>Aus derselben Kaskade erklärt sich auch, warum Sildenafil ohne sexuelle Stimulation nicht
+      wirkt: Ohne NO-Freisetzung entsteht kein cGMP, und ein Enzym, das nichts abbaut, kann durch
+      Hemmung nichts bewirken. Die Karenzzeit beträgt 24 Stunden für Sildenafil und Vardenafil,
+      48 Stunden für das langwirksame Tadalafil.</p>
+    </div>
+    <div class="merk">
+      <b>Die entkoppelte NO-Synthase</b>
+      <p>Die NOS überträgt Elektronen von NADPH über FAD und FMN auf das Häm. Fehlt <b>BH₄</b>, so
+      läuft der Elektronenfluss weiter, findet aber kein Substrat mehr zum Oxidieren; die Elektronen
+      werden stattdessen auf molekularen Sauerstoff übertragen. Das Enzym produziert dann
+      <b>Superoxid statt NO</b>.</p>
+      <p>Diese Entkopplung ist ein zentraler Mechanismus der endothelialen Dysfunktion bei Diabetes,
+      Hypertonie und Hypercholesterinämie: Aus dem gefäßschützenden Enzym wird eine Quelle
+      oxidativen Stresses. Das Superoxid reagiert zudem mit verbliebenem NO zu <b>Peroxynitrit</b>,
+      das seinerseits BH₄ oxidiert — ein sich selbst verstärkender Kreis.</p>
+    </div>
+  </div>
+
+  <!-- ===================================================== 3.4 -->
+  <h3 class="ast" id="a3-4"><span class="nr">3.4</span> Cystein: Glutathion, Taurin, Schwefelwasserstoff</h3>
+  <div class="spalte">
+    <p class="intro">Die Thiolgruppe des Cysteins ist die reaktivste Funktion aller proteinogenen
+    Aminosäuren. Der Körper nutzt sie für das wichtigste Redoxpuffersystem, für die Konjugation der
+    Gallensäuren und für einen dritten Gasotransmitter.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-s"><div class="struct">{{S:cystein}}</div>
+        <figcaption>L-Cystein<span class="iupac">(<i>R</i>) — beachte den Deskriptor</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">GCL<small>γ-Glutamylcystein-Ligase</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">ATP · + Glutamat</span>
+        <span class="hemm">GSH-Rückkopplung</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:glutathion}}</div>
+        <figcaption>Glutathion (GSH)<span class="iupac">γ-Glu-Cys-Gly</span></figcaption></figure>
+      <figure class="mol w-s"><div class="struct">{{S:cysteinsulfinat}}</div>
+        <figcaption>Cystein­sulfinat<span class="iupac">über Cystein-Dioxygenase</span></figcaption></figure>
+      <div class="pfeil"><span class="enz">CSAD</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">PLP · − CO₂</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:hypotaurin}}</div>
+        <figcaption>Hypotaurin</figcaption></figure>
+      <div class="pfeil"><span class="enz">Oxidation</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">[O]</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:taurin}}</div>
+        <figcaption>Taurin<span class="iupac">Gallensäurekonjugation</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="tab-wrap">
+    <table class="schritte">
+      <thead><tr><th>Nr.</th><th>Umsetzung</th><th>Enzym</th><th>Cofaktor</th><th>Merkpunkt</th><th>Arzneistoff</th></tr></thead>
+      <tbody>
+        <tr><td class="rk">3.4.1</td>
+          <td class="um">Glu + Cys → γ-Glutamylcystein <span class="rate">schrittbestimmend</span></td>
+          <td><span class="e">GCLC/GCLM</span></td><td><span class="c">ATP</span></td>
+          <td>die <b>γ</b>-Peptidbindung schützt das Tripeptid vor Peptidasen — nur die
+              γ-Glutamyltransferase kann sie spalten</td>
+          <td>—</td></tr>
+        <tr><td class="rk">3.4.2</td><td class="um">+ Glycin → Glutathion</td>
+          <td><span class="e">GSS</span></td><td><span class="c">ATP</span></td>
+          <td>Cystein ist der limitierende Baustein; daher wirkt N-Acetylcystein als GSH-Vorstufe</td>
+          <td><span class="d">N-Acetylcystein</span></td></tr>
+        <tr><td class="rk">3.4.3</td><td class="um">2 GSH + H₂O₂ → GSSG + 2 H₂O</td>
+          <td><span class="e">GPX</span> Glutathionperoxidase</td>
+          <td><span class="c">Selenocystein</span></td>
+          <td>erklärt, warum Selen ein essenzielles Spurenelement ist</td><td>—</td></tr>
+        <tr><td class="rk">3.4.4</td><td class="um">GSSG → 2 GSH</td>
+          <td><span class="e">GSR</span> Glutathionreduktase</td>
+          <td><span class="c">FAD, NADPH</span></td>
+          <td>NADPH stammt aus dem Pentosephosphatweg — daher die Hämolyse bei G6PD-Mangel</td>
+          <td><span class="d">Primaquin, Sulfonamide</span> <small>(Auslöser bei G6PD-Mangel)</small></td></tr>
+        <tr><td class="rk">3.4.5</td><td class="um">Cystein → Cysteinsulfinat → Taurin</td>
+          <td><span class="e">CDO, CSAD</span></td>
+          <td><span class="c">Fe²⁺, dann PLP</span></td>
+          <td>Taurin ist keine proteinogene Aminosäure — die Säurefunktion ist eine Sulfonsäure</td>
+          <td>—</td></tr>
+        <tr><td class="rk">3.4.6</td><td class="um">Cystein / Homocystein → <b>H₂S</b></td>
+          <td><span class="e">CBS, CSE</span></td><td><span class="c">PLP</span></td>
+          <td>dritter Gasotransmitter neben NO und CO; vasodilatierend über K<sub>ATP</sub>-Kanäle</td>
+          <td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="boxen">
+    <div class="falle">
+      <b>Prüfungsfalle · Paracetamol-Intoxikation und warum N-Acetylcystein hilft</b>
+      <p>Paracetamol wird zu etwa 90 % glucuronidiert und sulfatiert. Ein kleiner Anteil geht über
+      CYP2E1, CYP1A2 und CYP3A4 und ergibt <b>NAPQI</b>, ein reaktives Chinonimin. In
+      therapeutischer Dosis wird dieses sofort von Glutathion abgefangen.</p>
+      <p>Bei Überdosierung sind die Konjugationswege gesättigt, es entsteht mehr NAPQI, und der
+      Glutathionvorrat der Leber erschöpft sich. Sinkt er unter etwa 30 % des Ausgangswerts,
+      alkyliert NAPQI Cysteinreste hepatozellulärer Proteine — zentrolobuläre Nekrose.</p>
+      <p><b>N-Acetylcystein</b> wirkt als Cystein-Donor und füllt den Glutathionpool wieder auf.
+      Entscheidend ist der Zeitpunkt: Innerhalb von acht Stunden gegeben ist die Wirkung nahezu
+      vollständig, danach nimmt sie rasch ab. Chronischer Alkoholkonsum verschiebt die Toxizitätsschwelle
+      nach unten, weil er CYP2E1 induziert und zugleich den Glutathionvorrat senkt.</p>
+    </div>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol"><div class="struct">{{S:paracetamol}}</div>
+        <figcaption>Paracetamol</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">CYP2E1 / 1A2 / 3A4</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">NADPH · O₂ · ca. 5–10 %</span></div>
+      <figure class="mol"><div class="struct">{{S:napqi}}</div>
+        <figcaption>NAPQI<span class="iupac">reaktives Chinonimin</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">GST + GSH</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">Michael-Addition</span>
+        <span class="hemm">bei Erschöpfung: Leberzellnekrose</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:glutathion}}</div>
+        <figcaption>Glutathion<span class="iupac">Nachschub aus NAC</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:nac}}</div>
+        <figcaption>N-Acetylcystein<span class="iupac">Antidot</span></figcaption></figure>
+    </div>
+  </div>
+
+  <!-- ===================================================== 3.5 -->
+  <h3 class="ast" id="a3-5"><span class="nr">3.5</span> Methionin und der SAM-Zyklus</h3>
+  <div class="spalte">
+    <p class="intro">Nach ATP ist S-Adenosylmethionin das am zweithäufigsten eingesetzte
+    Cosubstrat des Körpers. Es methyliert DNA, Histone, Phospholipide, Catecholamine, Melatonin und
+    Creatin. Der Zyklus, der es regeneriert, verbindet drei Vitamine miteinander und ist damit einer
+    der am dichtesten geprüften Zusammenhänge dieses Skripts.</p>
+  </div>
+
+  <figure class="karte">
+    <svg viewBox="0 0 1020 470" role="img"
+      aria-label="Der Methionin-Zyklus: Methionin wird mit ATP zu S-Adenosylmethionin aktiviert, gibt seine Methylgruppe ab und wird zu S-Adenosylhomocystein, dieses zu Homocystein hydrolysiert. Homocystein hat zwei Auswege: Remethylierung zurück zu Methionin durch die cobalaminabhängige Methioninsynthase mit 5-Methyl-Tetrahydrofolat oder durch die Betain-Homocystein-Methyltransferase, oder Transsulfurierung über Cystathionin zu Cystein durch die pyridoxalphosphatabhängige Cystathionin-beta-Synthase.">
+      <defs>
+        <marker id="ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+        </marker>
+      </defs>
+      <g font-family="Corbel, Segoe UI, system-ui, sans-serif">
+
+      <!-- Zyklus: vier Knoten im Rechteck -->
+      <g font-size="14.5" font-weight="700" fill="currentColor" text-anchor="middle">
+        <text x="200" y="80">L-Methionin</text>
+        <text x="640" y="80">SAM</text>
+        <text x="640" y="250">SAH</text>
+        <text x="200" y="250">L-Homocystein</text>
+      </g>
+      <g font-size="11" fill="var(--ink-3)" text-anchor="middle">
+        <text x="640" y="96">S-Adenosylmethionin</text>
+        <text x="640" y="266">S-Adenosylhomocystein</text>
+      </g>
+
+      <!-- Pfeile im Uhrzeigersinn -->
+      <line x1="280" y1="75" x2="570" y2="75" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar3)"/>
+      <text x="425" y="62" font-size="11.5" text-anchor="middle" font-weight="700" fill="var(--enzym)" font-family="Consolas, monospace">MAT</text>
+      <text x="425" y="94" font-size="10.5" text-anchor="middle" fill="var(--cofaktor)">ATP — das gesamte Triphosphat geht ab</text>
+
+      <line x1="640" y1="112" x2="640" y2="220" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar3)"/>
+      <text x="656" y="150" font-size="11.5" font-weight="700" fill="var(--enzym)" font-family="Consolas, monospace">Methyltransferasen</text>
+      <text x="656" y="168" font-size="10.5" fill="var(--ink-3)">COMT · PNMT · HNMT · GAMT · DNMT</text>
+      <text x="656" y="186" font-size="10.5" fill="var(--drug)">⊣ Entacapon, Tolcapon (am Substrat)</text>
+
+      <line x1="570" y1="245" x2="300" y2="245" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar3)"/>
+      <text x="435" y="232" font-size="11.5" text-anchor="middle" font-weight="700" fill="var(--enzym)" font-family="Consolas, monospace">SAH-Hydrolase</text>
+      <text x="435" y="264" font-size="10.5" text-anchor="middle" fill="var(--ink-3)">reversibel — nur der Abfluss treibt sie vorwärts</text>
+
+      <!-- Rückweg 1: Remethylierung -->
+      <path d="M 160 232 L 160 96" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar3)"/>
+      <text x="20" y="140" font-size="11.5" font-weight="700" fill="var(--enzym)" font-family="Consolas, monospace">MTR</text>
+      <text x="20" y="158" font-size="10.5" fill="var(--cofaktor)">Cobalamin (B₁₂)</text>
+      <text x="20" y="174" font-size="10.5" fill="var(--cofaktor)">+ 5-Methyl-THF</text>
+      <text x="20" y="196" font-size="10.5" fill="var(--drug)">⊣ Lachgas oxidiert das Cobalt</text>
+      <text x="20" y="122" font-size="10.5" fill="var(--ink-3)">Remethylierung</text>
+
+      <!-- Rückweg 2: Betain -->
+      <path d="M 262 232 L 262 96" fill="none" stroke="currentColor" stroke-width="1.3"
+            stroke-dasharray="5 3" marker-end="url(#ar3)"/>
+      <text x="276" y="140" font-size="11" font-weight="700" fill="var(--enzym)" font-family="Consolas, monospace">BHMT</text>
+      <text x="276" y="157" font-size="10.5" fill="var(--cofaktor)">Betain, nur in Leber und Niere</text>
+
+      <!-- Transsulfurierung nach unten -->
+      <line x1="200" y1="272" x2="200" y2="330" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar3)"/>
+      <text x="216" y="298" font-size="11.5" font-weight="700" fill="var(--enzym)" font-family="Consolas, monospace">CBS</text>
+      <text x="216" y="315" font-size="10.5" fill="var(--cofaktor)">PLP + Häm</text>
+      <text x="200" y="352" font-size="14" font-weight="700" fill="currentColor" text-anchor="middle">Cystathionin</text>
+      <line x1="200" y1="366" x2="200" y2="410" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar3)"/>
+      <text x="216" y="392" font-size="11.5" font-weight="700" fill="var(--enzym)" font-family="Consolas, monospace">CSE</text>
+      <text x="200" y="432" font-size="14" font-weight="700" fill="currentColor" text-anchor="middle">L-Cystein</text>
+      <text x="200" y="450" font-size="10.5" fill="var(--ink-3)" text-anchor="middle">→ Glutathion, Taurin (3.4)</text>
+
+      <!-- Hinweiskasten -->
+      <rect x="620" y="310" width="382" height="140" rx="8" fill="var(--warn-bg)" stroke="var(--warn)" stroke-width="1.3"/>
+      <text x="640" y="334" font-size="11.5" font-weight="700" fill="var(--warn)">DREI VITAMINE, EIN LABORWERT</text>
+      <text x="640" y="358" font-size="12.5" fill="currentColor">Homocystein steigt bei Mangel an <tspan font-weight="700">B₁₂</tspan> (MTR),</text>
+      <text x="640" y="376" font-size="12.5" fill="currentColor"><tspan font-weight="700">Folat</tspan> (5-Methyl-THF fehlt) oder <tspan font-weight="700">B₆</tspan> (CBS).</text>
+      <text x="640" y="400" font-size="12.5" fill="currentColor">Ein erhöhtes Homocystein sagt daher, dass einer</text>
+      <text x="640" y="418" font-size="12.5" fill="currentColor">der drei Wege klemmt — aber nicht, welcher.</text>
+      <text x="640" y="440" font-size="11.5" fill="var(--warn)" font-style="italic">Methylmalonsäure trennt: nur bei B₁₂-Mangel erhöht.</text>
+      </g>
+    </svg>
+    <figcaption>Der Methionin-Zyklus mit seinen beiden Auswegen. Nach oben führt die
+    Remethylierung, die Methionin regeneriert und Folat sowie Cobalamin benötigt; nach unten die
+    Transsulfurierung, die Homocystein endgültig entsorgt und Pyridoxalphosphat benötigt. Nur der
+    untere Weg verbraucht Homocystein tatsächlich — die Remethylierung schiebt es lediglich im
+    Kreis.</figcaption>
+  </figure>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-s"><div class="struct">{{S:methionin}}</div>
+        <figcaption>L-Methionin</figcaption></figure>
+      <div class="pfeil"><span class="enz">MAT</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">ATP</span></div>
+      <figure class="mol ziel w-xl"><div class="struct">{{S:sam}}</div>
+        <figcaption>SAM<span class="iupac">Sulfonium — das aktivierte Methyl <a class="mref" href="#m05">M-05</a></span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">Methyltransferase</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">S<sub>N</sub>2 · − CH₃</span></div>
+      <figure class="mol w-xl"><div class="struct">{{S:sah}}</div>
+        <figcaption>SAH<span class="iupac">Produkthemmer der Methyltransferasen</span></figcaption></figure>
+      <div class="pfeil"><span class="enz">AHCY</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">− Adenosin</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:homocystein}}</div>
+        <figcaption>L-Homocystein</figcaption></figure>
+      <div class="pfeil"><span class="enz">CBS</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">PLP · + Serin</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:cystathionin}}</div>
+        <figcaption>Cystathionin</figcaption></figure>
+    </div>
+  </div>
+
+  <div class="boxen">
+    <div class="falle">
+      <b>Prüfungsfalle · Homocystinurie und ihre B₆-Responsivität</b>
+      <p>Der klassische Defekt betrifft die <b>Cystathionin-β-Synthase</b>. Klinisch ähnelt das Bild
+      dem Marfan-Syndrom — Hochwuchs, lange Extremitäten, Linsenluxation —, unterscheidet sich aber
+      durch die Richtung der Linsenverlagerung (nach unten statt nach oben), durch die geistige
+      Behinderung und vor allem durch die ausgeprägte Thromboseneigung.</p>
+      <p>Etwa die Hälfte der Patienten spricht auf hohe Dosen <b>Pyridoxin</b> an. Das lässt sich
+      unmittelbar aus dem Mechanismus erklären: Die betreffenden Mutationen vermindern nicht die
+      Katalyse, sondern die Affinität zum Cofaktor. Ein Überangebot an PLP verschiebt das
+      Bindungsgleichgewicht und stellt einen Teil der Aktivität wieder her.</p>
+      <p>Bei den Nicht-Respondern hilft nur die methioninarme Diät, ergänzt um Betain, das die
+      alternative Remethylierung über BHMT antreibt.</p>
+    </div>
+    <div class="merk">
+      <b>Warum Lachgas eine Blutbildveränderung machen kann</b>
+      <p>Die Methioninsynthase trägt <b>Methylcobalamin</b> als prosthetische Gruppe. Das
+      Cobalt durchläuft dabei die Stufen Co(I), Co(II) und Co(III); die supernucleophile
+      Co(I)-Form nimmt die Methylgruppe vom 5-Methyl-THF auf.</p>
+      <p><b>Distickstoffmonoxid</b> oxidiert genau diese Co(I)-Form irreversibel. Nach längerer oder
+      wiederholter Lachgasexposition — klassisch bei Anästhesiepersonal oder bei Missbrauch — fällt
+      die Methioninsynthase aus. Die Folge ist eine megaloblastäre Anämie mit funikulärer
+      Myelose, obwohl der Cobalaminspiegel im Serum normal sein kann.</p>
+      <p>Dieselbe Blockade erzeugt die <b>Methylfalle</b>: Da die MTHFR-Reaktion irreversibel ist,
+      staut sich das gesamte Folat als 5-Methyl-THF, das ohne funktionierende Methioninsynthase
+      nicht weiterverwendet werden kann. Es entsteht ein funktioneller Folatmangel bei normalem
+      Folatspiegel — siehe <a class="mref" href="#m04">M-04</a>.</p>
+    </div>
+  </div>
+
+  <!-- ===================================================== 3.6 -->
+  <h3 class="ast" id="a3-6"><span class="nr">3.6</span> Serin: C₁-Einheiten und Sphingolipide</h3>
+  <div class="spalte">
+    <p class="intro">Serin ist der Hauptlieferant von C₁-Einheiten für den Folatstoffwechsel und
+    zugleich das Rückgrat aller Sphingolipide. Beide Umsetzungen laufen über PLP-abhängige Enzyme.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-s"><div class="struct">{{S:serin}}</div>
+        <figcaption>L-Serin</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">SHMT<small>Serin-Hydroxymethyltransferase</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">PLP · + THF</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:glycin}}</div>
+        <figcaption>Glycin<span class="iupac">+ 5,10-Methylen-THF</span></figcaption></figure>
+      <figure class="mol w-xl"><div class="struct">{{S:thf}}</div>
+        <figcaption>Tetrahydrofolat<span class="iupac">der C₁-Träger <a class="mref" href="#m04">M-04</a></span></figcaption></figure>
+      <figure class="mol w-xl"><div class="struct">{{S:methylthf}}</div>
+        <figcaption>5-Methyl-THF<span class="iupac">Endstation der Methylfalle</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-s"><div class="struct">{{S:serin}}</div>
+        <figcaption>L-Serin</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">SPT<small>Serin-Palmitoyltransferase</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">PLP · + Palmitoyl-CoA · − CO₂</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:sphingosin}}</div>
+        <figcaption>Sphingosin<span class="iupac">(2<i>S</i>,3<i>R</i>,4<i>E</i>)</span></figcaption></figure>
+      <div class="pfeil"><span class="enz">Sphingosinkinase</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">ATP</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:s1p}}</div>
+        <figcaption>Sphingosin-1-phosphat<span class="iupac">S1P — steuert die Lymphozytenauswanderung</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:fingolimod}}</div>
+        <figcaption>Fingolimod<span class="iupac">Sphingosin-Analogon, S1P₁-Modulator</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="boxen">
+    <div class="merk">
+      <b>Fingolimod als Beispiel für rationales Wirkstoffdesign</b>
+      <p>Fingolimod ist ein Sphingosin-Analogon: Die lange Alkylkette und die beiden Hydroxymethylgruppen
+      bilden das Sphingosin-Motiv nach. Es wird im Körper durch dieselbe <b>Sphingosinkinase</b>
+      phosphoryliert wie das natürliche Substrat und wirkt dann am S1P₁-Rezeptor.</p>
+      <p>Der therapeutische Effekt beruht auf einer Besonderheit: Fingolimodphosphat wirkt als
+      <b>funktioneller Antagonist</b> — es aktiviert den Rezeptor zunächst, bewirkt dann aber dessen
+      Internalisierung. Ohne S1P₁ können Lymphozyten die Lymphknoten nicht verlassen; sie werden dort
+      zurückgehalten, und die Zahl zirkulierender Lymphozyten sinkt. Daraus ergibt sich die Wirkung
+      bei multipler Sklerose ebenso wie die typische Nebenwirkung, die Bradykardie bei Erstgabe
+      über S1P₃-Rezeptoren am Herzen.</p>
+    </div>
+  </div>
+</section>

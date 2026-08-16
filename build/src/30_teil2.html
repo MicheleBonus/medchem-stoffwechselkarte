@@ -1,0 +1,652 @@
+<section class="teil band" id="teil2">
+  <div class="teil-kopf">
+    <div class="nr">Teil 2 — Die aromatische Aminosäure-Wurzel</div>
+    <h2>Die biogenen Amine und ihre Vorstufen</h2>
+    <p class="abstract">Aus Phenylalanin, Tyrosin, Tryptophan und Histidin entstehen sämtliche biogenen Amine. Die
+    Enzyme dieser Wege sind die Angriffspunkte von Antidepressiva, Antipsychotika,
+    Antiparkinsonmitteln, Antihistaminika, Triptanen und Thyreostatika.</p>
+  </div>
+
+  <div class="boxen">
+    <div class="merk">
+      <b>Das gemeinsame Bauprinzip</b>
+      <p>Jedes biogene Amin entsteht nach demselben Zweischritt-Muster: <b>ringständige
+      Hydroxylierung</b>, dann <b>Decarboxylierung der Aminosäure-Seitenkette</b>. Bei Tyrosin
+      liefert das Dopamin, bei Tryptophan Serotonin. Histidin überspringt die Hydroxylierung und
+      wird direkt decarboxyliert.</p>
+      <p>Beide Schritte haben feste Cofaktoren, und die verwechselt man leicht: Die Hydroxylasen
+      sind <b>BH₄-abhängig</b> (Tetrahydrobiopterin, mit Nicht-Häm-Fe(II)), die Decarboxylasen
+      <b>PLP-abhängig</b> (Pyridoxal-5′-phosphat); diese Zuordnung wird häufig vertauscht.
+      Tafel <a class="mref" href="#m01">M-01</a> zeigt, worauf die Vielseitigkeit des PLP beruht.</p>
+    </div>
+ </div>
+
+  <!-- ===================================================== 2.1 -->
+  <h3 class="ast" id="a2-1"><span class="nr">2.1</span> Phenylalanin → Tyrosin, und warum BH₄ zweimal zählt</h3>
+  <div class="spalte">
+    <p class="intro">Tyrosin ist die einzige der vier Aminosäuren, die der Körper selbst bilden kann, und zwar aus
+    Phenylalanin. Der Ausfall dieses Schritts führt zur Phenylketonurie.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol"><div class="struct">{{S:phenylalanin}}</div>
+        <figcaption>L-Phenylalanin<span class="iupac">(2<i>S</i>)-2-Amino-3-phenylpropansäure</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">PAH<small>Phenylalanin-4-Monooxygenase</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">BH₄ · O₂ · Fe(II)</span>
+        <span class="hemm">Defekt = PKU</span></div>
+      <figure class="mol ziel"><div class="struct">{{S:tyrosin}}</div>
+        <figcaption>L-Tyrosin<span class="iupac">bei PKU essenziell</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:bh4}}</div>
+        <figcaption>Tetrahydrobiopterin (BH₄)<span class="iupac">= Sapropterin als Arzneistoff</span></figcaption></figure>
+      <div class="pfeil"><span class="enz">PCD → DHPR</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="4.5" x2="90" y2="4.5" stroke="currentColor" stroke-width="1.3"/><polygon points="90,1 99,4.5 90,8" fill="currentColor"/><line x1="10" y1="10" x2="98" y2="10" stroke="currentColor" stroke-width="1.3"/><polygon points="10,6.5 1,10 10,13.5" fill="currentColor"/></svg>
+        <span class="cof">NADH · Regeneration</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:bh4_4a_oh}}</div>
+        <figcaption>4a-Hydroxy-BH₄<span class="iupac">Carbinolamin-Zwischenstufe</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="boxen">
+    <div class="falle">
+      <b>Prüfungsfalle · nicht jede PKU ist eine PAH-PKU</b>
+      <p>Etwa 2 % der Hyperphenylalaninämien beruhen nicht auf einem Defekt der Phenylalanin-
+      Hydroxylase, sondern auf einem Defekt im <b>BH₄-Stoffwechsel</b> — entweder in der
+      Neusynthese (GTP-Cyclohydrolase I, 6-Pyruvoyl-tetrahydropterin-Synthase) oder in der
+      Regeneration (Dihydropteridin-Reduktase).</p>
+      <p>Der klinische Unterschied ergibt sich aus der Cofaktorbilanz: BH₄ ist
+      Cofaktor von <em>drei</em> Hydroxylasen — PAH, Tyrosin-Hydroxylase und
+      Tryptophan-Hydroxylase — sowie der NO-Synthase. Ein BH₄-Defekt trifft deshalb zusätzlich die
+      Catecholamin- und Serotoninsynthese. Diese Patienten entwickeln trotz phenylalaninarmer Diät
+      eine schwere neurologische Symptomatik („maligne PKU“) und benötigen Sapropterin plus
+      L-Dopa und 5-Hydroxytryptophan.</p>
+      <p>Eine phenylalaninarme Diät ist somit nur bei der PAH-Form ausreichend. Zum
+      Neugeborenenscreening gehört deshalb die Differenzierung über Pterinausscheidung und
+      DHPR-Aktivität.</p>
+    </div>
+ </div>
+
+  <!-- ===================================================== 2.2 -->
+  <h3 class="ast" id="a2-2"><span class="nr">2.2</span> Der Catecholamin-Strang</h3>
+  <div class="spalte">
+    <p class="intro">Vier aufeinanderfolgende Enzyme mit vier verschiedenen Cofaktoren. An jedem von ihnen greift
+    mindestens ein therapeutisch eingesetzter Wirkstoff an.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol"><div class="struct">{{S:tyrosin}}</div><figcaption>L-Tyrosin</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">TH<small>Tyrosin-3-Monooxygenase</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">BH₄ · O₂ · Fe(II)</span>
+        <span class="hemm">Metirosin</span></div>
+      <figure class="mol"><div class="struct">{{S:ldopa}}</div>
+        <figcaption>L-DOPA<span class="iupac">(2<i>S</i>) — Levodopa</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">AADC<small>= DDC, Dopa-Decarboxylase</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">PLP · − CO₂</span>
+        <span class="hemm">Carbidopa, Benserazid</span></div>
+      <figure class="mol"><div class="struct">{{S:dopamin}}</div>
+        <figcaption>Dopamin<span class="iupac">achiral!</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">DBH<small>im Vesikel-Inneren</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">Cu²⁺ · Ascorbat · O₂</span>
+        <span class="hemm">Disulfiram</span></div>
+      <figure class="mol"><div class="struct">{{S:noradrenalin}}</div>
+        <figcaption>(<i>R</i>)-Noradrenalin</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">PNMT<small>nur Nebennierenmark</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">SAM → SAH</span></div>
+      <figure class="mol ziel"><div class="struct">{{S:adrenalin}}</div>
+        <figcaption>(<i>R</i>)-Adrenalin</figcaption></figure>
+    </div>
+  </div>
+
+  <div class="tab-wrap">
+    <table class="schritte">
+      <thead><tr><th>Nr.</th><th>Umsetzung</th><th>Enzym</th><th>Cofaktor</th><th>Reaktionstyp</th><th>Regulation / Lokalisation</th><th>Arzneistoff</th></tr></thead>
+      <tbody>
+        <tr><td class="rk">2.2.1</td>
+          <td class="um">L-Tyrosin → L-DOPA <span class="rate">schrittbestimmend</span></td>
+          <td><span class="e">TH</span></td>
+          <td><span class="c">BH₄, Fe(II), O₂</span> <a class="mref" href="#m10">M-10</a></td>
+          <td>aromatische Hydroxylierung in 3-Position</td>
+          <td>Endprodukthemmung durch Catecholamine; Aktivierung durch PKA-Phosphorylierung an Ser40; cytosolisch</td>
+          <td><span class="d">Metirosin</span> <small>(α-Methyl-L-tyrosin, Phäochromozytom)</small></td></tr>
+        <tr><td class="rk">2.2.2</td><td class="um">L-DOPA → Dopamin</td>
+          <td><span class="e">AADC / DDC</span></td>
+          <td><span class="c">PLP</span> <a class="mref" href="#m01">M-01</a></td>
+          <td>α-Decarboxylierung</td>
+          <td>Dimer; Lys303 trägt das interne Aldimin, Asp271 fixiert das Pyridinium-N, His192 ist katalytisch essenziell</td>
+          <td><span class="d">Carbidopa, Benserazid</span> <small>(peripher, ZNS-gängig nur Levodopa)</small></td></tr>
+        <tr><td class="rk">2.2.3</td><td class="um">Dopamin → (<i>R</i>)-Noradrenalin</td>
+          <td><span class="e">DBH</span> Dopamin-β-Hydroxylase</td>
+          <td><span class="c">Cu²⁺, Ascorbat, O₂</span> <a class="mref" href="#m11">M-11</a></td>
+          <td>benzylische Hydroxylierung, stereospezifisch zu (<i>R</i>)</td>
+          <td><b>im Vesikelinneren</b>; Dopamin muss erst über VMAT2 hinein</td>
+          <td><span class="d">Disulfiram</span> <small>(Cu-Chelation)</small>;
+              <span class="d">Reserpin</span> <small>(VMAT2, verhindert den Zutritt)</small></td></tr>
+        <tr><td class="rk">2.2.4</td><td class="um">Noradrenalin → Adrenalin</td>
+          <td><span class="e">PNMT</span></td>
+          <td><span class="c">SAM</span> <a class="mref" href="#m05">M-05</a></td>
+          <td>N-Methylierung, S<sub>N</sub>2 am Sulfonium</td>
+          <td><b>cytosolisch</b>; Noradrenalin muss das Vesikel wieder verlassen. Expression durch
+              Cortisol aus dem Nebennierenrinden-Portalblut induziert</td>
+          <td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="boxen">
+    <div class="falle">
+      <b>Prüfungsfalle · das Vesikel als Ortsangabe</b>
+      <p>Die Kompartimentierung der vier Schritte ist pharmakologisch folgenreich. TH und AADC
+      arbeiten im <b>Cytosol</b>. DBH sitzt als
+      einziges Enzym der Reihe <b>im Vesikel</b>. PNMT arbeitet wieder im <b>Cytosol</b>.</p>
+      <p>Das Noradrenalin wandert also: Cytosol → Vesikel (VMAT2) → dort Hydroxylierung → im
+      Nebennierenmark zurück ins Cytosol → Methylierung → erneut ins Vesikel. Reserpin, das VMAT2
+      irreversibel blockiert, entleert deshalb nicht nur die Speicher, sondern verhindert bereits die Noradrenalinsynthese:
+      Das Dopamin gelangt gar nicht erst an sein Enzym.</p>
+      <p>Zu beachten ist außerdem, dass <b>Dopamin achiral</b> ist; das Stereozentrum wird erst
+      durch die DBH eingeführt.</p>
+    </div>
+
+    <div class="merk">
+      <b>Levodopa statt Dopamin, und die Rolle des Decarboxylase-Hemmers</b>
+      <p>Dopamin selbst ist zu polar für die Blut-Hirn-Schranke. Levodopa dagegen ist eine
+      α-Aminosäure und wird vom <b>LAT1</b>-Transporter aktiv befördert; die zusätzliche
+      3-Hydroxygruppe wird gut toleriert (K<sub>i</sub> ≈ 67 µM gegenüber 31 µM für Tyrosin).</p>
+      <p>Ohne Decarboxylase-Hemmer werden allerdings über 95 % des Levodopa bereits in der
+      Peripherie zu Dopamin decarboxyliert, mit Übelkeit und Hypotonie als Folge und ohne Wirkung
+      im ZNS. Carbidopa und Benserazid sind selbst <b>nicht ZNS-gängig</b>; sie hemmen
+      also nur die periphere AADC. Die Bioverfügbarkeit von Levodopa steigt dadurch von etwa 33 %
+      auf 80–98 %.</p>
+      <p>Carbidopa ist ein <b>Substratanalogon</b> (Levodopa mit Hydrazinogruppe und zusätzlicher
+      α-Methylgruppe), Benserazid ein <b>Produktanalogon</b> (acyliertes Dopamin-Hydrazin). Beide
+      binden den Cofaktor kovalent — siehe <a class="mref" href="#m01">M-01</a>.</p>
+    </div>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol"><div class="struct">{{S:carbidopa}}</div>
+        <figcaption>(<i>S</i>)-Carbidopa<span class="iupac">Substratanalogon, Hydrazino-Gruppe</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:benserazid}}</div>
+        <figcaption>Benserazid<span class="iupac">Produktanalogon; 2′-OH erklärt die höhere Affinität</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:metirosin}}</div>
+        <figcaption>Metirosin<span class="iupac">α-Methyl-L-tyrosin, TH-Hemmer</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:methyldopa}}</div>
+        <figcaption>α-Methyldopa<span class="iupac">falscher Transmitter → α₂-Agonismus</span></figcaption></figure>
+    </div>
+  </div>
+
+  <!-- ===================================================== 2.3 -->
+  <h3 class="ast" id="a2-3"><span class="nr">2.3</span> Abbau: MAO und COMT — auf die Reihenfolge kommt es an</h3>
+  <div class="spalte">
+    <p class="intro">Zwei Enzyme, zwei mögliche Reihenfolgen, vier Metaboliten. Beide Wege führen zum selben
+    Endprodukt, aber über unterschiedliche Zwischenstufen.</p>
+  </div>
+
+  <figure class="karte">
+    <svg viewBox="0 0 940 340" role="img"
+      aria-label="Der Dopaminabbau verläuft je nach Kompartiment in zwei Reihenfolgen: intraneuronal zuerst MAO-B zu DOPAC, dann COMT; extraneuronal zuerst COMT zu 3-Methoxytyramin, dann MAO. Beide Wege münden in Homovanillinsäure.">
+      <defs>
+        <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+        </marker>
+      </defs>
+      <g font-family="Corbel, Segoe UI, system-ui, sans-serif">
+
+      <!-- Kompartiment-Rahmen -->
+      <rect x="10" y="34" width="920" height="122" rx="8" fill="var(--surface-2)" stroke="currentColor"
+            stroke-width="1" opacity=".5"/>
+      <rect x="10" y="186" width="920" height="122" rx="8" fill="var(--surface-2)" stroke="currentColor"
+            stroke-width="1" opacity=".5"/>
+      <text x="24" y="54" font-size="11" letter-spacing="1.2" font-weight="700" fill="var(--ink-3)">INTRANEURONAL  ·  MAO ZUERST</text>
+      <text x="24" y="206" font-size="11" letter-spacing="1.2" font-weight="700" fill="var(--ink-3)">EXTRANEURONAL / GLIA  ·  COMT ZUERST</text>
+
+      <!-- obere Reihe -->
+      <g font-size="13.5" fill="currentColor" text-anchor="middle">
+        <text x="90"  y="104" font-weight="700">Dopamin</text>
+        <text x="360" y="104" font-weight="700">DOPAC</text>
+        <text x="700" y="104" font-weight="700">Homovanillinsäure</text>
+        <text x="700" y="120" font-size="11" fill="var(--ink-3)">HVA</text>
+      </g>
+      <g stroke="currentColor" stroke-width="1.4" marker-end="url(#ar2)">
+        <line x1="150" y1="99" x2="300" y2="99"/>
+        <line x1="418" y1="99" x2="600" y2="99"/>
+      </g>
+      <g font-size="11.5" font-family="Consolas, monospace" font-weight="700" text-anchor="middle">
+        <text x="225" y="90" fill="var(--enzym)">MAO-B → ALDH</text>
+        <text x="509" y="90" fill="var(--enzym)">COMT</text>
+      </g>
+      <g font-size="10.5" text-anchor="middle" fill="var(--cofaktor)">
+        <text x="225" y="117">FAD, dann NAD⁺</text>
+        <text x="509" y="117">SAM, Mg²⁺</text>
+      </g>
+      <text x="225" y="137" font-size="10.5" text-anchor="middle" fill="var(--drug)">⊣ Selegilin, Rasagilin</text>
+      <text x="509" y="137" font-size="10.5" text-anchor="middle" fill="var(--drug)">⊣ Entacapon, Tolcapon</text>
+
+      <!-- untere Reihe -->
+      <g font-size="13.5" fill="currentColor" text-anchor="middle">
+        <text x="90"  y="256" font-weight="700">Dopamin</text>
+        <text x="360" y="256" font-weight="700">3-Methoxytyramin</text>
+        <text x="360" y="272" font-size="11" fill="var(--ink-3)">3-MT</text>
+        <text x="700" y="256" font-weight="700">Homovanillinsäure</text>
+      </g>
+      <g stroke="currentColor" stroke-width="1.4" marker-end="url(#ar2)">
+        <line x1="150" y1="251" x2="270" y2="251"/>
+        <line x1="452" y1="251" x2="600" y2="251"/>
+      </g>
+      <g font-size="11.5" font-family="Consolas, monospace" font-weight="700" text-anchor="middle">
+        <text x="210" y="242" fill="var(--enzym)">COMT</text>
+        <text x="526" y="242" fill="var(--enzym)">MAO → ALDH</text>
+      </g>
+      <g font-size="10.5" text-anchor="middle" fill="var(--cofaktor)">
+        <text x="210" y="290">SAM, Mg²⁺</text>
+        <text x="526" y="290">FAD, dann NAD⁺</text>
+      </g>
+
+      <!-- Zusammenführung -->
+      <path d="M 700 132 L 700 160 M 700 232 L 700 204" stroke="currentColor" stroke-width="1.2"
+            stroke-dasharray="4 3" fill="none" opacity=".6"/>
+      <text x="790" y="176" font-size="12" fill="var(--ink-2)" font-style="italic">dasselbe Endprodukt,</text>
+      <text x="790" y="192" font-size="12" fill="var(--ink-2)" font-style="italic">verschiedene Zwischenstufen</text>
+      </g>
+    </svg>
+    <figcaption>Der Abbau des Dopamins in beiden Kompartimenten. Die Enzyme sind dieselben, nur ihre Reihenfolge unterscheidet sich. Daraus folgt, welcher
+    Metabolit im Liquor oder Urin ansteigt, wenn eines der beiden gehemmt wird.</figcaption>
+  </figure>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol"><div class="struct">{{S:dopamin}}</div><figcaption>Dopamin</figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:dopac}}</div>
+        <figcaption>DOPAC<span class="iupac">3,4-Dihydroxyphenylessigsäure</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:methoxytyramin}}</div>
+        <figcaption>3-Methoxytyramin<span class="iupac">3-MT</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:hva}}</div>
+        <figcaption>Homovanillinsäure<span class="iupac">HVA — gemeinsames Endprodukt</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:omd}}</div>
+        <figcaption>3-<i>O</i>-Methyldopa<span class="iupac">3-OMD — therapeutisch inaktiv</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:vma}}</div>
+        <figcaption>Vanillinmandelsäure<span class="iupac">VMA — aus Nor-/Adrenalin</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="tab-wrap">
+    <table class="schritte">
+      <thead><tr><th>Enzym</th><th>Cofaktor</th><th>Lokalisation</th><th>Substratpräferenz</th><th>Reaktion</th><th>Arzneistoff</th></tr></thead>
+      <tbody>
+        <tr><td><span class="e">MAO-A</span></td>
+          <td><span class="c">FAD</span>, kovalent über Thioether an Cys eines
+            Ser-Gly-Gly-<b>Cys</b>-Tyr-Motivs <a class="mref" href="#m06">M-06</a></td>
+          <td>äußere Mitochondrienmembran; Darm, Leber, Plazenta</td>
+          <td>Serotonin, Noradrenalin, Adrenalin, Tyramin</td>
+          <td>oxidative Desaminierung zum Aldehyd</td>
+          <td><span class="d">Moclobemid</span> <small>(RIMA, reversibel)</small>;
+              <span class="d">Tranylcypromin</span> <small>(irreversibel, unselektiv)</small></td></tr>
+        <tr><td><span class="e">MAO-B</span></td>
+          <td><span class="c">FAD</span>, ebenso kovalent</td>
+          <td>äußere Mitochondrienmembran; im Gehirn ca. 80 % der Gesamtaktivität</td>
+          <td><b>Dopamin</b> im menschlichen Gehirn, β-Phenylethylamin</td>
+          <td>oxidative Desaminierung</td>
+          <td><span class="d">Selegilin, Rasagilin</span> <small>(mechanismusbasierte
+            Suizidinhibitoren)</small></td></tr>
+        <tr><td><span class="e">COMT</span></td>
+          <td><span class="c">SAM, Mg²⁺</span> <a class="mref" href="#m05">M-05</a></td>
+          <td>S-COMT löslich (Peripherie), MB-COMT membrangebunden (Gehirn)</td>
+          <td>alle Catechole: Levodopa, Catecholamine, Ascorbinsäure</td>
+          <td><i>O</i>-Methylierung der 3-OH-Gruppe</td>
+          <td><span class="d">Entacapon</span> <small>(nur peripher)</small>;
+              <span class="d">Tolcapon</span> <small>(auch zentral, hepatotoxisch)</small></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="boxen">
+    <div class="falle">
+      <b>Prüfungsfalle · der Cheese-Effekt und warum er MAO-A betrifft</b>
+      <p>Tyramin aus gereiftem Käse, Rotwein oder Hefeextrakt wird normalerweise von der
+      <b>MAO-A der Darmwand und der Leber</b> beim First-Pass vollständig abgebaut. Unselektive
+      irreversible MAO-Hemmer wie Tranylcypromin schalten diesen Schutz aus. Das Tyramin gelangt
+      in den Kreislauf, wird über NET in die noradrenerge Nervenendigung aufgenommen und setzt
+      dort gespeichertes Noradrenalin frei — hypertensive Krise.</p>
+      <p>Daraus ergeben sich die Sicherheitsanforderungen der Substanzklasse. <b>Selektive
+      MAO-B-Hemmer</b> (Selegilin, Rasagilin) und <b>reversible MAO-A-Hemmer</b> (Moclobemid)
+      erfordern keine Diätrestriktion; der reversible Hemmer wird vom Tyramin vom Enzym verdrängt. Bei Selegilin gilt das allerdings nur im niedrigen Dosisbereich; oberhalb von
+      etwa 10 mg/d geht die B-Selektivität verloren.</p>
+    </div>
+
+    <div class="merk">
+      <b>Warum COMT-Hemmer eine Nitrocatechol-Gruppe tragen</b>
+      <p>Entacapon und Tolcapon sind Nitrocatechole. Die Catecholgruppe ist für die Bindung ins aktive Zentrum essenziell; sie koordiniert dasselbe
+      <b>Mg²⁺</b>, das im physiologischen Fall das Substrat ausrichtet. Die <b>Nitrogruppe</b>
+      senkt den pK<sub>a</sub> der benachbarten Hydroxylgruppe so weit, dass diese bei
+      physiologischem pH als Phenolat vorliegt und das Metall besonders fest bindet; zusätzlich
+      bildet sie Wasserstoffbrücken zu Glu199 und Lys144.</p>
+      <p>Der Unterschied zwischen beiden liegt allein in der ZNS-Gängigkeit: <b>Entacapon</b>
+      wirkt nur peripher und verhindert dort die Umwandlung von Levodopa in das unwirksame
+      3-<i>O</i>-Methyldopa. <b>Tolcapon</b> überschreitet die Blut-Hirn-Schranke und wirkt stärker, ist aber wegen
+      fulminanter Hepatotoxizität Reservemittel mit Leberwertkontrolle.</p>
+    </div>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol"><div class="struct">{{S:selegilin}}</div>
+        <figcaption>(<i>R</i>)-Selegilin<span class="iupac">N-Propargyl: alkyliert FAD-N5</span></figcaption></figure>
+      <figure class="mol w-s"><div class="struct">{{S:rasagilin}}</div>
+        <figcaption>(<i>R</i>)-Rasagilin<span class="iupac">Indan statt Amphetamin-Rest</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:tranylcypromin}}</div>
+        <figcaption>Tranylcypromin<span class="iupac">trans-Cyclopropylamin</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:moclobemid}}</div>
+        <figcaption>Moclobemid<span class="iupac">RIMA</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:entacapon}}</div>
+        <figcaption>Entacapon<span class="iupac">Nitrocatechol, (<i>E</i>)-konfiguriert</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:tolcapon}}</div>
+        <figcaption>Tolcapon<span class="iupac">ZNS-gängig, hepatotoxisch</span></figcaption></figure>
+    </div>
+  </div>
+
+  <!-- ===================================================== 2.4 -->
+  <h3 class="ast" id="a2-4"><span class="nr">2.4</span> Der Melanin-Ast</h3>
+  <div class="spalte">
+    <p class="intro">Die <b>Tyrosinase</b> ist ein Kupferenzym und katalysiert zwei Reaktionen am selben aktiven
+    Zentrum: die Hydroxylierung von Tyrosin zu DOPA und dessen Oxidation zum Dopachinon. Die
+    anschließende Raper-Mason-Sequenz verläuft weitgehend spontan.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol"><div class="struct">{{S:tyrosin}}</div><figcaption>L-Tyrosin</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">Tyrosinase<small>TYR, Melanosom</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">2 Cu²⁺ · O₂</span>
+        <span class="hemm">Hydrochinon, Arbutin, Kojisäure</span></div>
+      <figure class="mol"><div class="struct">{{S:ldopa}}</div><figcaption>L-DOPA</figcaption></figure>
+      <div class="pfeil"><span class="enz">Tyrosinase<small>dieselbe!</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">− 2 H, − 2 e⁻</span></div>
+      <figure class="mol"><div class="struct">{{S:dopachinon}}</div>
+        <figcaption>Dopachinon<span class="iupac">ortho-Chinon</span></figcaption></figure>
+      <div class="pfeil"><span class="enz">spontan</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4" stroke-dasharray="3 3"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">intramolekulare 1,4-Addition</span></div>
+      <figure class="mol"><div class="struct">{{S:cyclodopa}}</div>
+        <figcaption>Leukodopachrom<span class="iupac">Cyclodopa</span></figcaption></figure>
+      <div class="pfeil"><span class="enz">DCT / spontan</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 3"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">Tautomerie, − CO₂</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:dhi}}</div>
+        <figcaption>DHI<span class="iupac">→ Eumelanin</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:dhica}}</div>
+        <figcaption>DHICA<span class="iupac">→ Eumelanin</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="boxen">
+    <div class="merk">
+      <b>Eumelanin oder Phäomelanin: die Cystein-Weiche</b>
+      <p>Ob braun-schwarzes <b>Eumelanin</b> oder rot-gelbes <b>Phäomelanin</b> entsteht,
+      entscheidet sich unmittelbar am Dopachinon: In Anwesenheit von <b>Cystein</b> reagiert das
+      Chinon zu 5-<i>S</i>-Cysteinyl-DOPA und mündet in den schwefelhaltigen Phäomelaninast; ohne
+      Cystein läuft die intramolekulare Cyclisierung zum Eumelanin. Der MC1R-Rezeptor steuert dieses Verhältnis; Varianten mit gestörter MC1R-Funktion erklären
+      rotes Haar und die erhöhte UV-Empfindlichkeit.</p>
+      <p>Der Albinismus Typ OCA1 beruht auf einem Tyrosinase-Defekt. Umgekehrt nutzt man die
+      Kupferabhängigkeit therapeutisch und kosmetisch: <b>Hydrochinon</b>, <b>Arbutin</b> (dessen
+      Glucosid) und <b>Kojisäure</b> hemmen die Tyrosinase und werden zur Depigmentierung
+      eingesetzt.</p>
+    </div>
+ </div>
+
+  <!-- ===================================================== 2.5 -->
+  <h3 class="ast" id="a2-5"><span class="nr">2.5</span> Der Schilddrüsen-Ast</h3>
+  <div class="spalte">
+    <p class="intro">Die Synthese läuft nicht an freiem Tyrosin ab, sondern an Tyrosylresten des Thyreoglobulins,
+    und zwar extrazellulär im Kolloid des Follikels. Das fertige Hormon wird erst durch Proteolyse
+    freigesetzt.</p>
+
+    <div class="tab-wrap">
+      <table class="schritte">
+        <thead><tr><th>Nr.</th><th>Schritt</th><th>Enzym / Träger</th><th>Cofaktor</th><th>Merkpunkt</th><th>Arzneistoff</th></tr></thead>
+        <tbody>
+          <tr><td class="rk">2.5.1</td><td class="um">Iodid-Aufnahme aus dem Blut</td>
+            <td><span class="e">NIS</span> Na⁺/I⁻-Symporter</td><td>Na⁺-Gradient</td>
+            <td>sekundär aktiv, 20–40-fache Anreicherung</td>
+            <td><span class="d">Perchlorat, Thiocyanat</span> <small>(kompetitiv)</small></td></tr>
+          <tr><td class="rk">2.5.2</td><td class="um">Oxidation I⁻ → I⁺-Äquivalent und Iodierung</td>
+            <td><span class="e">TPO</span> Thyreoperoxidase</td>
+            <td><span class="c">Häm, H₂O₂ aus DUOX2</span></td>
+            <td>iodiert Tyrosylreste des Thyreoglobulins zu <b>MIT</b> und <b>DIT</b></td>
+            <td><span class="d">Thiamazol, Carbimazol, Propylthiouracil</span></td></tr>
+          <tr><td class="rk">2.5.3</td><td class="um">Kopplung MIT + DIT → T₃, DIT + DIT → T₄</td>
+            <td><span class="e">TPO</span> <small>dieselbe</small></td><td><span class="c">Häm</span></td>
+            <td>oxidative Phenolkupplung über eine Etherbrücke</td>
+            <td><span class="d">dieselben Thyreostatika</span></td></tr>
+          <tr><td class="rk">2.5.4</td><td class="um">Proteolyse des Thyreoglobulins</td>
+            <td>lysosomale Proteasen</td><td>—</td>
+            <td>setzt T₄ (ca. 90 %) und T₃ (ca. 10 %) frei</td>
+            <td><span class="d">Iodid in hoher Dosis</span> <small>(Wolff-Chaikoff, Plummung)</small></td></tr>
+          <tr><td class="rk">2.5.5</td><td class="um">T₄ → T₃ <span class="rate">Aktivierung</span></td>
+            <td><span class="e">DIO1 / DIO2</span></td>
+            <td><span class="c">Selenocystein</span></td>
+            <td><b>äußere</b> Ring-Deiodierung; T₄ ist im Grunde ein Prohormon</td>
+            <td><span class="d">Propylthiouracil</span> <small>(hemmt zusätzlich DIO1)</small></td></tr>
+          <tr><td class="rk">2.5.6</td><td class="um">T₄ → rT₃ <span class="rate">Inaktivierung</span></td>
+            <td><span class="e">DIO3</span></td><td><span class="c">Selenocystein</span></td>
+            <td><b>innere</b> Ring-Deiodierung; steigt beim Low-T₃-Syndrom</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol"><div class="struct">{{S:mit}}</div>
+        <figcaption>MIT<span class="iupac">3-Monoiodtyrosin</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:dit}}</div>
+        <figcaption>DIT<span class="iupac">3,5-Diiodtyrosin</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:t4}}</div>
+        <figcaption>Levothyroxin (T₄)<span class="iupac">3,3′,5,5′-Tetraiod-L-thyronin</span></figcaption></figure>
+      <figure class="mol ziel w-l"><div class="struct">{{S:t3}}</div>
+        <figcaption>Liothyronin (T₃)<span class="iupac">3,3′,5-Triiod — das aktive Hormon</span></figcaption></figure>
+      <figure class="mol w-l"><div class="struct">{{S:rt3}}</div>
+        <figcaption>reverses T₃<span class="iupac">3,3′,5′-Triiod — inaktiv</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="boxen">
+    <div class="falle">
+      <b>Prüfungsfalle · T₃, T₄ und rT₃ unterscheiden sich nur durch die Position eines Iods</b>
+      <p>Alle drei tragen vier bzw. drei Iodatome an demselben Thyronin-Gerüst. Entscheidend ist,
+      <em>welcher Ring</em> deiodiert wird. Der <b>äußere</b> (phenolische, 3′/5′) Ring trägt die
+      Hydroxylgruppe; wird dort ein Iod entfernt, entsteht das aktive <b>T₃</b>. Wird stattdessen
+      am <b>inneren</b> (tyrosylischen, 3/5) Ring deiodiert, entsteht das völlig inaktive
+      <b>rT₃</b>.</p>
+      <p>Merkhilfe: <em>Außen aktiviert, innen inaktiviert.</em> Bei schwerer Allgemeinerkrankung
+      verschiebt der Körper die Bilanz zugunsten von DIO3; daraus resultiert das Low-T₃-Syndrom
+      mit erniedrigtem T₃, erhöhtem rT₃ und normalem TSH.</p>
+      <p>Zweite Falle: <b>Carbimazol ist ein Prodrug</b> und wird rasch und nahezu vollständig zu Thiamazol hydrolysiert; 10 mg Carbimazol entsprechen etwa
+      6–7 mg Thiamazol.</p>
+    </div>
+ </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol w-s"><div class="struct">{{S:thiamazol}}</div>
+        <figcaption>Thiamazol<span class="iupac">Thioharnstoff-Partialstruktur</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:carbimazol}}</div>
+        <figcaption>Carbimazol<span class="iupac">Prodrug von Thiamazol</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:propylthiouracil}}</div>
+        <figcaption>Propylthiouracil<span class="iupac">hemmt zusätzlich DIO1</span></figcaption></figure>
+    </div>
+  </div>
+
+  <!-- ===================================================== 2.6 -->
+  <h3 class="ast" id="a2-6"><span class="nr">2.6</span> Tryptophan → Serotonin → Melatonin</h3>
+  <div class="spalte">
+    <p class="intro">Hydroxylierung und Decarboxylierung wie beim Tyrosin, im zweiten Schritt sogar durch dasselbe
+    Enzym. Zwei weitere Schritte führen vom Neurotransmitter Serotonin zum Hormon Melatonin.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol"><div class="struct">{{S:tryptophan}}</div><figcaption>L-Tryptophan</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">TPH1 / TPH2<small>peripher / ZNS</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">BH₄ · O₂ · Fe(II)</span>
+        <span class="hemm">Telotristat <small>(Karzinoid)</small></span></div>
+      <figure class="mol"><div class="struct">{{S:hydroxytryptophan}}</div>
+        <figcaption>5-Hydroxytryptophan<span class="iupac">5-HTP</span></figcaption></figure>
+      <div class="pfeil"><span class="enz">AADC<small>dasselbe wie 2.2.2</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">PLP · − CO₂</span></div>
+      <figure class="mol ziel"><div class="struct">{{S:serotonin}}</div>
+        <figcaption>Serotonin<span class="iupac">5-Hydroxytryptamin, 5-HT</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">AA-NAT<small>schrittbestimmend, circadian</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">Acetyl-CoA</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:nacetylserotonin}}</div>
+        <figcaption><i>N</i>-Acetylserotonin</figcaption></figure>
+      <div class="pfeil"><span class="enz">HIOMT / ASMT</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">SAM</span></div>
+      <figure class="mol ziel w-l"><div class="struct">{{S:melatonin}}</div>
+        <figcaption>Melatonin<span class="iupac"><i>N</i>-Acetyl-5-methoxytryptamin</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="boxen">
+    <div class="merk">
+      <b>Zwei Modifikationen in fester Reihenfolge</b>
+      <p>Melatonin entsteht durch <b>Acetylierung am aliphatischen Stickstoff</b> (AA-NAT) und
+      anschließende <b>Methylierung an der phenolischen Hydroxylgruppe</b> (HIOMT). Die AA-NAT ist
+      der geschwindigkeitsbestimmende Schritt; ihre Aktivität wird vom Nucleus suprachiasmaticus
+      circadian gesteuert und durch Licht supprimiert. Melatonin signalisiert damit Dunkelheit und
+      nicht Schlafbedürfnis.</p>
+      <p>Für die Klinik relevant: Serotonin wird von der MAO-A zu <b>5-Hydroxyindolessigsäure
+      (5-HIAA)</b> abgebaut. Deren Ausscheidung im 24-Stunden-Urin ist der klassische
+      Suchtest beim Karzinoidsyndrom; deshalb müssen Patienten vor dem Test auf serotoninreiche
+      Nahrungsmittel wie Bananen, Walnüsse und Ananas verzichten.</p>
+    </div>
+ </div>
+
+  <!-- ===================================================== 2.7 -->
+  <h3 class="ast" id="a2-7"><span class="nr">2.7</span> Der Kynureninweg — Tryptophan wird zu NAD⁺</h3>
+  <div class="spalte">
+    <p class="intro">Über 95 % des Tryptophans werden über den Kynureninweg abgebaut; der Serotoninast ist
+    mengenmäßig gering. Endprodukt des Kynureninwegs ist <b>NAD⁺</b>, womit dieser Weg den
+    Aminosäure- mit dem Vitaminstoffwechsel verbindet.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol"><div class="struct">{{S:tryptophan}}</div><figcaption>L-Tryptophan</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">TDO / IDO<small>Leber / extrahepatisch</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">Häm · O₂</span></div>
+      <figure class="mol w-l"><div class="struct">{{S:formylkynurenin}}</div>
+        <figcaption><i>N</i>-Formylkynurenin<span class="iupac">Indolring geöffnet</span></figcaption></figure>
+      <div class="pfeil"><span class="enz">Formamidase</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">H₂O · − Formiat</span></div>
+      <figure class="mol"><div class="struct">{{S:kynurenin}}</div><figcaption>L-Kynurenin</figcaption></figure>
+      <div class="pfeil"><span class="enz">KMO</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">FAD · NADPH · O₂</span></div>
+      <figure class="mol"><div class="struct">{{S:hydroxykynurenin}}</div>
+        <figcaption>3-Hydroxykynurenin</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">Kynureninase</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">PLP</span>
+        <span class="hemm">B₆-Mangel blockiert hier</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:hydroxyanthranilat}}</div>
+        <figcaption>3-Hydroxy­anthranilat</figcaption></figure>
+      <div class="pfeil"><span class="enz">HAAO, spontan</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 3"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">O₂, Cyclisierung</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:chinolinsaeure}}</div>
+        <figcaption>Chinolinsäure<span class="iupac">NMDA-Agonist!</span></figcaption></figure>
+      <div class="pfeil"><span class="enz">QPRT → NAD⁺</span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 3"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">PRPP</span></div>
+      <figure class="mol ziel w-xl"><div class="struct">{{S:nad}}</div>
+        <figcaption>NAD⁺<span class="iupac">60 mg Trp ≈ 1 mg Niacin</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="boxen">
+    <div class="falle">
+      <b>Prüfungsfalle · warum ein B₆-Mangel Xanthurensäure produziert</b>
+      <p>Die Kynureninase ist <b>PLP-abhängig</b>. Fehlt Vitamin B₆, staut sich 3-Hydroxykynurenin
+      vor dem Block und wird stattdessen transaminiert und zu <b>Xanthurensäure</b> cyclisiert, die im Urin
+      ausgeschieden wird. Der Xanthurensäure-Belastungstest nach Tryptophangabe ist deshalb der
+      klassische Funktionstest auf B₆-Mangel.</p>
+      <p>Derselbe Zusammenhang erklärt eine Arzneimittelnebenwirkung: <b>Isoniazid</b> bildet mit
+      Pyridoxalphosphat ein Hydrazon und entzieht es dem Stoffwechsel. Die Folge ist nicht nur die
+      bekannte Polyneuropathie, sondern zugleich eine gestörte NAD⁺-Bildung aus Tryptophan; pellagraähnliche Hauterscheinungen unter
+      INH sind beschrieben. Deshalb wird INH grundsätzlich
+      mit Pyridoxin kombiniert.</p>
+      <p>Damit hängt eine dritte Größe zusammen, die Umrechnung <b>60 mg Tryptophan ≙ 1 mg
+      Niacin-Äquivalent</b>. Bei Hartnup-Krankheit (gestörte Resorption neutraler
+      Aminosäuren) und beim Karzinoid (Tryptophanverbrauch für Serotonin) entsteht daher eine
+      sekundäre Pellagra.</p>
+    </div>
+ </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol"><div class="struct">{{S:xanthurensaeure}}</div>
+        <figcaption>Xanthurensäure<span class="iupac">Marker des B₆-Mangels</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:kynurensaeure}}</div>
+        <figcaption>Kynurensäure<span class="iupac">NMDA-Antagonist — Gegenspieler der Chinolinsäure</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:hiaa}}</div>
+        <figcaption>5-HIAA<span class="iupac">Karzinoid-Marker</span></figcaption></figure>
+      <figure class="mol"><div class="struct">{{S:plp}}</div>
+        <figcaption>Pyridoxal-5′-phosphat<span class="iupac">der Cofaktor hinter allem</span></figcaption></figure>
+    </div>
+  </div>
+
+  <!-- ===================================================== 2.8 -->
+  <h3 class="ast" id="a2-8"><span class="nr">2.8</span> Histidin → Histamin</h3>
+  <div class="spalte">
+    <p class="intro">Die Synthese besteht aus einem einzigen Schritt. Bemerkenswert ist der Abbau: Er verläuft über
+    zwei verschiedene Enzyme in verschiedenen Kompartimenten und erklärt die Histaminintoleranz.</p>
+  </div>
+
+  <div class="kaskade-wrap">
+    <div class="kaskade">
+      <figure class="mol"><div class="struct">{{S:histidin}}</div><figcaption>L-Histidin</figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">HDC<small>Histidin-Decarboxylase</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">PLP · − CO₂</span></div>
+      <figure class="mol ziel w-s"><div class="struct">{{S:histamin}}</div>
+        <figcaption>Histamin<span class="iupac">zwei basische Zentren</span></figcaption></figure>
+      <div class="pfeil pw-l"><span class="enz">HNMT<small>intrazellulär, ZNS</small></span>
+        <svg viewBox="0 0 100 13" aria-hidden="true"><line x1="2" y1="6.5" x2="90" y2="6.5" stroke="currentColor" stroke-width="1.4"/><polygon points="90,2.5 99,6.5 90,10.5" fill="currentColor"/></svg>
+        <span class="cof">SAM</span></div>
+      <figure class="mol w-s"><div class="struct">{{S:methylhistamin}}</div>
+        <figcaption>N<sup>τ</sup>-Methylhistamin</figcaption></figure>
+      <figure class="mol w-s"><div class="struct">{{S:imidazolessig}}</div>
+        <figcaption>Imidazolessigsäure<span class="iupac">über DAO, extrazellulär</span></figcaption></figure>
+    </div>
+  </div>
+
+  <div class="boxen">
+    <div class="merk">
+      <b>Zwei Abbauwege in zwei Kompartimenten</b>
+      <p><b>DAO</b> (Diaminoxidase, ein kupferhaltiges Enzym) baut Histamin <em>extrazellulär</em>
+      ab und ist vor allem in der Darmschleimhaut aktiv; sie bildet die Barriere gegen Nahrungshistamin. <b>HNMT</b> (SAM-abhängig) arbeitet <em>intrazellulär</em> und beherrscht
+      den Abbau im ZNS, wo keine DAO vorkommt.</p>
+      <p>Die sogenannte Histaminintoleranz ist ein DAO-Mangel: Nahrungshistamin aus Rotwein,
+      gereiftem Käse oder Fisch überwindet die Darmbarriere. Zahlreiche Arzneistoffe hemmen die
+      DAO zusätzlich, unter anderem Metamizol, Verapamil, Clavulansäure und Acetylcystein.</p>
+      <p>Histamin besitzt <b>zwei basische Zentren</b> — die primäre
+      aliphatische Aminogruppe (pK<sub>b</sub> ≈ 4,6) und den Imidazolring (pK<sub>b</sub> ≈ 8,2).
+      Bei physiologischem pH liegt es überwiegend als Monokation mit protonierter
+      Seitenkettenaminogruppe vor; diese Ladung wird am H₁-Rezeptor von Asp107 gebunden.</p>
+    </div>
+ </div>
+</section>

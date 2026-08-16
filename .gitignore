@@ -1,0 +1,15 @@
+# Lehrbuecher: urheberrechtlich geschuetzt, gehoeren nicht ins Repo
+Literatur/
+
+# Pruefbilder aus Playwright
+build/shots/
+build/shots_plan/
+build/vorschau_*.html
+
+# Python
+__pycache__/
+*.pyc
+
+# Zwischenstaende der Vorgaengerfassung (einteiliges Dokument)
+/Metabolitkarte.html
+/Lernfahrplan.html
