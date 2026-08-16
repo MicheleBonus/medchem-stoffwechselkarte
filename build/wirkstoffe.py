@@ -10,7 +10,10 @@ import re
 from collections import defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DOC = io.open(os.path.join(os.path.dirname(HERE), "Metabolitkarte.html"), encoding="utf-8").read()
+DOCS = os.path.join(os.path.dirname(HERE), "docs")
+DOC = "
+".join(io.open(os.path.join(DOCS, p), encoding="utf-8").read()
+                for p in sorted(os.listdir(DOCS)) if p.endswith(".html"))
 
 # Position jedes Abschnitts merken, um Fundstellen zuzuordnen
 marken = [(m.start(), m.group(1))

@@ -13,10 +13,12 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 TID = sys.argv[1] if len(sys.argv) > 1 else "m05"
 
 svg = json.load(io.open(os.path.join(HERE, "tafeln.json"), encoding="utf-8"))[TID]
-kopf = io.open(os.path.join(HERE, "src", "00_head.html"), encoding="utf-8").read()
-css = kopf[kopf.index("<style>"):kopf.index("</style>") + 8]
+css = "<style>%s\n%s</style>" % (
+    io.open(os.path.join(HERE, "geruest", "karte.css"), encoding="utf-8").read(),
+    io.open(os.path.join(HERE, "geruest", "site.css"), encoding="utf-8").read())
 
-seite = os.path.join(HERE, "vorschau_%s.html" % TID)
+os.makedirs(os.path.join(HERE, "shots"), exist_ok=True)
+seite = os.path.join(HERE, "shots", "vorschau_%s.html" % TID)
 io.open(seite, "w", encoding="utf-8").write(
     css + '<body style="padding:30px"><figure class="tafel" style="margin:0">'
     + svg + "</figure></body>")
@@ -111,9 +113,8 @@ with sync_playwright() as pw:
         print("   ausserhalb viewBox:", raus or "keiner")
         print("   Textkollisionen:", stoss or "keine")
         print("   Linien durch Text:", kreuzt or "keine")
-        pg.screenshot(path=os.path.join(HERE, "shots_plan",
-                                        "tafel-%s-%s.png" % (TID, scheme)),
+        pg.screenshot(path=os.path.join(HERE, "shots", "tafel-%s-%s.png" % (TID, scheme)),
                       full_page=True)
         ctx.close()
     br.close()
-print("Screenshots in shots_plan/tafel-%s-*.png" % TID)
+print("Screenshots in shots/tafel-%s-*.png" % TID)
