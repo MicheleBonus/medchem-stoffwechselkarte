@@ -80,3 +80,23 @@
 
 h2.zwischen{font:600 19px/1.3 var(--f-sans); color:var(--ink-2); margin:36px 0 16px;
   padding-bottom:8px; border-bottom:1px solid var(--rule-2); max-width:1000px}
+
+/* --- Hervorhebungen in Strukturformeln ---------------------------------- */
+/* gerippe: das gemeinsame Geruest einer Reihe. neu: was in diesem Schritt   */
+/* hinzukommt. weg: was abgeht. stelle: wo die Reaktion stattfindet.         */
+:root{
+  --hl-gerippe:#E3E8EF; --hl-neu:#CFEAE6; --hl-weg:#F6E0EA; --hl-stelle:#F8E7CB;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --hl-gerippe:#2A313B; --hl-neu:#123C3A; --hl-weg:#3D1F30; --hl-stelle:#3E2E14;
+  }
+}
+:root[data-theme="dark"]{
+  --hl-gerippe:#2A313B; --hl-neu:#123C3A; --hl-weg:#3D1F30; --hl-stelle:#3E2E14;
+}
+
+/* Reihen stehen massstabsgleich: der Kasten richtet sich nach dem Molekuel,
+   nicht das Molekuel nach der Spaltenbreite. */
+.mol.masstab{width:auto}
+.mol.masstab .struct svg{width:auto; height:auto; max-width:100%}

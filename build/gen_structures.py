@@ -10,12 +10,14 @@ Konventionen:
   - '*'-Dummyatome tragen ein atomLabel (z.B. 'SCoA') fuer abgekuerzte Reste
 """
 import json
+import math
 import re
 import sys
 from rdkit import Chem
 from rdkit.Chem import rdDepictor
 from rdkit.Chem.Draw import rdMolDraw2D
 from rdkit.Chem import rdCIPLabeler
+from rdkit.Chem import rdFMCS
 
 rdDepictor.SetPreferCoordGen(True)
 
@@ -35,8 +37,87 @@ PALETTE = {
 }
 
 
-def render(smiles, labels=None, scale=1.0, rotate=0.0):
-    """SMILES -> SVG-String. labels: {atom_idx: 'SCoA'}"""
+# ------------------------------------------------------- Ausrichtung in Reihen
+# Verwandte Strukturen, die nebeneinander stehen, muessen dieselbe Lage haben.
+# Sonst muss der Leser jedes Bild neu einnorden, bevor er den Unterschied sieht.
+# Zu jeder Reihe gehoert eine Vorlage (deren 2D-Lage gilt) und ein Muster, das
+# alle Glieder gemeinsam haben; nur die Muster-Atome werden festgehalten.
+#   REIHEN[name] = dict(vorlage=SMILES, bindung=px, muster=SMARTS)
+# vorlage  gibt die Lage vor; am besten das groesste Glied der Reihe
+# bindung  feste Bindungslaenge in Bildpunkten, damit die Glieder massstabsgleich
+#          nebeneinander stehen (ohne das wird das groesste Molekuel geschrumpft)
+# muster   optional; ohne Angabe sucht der Builder selbst die groesste
+#          gemeinsame Teilstruktur von Vorlage und Molekuel und haelt sie fest
+REIHEN = {}
+_VORLAGE = {}        # name -> Molekuel mit Konformer, einmal berechnet
+
+
+def vorlage(name):
+    if name not in _VORLAGE:
+        ref = Chem.MolFromSmiles(REIHEN[name]["vorlage"])
+        if ref is None:
+            raise ValueError("Reihenvorlage nicht parsebar: %s" % REIHEN[name]["vorlage"])
+        rdDepictor.Compute2DCoords(ref)
+        rdDepictor.StraightenDepiction(ref)
+        grad = REIHEN[name].get("drehung", 0.0)
+        if grad:
+            # Die Vorlage einmal drehen; alle Glieder erben die Lage. Am fertigen
+            # Bild zu drehen ginge auch, machte aber die Groessenrechnung falsch.
+            w = math.radians(grad)
+            k = ref.GetConformer()
+            for i in range(ref.GetNumAtoms()):
+                p = k.GetAtomPosition(i)
+                k.SetAtomPosition(i, (p.x * math.cos(w) - p.y * math.sin(w),
+                                      p.x * math.sin(w) + p.y * math.cos(w), 0.0))
+        _VORLAGE[name] = ref
+    return _VORLAGE[name]
+
+
+def gemeinsames_muster(mol, ref):
+    """Groesste gemeinsame Teilstruktur als SMARTS-Molekuel."""
+    res = rdFMCS.FindMCS(
+        [Chem.Mol(mol), Chem.Mol(ref)],
+        atomCompare=rdFMCS.AtomCompare.CompareElements,
+        bondCompare=rdFMCS.BondCompare.CompareAny,
+        ringMatchesRingOnly=True, completeRingsOnly=False,
+        matchValences=False, timeout=20)
+    if res.canceled or res.numAtoms < 3:
+        return None
+    return Chem.MolFromSmarts(res.smartsString)
+
+
+# -------------------------------------------------------------- Hervorhebungen
+# RDKit malt Hervorhebungen mit festen Farben. Damit sie in hell und dunkel
+# taugen, werden vier unmoegliche Signalfarben gezeichnet und danach gegen
+# CSS-Variablen getauscht: die Seite entscheidet, wie kraeftig der Ton wird.
+SIGNAL = {
+    "gerippe": ((0.0, 1.0, 1.0), "#00FFFF", "var(--hl-gerippe)"),
+    "neu":     ((1.0, 0.0, 1.0), "#FF00FF", "var(--hl-neu)"),
+    "weg":     ((1.0, 1.0, 0.0), "#FFFF00", "var(--hl-weg)"),
+    "stelle":  ((0.0, 1.0, 0.0), "#00FF00", "var(--hl-stelle)"),
+}
+
+
+def _treffer(mol, was):
+    """was: Liste von Atomindizes oder ein SMARTS -> Menge von Indizes."""
+    if isinstance(was, str):
+        patt = Chem.MolFromSmarts(was)
+        if patt is None:
+            raise ValueError("SMARTS nicht parsebar: %s" % was)
+        gefunden = mol.GetSubstructMatches(patt)
+        if not gefunden:
+            raise ValueError("SMARTS trifft nicht: %s" % was)
+        return set(i for m in gefunden for i in m)
+    return set(int(i) for i in was)
+
+
+def render(smiles, labels=None, scale=1.0, rotate=0.0, reihe=None, hervor=None):
+    """SMILES -> SVG-String.
+
+    labels  {atom_idx: 'SCoA'}   Beschriftung fuer Dummy-Atome
+    reihe   Name aus REIHEN      richtet die Struktur an der Reihenvorlage aus
+    hervor  {'neu': SMARTS oder [idx], ...}  hinterlegt Molekuelteile farbig
+    """
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
         raise ValueError("SMILES nicht parsebar: %s" % smiles)
@@ -50,12 +131,40 @@ def render(smiles, labels=None, scale=1.0, rotate=0.0):
         for idx, txt in labels.items():
             mol.GetAtomWithIdx(int(idx)).SetProp("atomLabel", txt)
 
-    rdDepictor.Compute2DCoords(mol)
-    rdDepictor.StraightenDepiction(mol)
+    gelegt = False
+    if reihe:
+        if reihe not in REIHEN:
+            raise ValueError("unbekannte Reihe: %s" % reihe)
+        ref = vorlage(reihe)
+        vorgabe = REIHEN[reihe].get("muster")
+        muster = Chem.MolFromSmarts(vorgabe) if vorgabe else gemeinsames_muster(mol, ref)
+        if muster is None:
+            raise ValueError("Reihe %r: keine gemeinsame Teilstruktur gefunden" % reihe)
+        if not mol.GetSubstructMatch(muster) or not ref.GetSubstructMatch(muster):
+            raise ValueError("Reihe %r: Muster trifft nicht" % reihe)
+        rdDepictor.GenerateDepictionMatching2DStructure(
+            mol, ref, refPatt=muster, acceptFailure=False)
+        gelegt = True
 
-    n = mol.GetNumHeavyAtoms()
-    w = int(min(760, max(200, 34 * (n ** 0.62))) * scale)
-    h = int(w * 0.72)
+    if not gelegt:
+        rdDepictor.Compute2DCoords(mol)
+        rdDepictor.StraightenDepiction(mol)
+
+    fest = REIHEN.get(reihe, {}).get("bindung") if reihe else None
+    if fest:
+        # Massstabsgleich: die Leinwand waechst mit dem Molekuel, nicht umgekehrt.
+        # Ohne das schrumpft RDKit das groesste Glied einer Reihe, und der
+        # Vergleich, um dessentwillen die Bilder nebeneinanderstehen, geht verloren.
+        k = mol.GetConformer()
+        xs = [k.GetAtomPosition(i).x for i in range(mol.GetNumAtoms())]
+        ys = [k.GetAtomPosition(i).y for i in range(mol.GetNumAtoms())]
+        rand = 2.0
+        w = int((max(xs) - min(xs) + rand) * fest * scale)
+        h = int((max(ys) - min(ys) + rand) * fest * scale)
+    else:
+        n = mol.GetNumHeavyAtoms()
+        w = int(min(760, max(200, 34 * (n ** 0.62))) * scale)
+        h = int(w * 0.72)
 
     # CIP-Deskriptoren nur dort einblenden, wo sie etwas lehren. Bei Steroiden
     # und anderen Polycyclen ueberfrachten acht (R)/(S)-Marker das Ringgeruest;
@@ -70,21 +179,55 @@ def render(smiles, labels=None, scale=1.0, rotate=0.0):
     o.bondLineWidth = 1.6
     o.multipleBondOffset = 0.14
     o.padding = 0.06
-    o.rotate = rotate
+    o.rotate = 0.0 if reihe else rotate
     o.updateAtomPalette(PALETTE)
+    if fest:
+        o.centreMoleculesBeforeDrawing = True
+        o.fixedBondLength = fest * scale
 
-    rdMolDraw2D.PrepareAndDrawMolecule(d, mol)
+    atome, atomfarben, bindungen, bindfarben = [], {}, [], {}
+    if hervor:
+        for schluessel, was in hervor.items():
+            if schluessel not in SIGNAL:
+                raise ValueError("unbekannte Hervorhebung: %s" % schluessel)
+            rgb = SIGNAL[schluessel][0]
+            idx = _treffer(mol, was)
+            for i in idx:
+                atome.append(i)
+                atomfarben[i] = rgb
+            for b in mol.GetBonds():
+                if b.GetBeginAtomIdx() in idx and b.GetEndAtomIdx() in idx:
+                    bindungen.append(b.GetIdx())
+                    bindfarben[b.GetIdx()] = rgb
+        o.highlightRadius = 0.30
+        o.highlightBondWidthMultiplier = 14
+
+    if hervor:
+        rdMolDraw2D.PrepareAndDrawMolecule(
+            d, mol, highlightAtoms=atome, highlightAtomColors=atomfarben,
+            highlightBonds=bindungen, highlightBondColors=bindfarben)
+    else:
+        rdMolDraw2D.PrepareAndDrawMolecule(d, mol)
     d.FinishDrawing()
     svg = d.GetDrawingText()
 
     # Theme-Faehigkeit: reines Schwarz -> currentColor
     svg = svg.replace("#000000", "currentColor").replace("#000", "currentColor")
+    for _, sentinel, css in SIGNAL.values():
+        svg = svg.replace(sentinel, css).replace(sentinel.lower(), css)
     svg = re.sub(r"<\?xml[^>]*\?>\s*", "", svg)
     svg = svg.replace("<svg:", "<").replace("</svg:", "</").replace("xmlns:svg=", "xmlns=")
     # Feste Masse ganz entfernen: viewBox + CSS steuern die Groesse.
     # (height='auto' waere als SVG-Attribut ungueltig und wirft einen Konsolenfehler.)
-    svg = re.sub(r"\s+width='\d+px'", "", svg)
     svg = re.sub(r"\s+height='\d+px'", "", svg)
+    if fest:
+        # In einer Reihe traegt das Bild seine Groesse selbst: der Kasten richtet
+        # sich nach dem Molekuel, damit die Bindungslaengen nebeneinander gleich
+        # bleiben. Ohne feste Bindungslaenge bestimmt die Spaltenbreite den
+        # Massstab, und das breiteste Molekuel wird das kleinste.
+        svg = re.sub(r"\s+width='(\d+)px'", r" width='\1'", svg)
+    else:
+        svg = re.sub(r"\s+width='\d+px'", "", svg)
     return minify(svg)
 
 
@@ -501,6 +644,36 @@ MOLS = {
 COA_IDS = {"acetyl_coa_abbr", "acetoacetyl_coa", "hmg_coa", "malonyl_coa"}
 
 
+# ================================================================== Reihen
+# Vorlage und gemeinsames Muster. Die Vorlage bestimmt die Lage; das Muster
+# sagt, welcher Teil davon in allen Gliedern der Reihe vorkommt.
+REIHEN.update({
+    # C5-Bausteine und ihre Verlaengerungen: die Diphosphatgruppe liegt in
+    # allen Gliedern rechts, die Kette waechst nach links.
+    # Das Diphosphat liegt in allen Gliedern gleich; die Kette waechst nach links.
+    "isopren": dict(vorlage="CC(C)=CCC/C(C)=C/CC/C(C)=C/COP(=O)(O)OP(=O)(O)O",
+                    muster="[CH2]OP(=O)(O)OP(=O)(O)O", bindung=17.0),
+})
+
+# ================================================================== Schmuck
+# Was an einer Struktur ausgerichtet und was farbig hinterlegt wird.
+#   reihe   Name aus REIHEN
+#   hervor  gerippe = gemeinsames Geruest, neu = kommt in diesem Schritt hinzu,
+#           weg = geht in diesem Schritt ab, stelle = hier passiert die Reaktion
+# Die zuletzt angehaengte C5-Einheit sitzt immer am Diphosphat: Isopentenyl-PP
+# behaelt bei der Verknuepfung sein eigenes Diphosphat, der allylische Partner
+# gibt seines ab. Deshalb faerbt derselbe SMARTS in GPP und FPP das jeweils neu
+# hinzugekommene Glied.
+_NEUE_C5 = "[CH2;$([CH2]OP)][CH]=[C]([CH3])[CH2]"
+
+SCHMUCK = {
+    "ipp":   dict(reihe="isopren", hervor={"stelle": "[CH2]=[C]([CH3])"}),
+    "dmapp": dict(reihe="isopren", hervor={"weg": "OP(=O)(O)OP(=O)(O)O"}),
+    "gpp":   dict(reihe="isopren", hervor={"neu": _NEUE_C5}),
+    "fpp":   dict(reihe="isopren", hervor={"neu": _NEUE_C5}),
+}
+
+
 def main():
     out, fails = {}, []
     for mid, (smi, labels) in MOLS.items():
@@ -513,14 +686,19 @@ def main():
                 for a in mol.GetAtoms():
                     if a.GetAtomicNum() == 0:
                         lbl[a.GetIdx()] = "CoA"
-            out[mid] = render(smi, lbl)
+            out[mid] = render(smi, lbl, **SCHMUCK.get(mid, {}))
         except Exception as e:
             fails.append((mid, smi, str(e)))
+
+    unbekannt = sorted(set(SCHMUCK) - set(MOLS))
+    if unbekannt:
+        fails.append(("SCHMUCK", "", "ids ohne Struktur: %s" % ", ".join(unbekannt)))
 
     with open("structures.json", "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False)
 
-    print("OK: %d Strukturen" % len(out))
+    print("OK: %d Strukturen, davon %d ausgerichtet oder hervorgehoben"
+          % (len(out), len([k for k in SCHMUCK if k in out])))
     if fails:
         print("\nFEHLER (%d):" % len(fails))
         for mid, smi, e in fails:
