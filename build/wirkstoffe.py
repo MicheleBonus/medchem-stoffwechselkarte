@@ -7,12 +7,14 @@ sie stehen. Grundlage fuer das Register in Teil 9.
 import io
 import os
 import re
+import sys
 from collections import defaultdict
+
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DOCS = os.path.join(os.path.dirname(HERE), "docs")
-DOC = "
-".join(io.open(os.path.join(DOCS, p), encoding="utf-8").read()
+DOC = "\n".join(io.open(os.path.join(DOCS, p), encoding="utf-8").read()
                 for p in sorted(os.listdir(DOCS)) if p.endswith(".html"))
 
 # Position jedes Abschnitts merken, um Fundstellen zuzuordnen
