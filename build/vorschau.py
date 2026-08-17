@@ -18,8 +18,11 @@ css = "<style>%s\n%s</style>" % (
 
 os.makedirs(os.path.join(HERE, "shots"), exist_ok=True)
 seite = os.path.join(HERE, "shots", "vorschau_%s.html" % TID)
+# meta charset: ohne die Angabe raet Chromium beim Laden von der Platte, und in
+# einem Dunkellauf kamen die Umlaute falsch dekodiert heraus.
 io.open(seite, "w", encoding="utf-8").write(
-    css + '<body style="padding:30px"><figure class="tafel" style="margin:0">'
+    '<!doctype html><meta charset="utf-8">' + css
+    + '<body style="padding:30px"><figure class="tafel" style="margin:0">'
     + svg + "</figure></body>")
 
 url = "file:///" + seite.replace("\\", "/")

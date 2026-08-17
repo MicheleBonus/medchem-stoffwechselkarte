@@ -87,6 +87,11 @@ SEHNE = {
     "intra": ((0.75, 1.20), (0.60, 1.90)),
     "ring": ((0.60, 0.90), (0.45, 1.30)),
     "inter": ((1.50, 4.00), (1.20, 8.00)),
+    # Rueckhaken: aus einer Bindung auf eines ihrer eigenen Atome. Geometrisch
+    # kann diese Sehne nicht laenger als etwa 0,9 L werden, siehe Schub._art.
+    # Nach unten begrenzt sie der Kopf: unter 0,55 L bleibt vom Schaft nichts
+    # uebrig, und der Pfeil ist nur noch eine Spitze.
+    "zurueck": ((0.55, 0.85), (0.50, 1.05)),
 }
 
 
@@ -112,6 +117,7 @@ class Tinte(object):
         self.strecken, self.s_key = [], []
         self.kaesten, self.k_key = [], []
         self._s = self._k = None
+        self._k_hart = np.zeros(0, dtype=bool)
 
     def strecke(self, x0, y0, x1, y1, key):
         self.strecken.append((x0, y0, x1, y1))
@@ -123,14 +129,6 @@ class Tinte(object):
         self.k_key.append(key)
         self._k = None
 
-    def _bauen(self):
-        if self._s is None:
-            self._s = (np.array(self.strecken, dtype=float).reshape(-1, 4)
-                       if self.strecken else np.zeros((0, 4)))
-        if self._k is None:
-            self._k = (np.array(self.kaesten, dtype=float).reshape(-1, 4)
-                       if self.kaesten else np.zeros((0, 4)))
-
     def abstand(self, P, ausser=()):
         """Kleinster Abstand der Punktwolke P zu aller Tinte ausser den genannten."""
         return self._mess(P, lambda k: k not in ausser)
@@ -138,6 +136,30 @@ class Tinte(object):
     def abstand_nur(self, P, keys):
         """Kleinster Abstand zu genau den genannten Stuecken."""
         return self._mess(P, lambda k: k in keys)
+
+    def kreuzt(self, P):
+        """Kreuzt der Polygonzug irgendeine gezeichnete Linie oder Beschriftung?
+
+        Ohne Ausnahmen. Auch die eigene Quellbindung und der eigene Zielglyph
+        zaehlen: nahe duerfen sie sein, durchquert werden nie.
+        """
+        self._bauen()
+        if _kreuzt_strecken(P, self._s):
+            return True
+        return bool(len(self._k)) and _in_box(P, self._k[self._k_hart])
+
+    def _bauen(self):
+        if self._s is None:
+            self._s = (np.array(self.strecken, dtype=float).reshape(-1, 4)
+                       if self.strecken else np.zeros((0, 4)))
+        if self._k is None:
+            self._k = (np.array(self.kaesten, dtype=float).reshape(-1, 4)
+                       if self.kaesten else np.zeros((0, 4)))
+            # Glyphen und Beschriftungen darf kein Bogen durchqueren. Punktpaare
+            # und Einzelelektronen stehen dagegen als kleine Marken im Weg, an
+            # denen ein Pfeil ansetzt; fuer die gilt nur der Abstandstest.
+            self._k_hart = np.array([k[0] in ("glyph", "sperre")
+                                     for k in self.k_key], dtype=bool)
 
     def _mess(self, P, nimm):
         self._bauen()
@@ -169,6 +191,49 @@ def _pt_box(P, B):
     dy = np.maximum(np.maximum(B[None, :, 1] - P[:, None, 1],
                                P[:, None, 1] - B[None, :, 3]), 0.0)
     return np.hypot(dx, dy)
+
+
+def _kreuzt_strecken(P, S):
+    """Kreuzt der Polygonzug P eine der Strecken S? Echter Schnitt, kein Abstand.
+
+    Der Abstandstest allein genuegt nicht. An seiner eigenen Quellbindung darf ein
+    Pfeil nahe sein - dort gilt ein Lotabstand von 0,22 L, weniger als der
+    Mindestabstand zu fremder Tinte -, und deshalb ist diese Bindung vom
+    Abstandstest ausgenommen. Durch sie hindurchlaufen darf er trotzdem nie. Genau
+    das ist in fuenf Tafeln passiert und von der Pruefung nicht bemerkt worden.
+    Ein Schnitttest braucht keine Ausnahmen: Kreuzen ist immer falsch.
+    """
+    if len(P) < 2 or not len(S):
+        return False
+    a, b = P[:-1], P[1:]
+    c, d = S[:, 0:2], S[:, 2:4]
+    r = (b - a)[:, None, :]
+    s = (d - c)[None, :, :]
+    qp = c[None, :, :] - a[:, None, :]
+    rxs = r[:, :, 0] * s[:, :, 1] - r[:, :, 1] * s[:, :, 0]
+    mit = np.abs(rxs) > 1e-12
+    if not mit.any():
+        return False
+    sicher = np.where(mit, rxs, 1.0)
+    t = (qp[:, :, 0] * s[:, :, 1] - qp[:, :, 1] * s[:, :, 0]) / sicher
+    u = (qp[:, :, 0] * r[:, :, 1] - qp[:, :, 1] * r[:, :, 0]) / sicher
+    return bool((mit & (t > 1e-9) & (t < 1 - 1e-9)
+                 & (u > 1e-9) & (u < 1 - 1e-9)).any())
+
+
+def _in_box(P, B):
+    """Liegt ein Punkt aus P im Inneren eines Rechtecks aus B?
+
+    Fuer den Zielglyph: die Spitze steht nach Z1 davor, also ausserhalb. Kommt
+    trotzdem ein Stueck des Bogens im Rechteck zu liegen, laeuft er durch das
+    Atomsymbol.
+    """
+    if not len(P) or not len(B):
+        return False
+    return bool(((P[:, None, 0] > B[None, :, 0] + 0.4)
+                 & (P[:, None, 0] < B[None, :, 2] - 0.4)
+                 & (P[:, None, 1] > B[None, :, 1] + 0.4)
+                 & (P[:, None, 1] < B[None, :, 3] - 0.4)).any())
 
 
 # ------------------------------------------------------------------------ Anker
@@ -348,8 +413,15 @@ class Paar(Anker):
             a = math.radians(grad)
             ux, uy = math.cos(a), math.sin(a)
             x, y = self.m.atom(self.idx)
-            r = max(PAAR_ABSTAND * L,
-                    _glyph_reichweite(self.m, self.idx, grad) + 0.20 * L)
+            # Die Spreizung setzt die beiden Punkte quer zur Richtung. Wird nur
+            # ihre Mitte aus dem Glyphenrechteck geschoben, rutscht einer der
+            # beiden wieder hinein und verschmilzt mit dem Buchstaben. Deshalb
+            # wird die Reichweite auch fuer die beiden ausgelenkten Richtungen
+            # gemessen.
+            quer = math.degrees(math.atan(PAAR_SPREIZ / max(PAAR_ABSTAND, 0.01)))
+            weite = max(_glyph_reichweite(self.m, self.idx, grad + dd)
+                        for dd in (-quer, 0.0, quer))
+            r = max(PAAR_ABSTAND * L, weite + 0.20 * L)
             px, py = x + ux * r, y + uy * r
             if rolle == "quelle":
                 tx, ty = _e(partner[0] - px, partner[1] - py)
@@ -499,7 +571,17 @@ class Bindung(Anker):
 
 
 class Fest(Anker):
-    """Ein ausdruecklich benannter Ort - fuer Teilchen ohne SMILES."""
+    """Ein ausdruecklich benannter Ort - fuer Teilchen ohne SMILES.
+
+    Das sind die Anker der Bausteine: Metallzentrum, axialer Ligand, Thiolat,
+    frei gesetzte Elektronenpaare, benannte Marken. Sie kennen keine
+    Nachbarschaft, aus der sich eine freie Richtung ableiten liesse; deshalb
+    wird ein Faecher um die Richtung zum Partner angeboten und der Solver
+    waehlt daraus. Frueher gab es nur drei Lagen genau auf der Verbindungslinie,
+    und die Sehnenstrafe zog den Anker dabei systematisch vom Ort weg - die
+    Spitze landete dann bis zu 1,4 Bindungslaengen neben dem Atom, das sie
+    treffen sollte.
+    """
 
     def __init__(self, x, y, name, art="marke", rx=0.0, ry=0.0):
         self.x, self.y, self.name, self.art = float(x), float(y), name, art
@@ -509,12 +591,16 @@ class Fest(Anker):
         return (self.art, self.name, None)
 
     def kandidaten(self, partner, L, rolle):
-        ux, uy = _e(partner[0] - self.x, partner[1] - self.y)
+        grund = math.degrees(math.atan2(partner[1] - self.y, partner[0] - self.x))
         r = max(self.rx, self.ry)
         out = []
-        for weg in (0.0, 0.25, 0.45):
-            d = r + weg * L
-            out.append((self.x + ux * d, self.y + uy * d, weg, {}))
+        for ab in (0.0, -34.0, 34.0, -66.0, 66.0, -98.0, 98.0):
+            a = math.radians(grund + ab)
+            ux, uy = math.cos(a), math.sin(a)
+            for weg in (0.16, 0.28, 0.42):
+                d = r + weg * L
+                out.append((self.x + ux * d, self.y + uy * d,
+                            abs(ab) / 55.0 + abs(weg - 0.28) * 2.0, {}))
         return out
 
 
@@ -592,10 +678,37 @@ class Bogen(object):
             self.p0[0], self.p0[1], self.r, self.r, gross, self.sweep, p[0], p[1])
 
 
-def kopf_masse(L, strich):
-    """Kopflaenge und Kopfbreite in Pixeln."""
+def kopf_masse(L, strich, r=None):
+    """Kopflaenge und Kopfbreite in Pixeln.
+
+    r ist der Bogenradius. Bei einem engen Bogen weicht der Schaft auf dem Weg
+    zur Spitze um r*(1-cos(hl/r)), also etwa hl^2/(2r), zur Bogenmitte hin ab -
+    genau dorthin, wo die innere Barbe sitzt. Ist der Kopf dann nicht breit genug, verschwindet sie im
+    Schaft, und der Vollpfeil sieht aus wie ein Fischhaken. Gemessen an einem
+    Fall mit r = 8,2 px: Abweichung 1,98 px, halbe Kopfbreite 2,25 px, halbe
+    Schaftbreite 0,7 px - die Barbe lag 0,43 px innerhalb des Schaftes. Der Kopf
+    waechst deshalb mit der Kruemmung mit.
+    """
     hl = KOPF_LAENGE * L
-    return hl, max(KOPF_BREITE * hl, KOPF_MIN_STRICH * strich)
+    hw = max(KOPF_BREITE * hl, KOPF_MIN_STRICH * strich)
+    if r:
+        # gedeckelt: ein Kopf, der breiter waere als lang, ist ein Faecher und
+        # kein Pfeilkopf. Wo der Deckel nicht reicht, ist der Bogen zu eng - das
+        # bestraft die Bewertung, statt es durch die Kopfform zu kaschieren.
+        hw = max(hw, min(hl * hl / float(r) + 1.7 * strich, 1.35 * hl))
+    return hl, hw
+
+
+def kopf_eng(hl, hw, r, strich):
+    """Wie weit die innere Barbe im Schaft verschwindet, in Pixeln.
+
+    Positiv heisst: der Schaft deckt sie zu, und der Vollpfeil beginnt wie ein
+    Fischhaken auszusehen.
+    """
+    if not r:
+        return -1.0
+    weicht = r * (1.0 - math.cos(min(hl / float(r), math.pi)))
+    return (weicht + 0.5 * strich) - hw / 2.0
 
 
 def kopf_polygon(bogen, L, halb=False, strich=1.6):
@@ -606,7 +719,7 @@ def kopf_polygon(bogen, L, halb=False, strich=1.6):
     multipliziert - 11,05 px statt der zulaessigen 5,9 bei 21 px Bindung. refX
     schob die Spitze zusaetzlich ueber den berechneten Endpunkt hinaus.
     """
-    hl, hw = kopf_masse(L, strich)
+    hl, hw = kopf_masse(L, strich, bogen.r)
     spitze = bogen.punkt(1.0)
     ux, uy = bogen.tangente(1.0)
     nx, ny = -uy, ux
@@ -645,6 +758,7 @@ class Schub(object):
         self.mass = {}
         self.L = 21.0
         self.breite = 1.6      # Schaftbreite in px, von der Tafel gesetzt
+        self._letzte_art = "intra"
         self.frei = 0.0
 
     # ------------------------------------------------------------------
@@ -657,6 +771,20 @@ class Schub(object):
         idx = []
         for a in (self.quelle, self.ziel):
             idx += ([a.i, a.j] if isinstance(a, Bindung) else [a.idx])
+        # Der Rueckhaken: aus einer Bindung heraus auf eines ihrer eigenen Atome.
+        # Das haeufigste Motiv der ganzen Sammlung - jede Heterolyse sieht so aus -
+        # und das mit der kuerzesten Sehne. Anfang und Ende liegen nur eine halbe
+        # Bindungslaenge auseinander, quer dazu je 0,2 L versetzt; laenger als
+        # 0,75 L kann diese Sehne gar nicht werden. Im Fenster fuer gewoehnliche
+        # innermolekulare Pfeile (ab 0,60 L) fiel sie deshalb regelmaessig durch,
+        # und der Pfeil blieb ungezeichnet. Neun Tafeln hatten dadurch
+        # unvollstaendige Pfeilsaetze.
+        paare = [(a, b) for a, b in ((self.quelle, self.ziel),
+                                     (self.ziel, self.quelle))]
+        for bind, ende in paare:
+            if isinstance(bind, Bindung) and not isinstance(ende, Bindung):
+                if ende.idx in (bind.i, bind.j):
+                    return "zurueck"
         ri = mq.mol.GetRingInfo()
         for ring in ri.AtomRings():
             if all(i in ring for i in idx):
@@ -665,6 +793,7 @@ class Schub(object):
 
     def loesen(self, tinte, L, gesetzt, vorgaenger=None):
         art = self._art()
+        self._letzte_art = art
         (f0, f1), (h0, h1) = SEHNE[art]
         aus = set(self.quelle.ausschluss()) | set(self.ziel.ausschluss())
 
@@ -752,46 +881,76 @@ class Schub(object):
         P = b.abtasten(24)
         kopf = np.array(kopf_polygon(b, L, self.elektronen == 1, self.breite))
         alle = np.vstack([P, kopf])
+        # Kreuzen ist immer falsch, auch an der eigenen Quellbindung und am
+        # eigenen Zielglyph. Der Abstandstest darunter nimmt beide aus, weil dort
+        # die engeren Ankerregeln U4 und Z1 gelten, die kleinere Abstaende
+        # verlangen als der Mindestabstand zu fremder Tinte. Frueher stand hier
+        # statt des Schnitttests eine Abstandsheuristik auf der Bogenmitte; ein
+        # Schnitt dicht am Schwanz fiel dadurch hindurch, und fuenf Tafeln
+        # lieferten Pfeile, die sichtbar durch eine Bindung liefen.
+        # Der Schaft muss sichtbar bleiben. Sonst entartet der Pfeil zur blossen
+        # Spitze, und man sieht nicht mehr, woher die Elektronen kommen.
+        hl, hw = kopf_masse(L, self.breite, b.r)
+        schaft = abs(b.spanne) * b.r - hl * KOPF_SCHAFT
+        if schaft < 0.85 * hl:
+            return None, 0.0, "kein Platz fuer den Schaft neben dem Kopf"
+        zug = np.vstack([P, kopf, kopf[:1]])
+        if tinte.kreuzt(zug):
+            return None, 0.0, "kreuzt eine Bindung oder ein Atomsymbol"
         frei = tinte.abstand(alle, aus)
         if frei < RAND_FREMD * L:
             return None, frei, "zu nah an fremder Tinte"
-        # Quellbindung und Zielglyph sind oben ausgenommen, weil an ihnen die
-        # engeren Ankerregeln gelten (U4 bzw. Z1). Fuer das mittlere Stueck des
-        # Bogens gilt die Ausnahme nicht ganz: es darf weder auf der Bindung
-        # liegen, aus der es kommt, noch durch das Atomsymbol laufen, auf das es
-        # zeigt. Am Ziel ist der Massstab enger als an der Quelle - der Pfeil
-        # soll das Symbol beruehrungsfrei umfahren, nicht ihm ausweichen.
-        # Gemessen wird jeweils in der vom Anker abgewandten Haelfte: dicht am
-        # Schwanz darf der Bogen an seiner Quellbindung liegen, dicht an der
-        # Spitze am Zielsymbol vorbeiziehen. Verboten ist beides in der Mitte -
-        # dort hiesse es, der Pfeil laeuft quer darueber.
-        q = set(self.quelle.ausschluss())
-        z = set(self.ziel.ausschluss()) - q
-        if q and tinte.abstand_nur(P[8:20], q) < 0.13 * L:
-            return None, frei, "Bauch liegt auf der eigenen Quellbindung"
-        if z and tinte.abstand_nur(P[4:16], z) < 0.06 * L:
-            return None, frei, "Bauch laeuft durch das Zielsymbol"
         for vb in gesetzt:
-            nah = float(_pt_seg(alle, _als_strecken(vb)).min())
+            strecken = _als_strecken(vb)
+            if _kreuzt_strecken(zug, strecken):
+                return None, 0.0, "kreuzt einen anderen Pfeil"
+            nah = float(_pt_seg(alle, strecken).min())
             if nah < RAND_PFEIL * L:
                 return None, min(frei, nah), "zu nah an einem anderen Pfeil"
             frei = min(frei, nah)
         wert = abs(b.theta - getattr(self, "_soll", WINKEL_SOLL)) / 9.0
         wert += max(0.0, RAND_SOLL * L - frei) / (0.10 * L)
+        # Enge Boegen meiden: dort deckt der Schaft die innere Barbe zu.
+        wert += max(0.0, kopf_eng(hl, hw, b.r, self.breite)) * 3.0
         if d < f0:
             wert += (f0 - d) * 5.0
         if d > f1:
             wert += (d - f1) * 5.0
+        # Zeigt der Kopf auf sein Ziel? Die Bewertung kannte die Kopfrichtung
+        # nicht, und bei sonst gleichwertigen Lagen waehlte der Solver ebenso
+        # gern die Seite, auf der der Kopf am Ziel vorbeizeigt. Der Leser sieht
+        # aber genau das: wohin die Spitze weist. Beim Rueckhaken weicht die
+        # Tangente konstruktionsbedingt um bis zu theta/2 ab, dort wird milder
+        # gewichtet.
+        ziel = self._zielort()
+        if ziel is not None:
+            ux, uy = b.tangente(1.0)
+            sp = b.punkt(1.0)
+            zx, zy = _e(ziel[0] - sp[0], ziel[1] - sp[1])
+            ab = math.degrees(math.acos(max(-1.0, min(1.0, ux * zx + uy * zy))))
+            wert += (ab / 30.0) ** 2 * (0.5 if self._letzte_art == "zurueck" else 1.5)
         if vorgaenger is not None and vorgaenger.bogen is not None:
             v = vorgaenger.bogen.punkt(1.0)
             k = math.hypot(v[0] - b.p0[0], v[1] - b.p0[1]) / L
             wert += abs(k - KETTE_SOLL) * 2.2
         return wert, frei, None
 
+    def _zielort(self):
+        """Der Ort, auf den die Spitze zeigen soll: Atomzentrum bzw. Bindungsmitte."""
+        z = self.ziel
+        if isinstance(z, Bindung):
+            (ax, ay), (bx, by) = z.m.atom(z.i), z.m.atom(z.j)
+            return ((ax + bx) / 2.0, (ay + by) / 2.0)
+        if isinstance(z, (Atom, Paar, Elektron)):
+            return z.m.atom(z.idx)
+        if isinstance(z, Fest):
+            return (z.x, z.y)
+        return None
+
     # ------------------------------------------------------------------ Ausgabe
     def svg(self, L, farbe, breite):
         b = self.bogen
-        hl, _ = kopf_masse(L, breite)
+        hl, _ = kopf_masse(L, breite, b.r)
         # Der Schaft endet genau an der Kerbe des Kopfes; seine runde Endkappe
         # fuellt sie aus. Endete er frueher, klaffte eine Luecke, endete er
         # spaeter, stuende er ueber die Barben hinaus.

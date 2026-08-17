@@ -213,9 +213,23 @@ def pruefe_schuebe(tafel):
                             "Darunter ist der Vollpfeil nicht mehr von einem "
                             "Fischhaken zu unterscheiden."
                             % (hw / strich, _fmt(FENSTER["kopf_strich"])))
-        b.zeilen.append("  Kopf bei L=%.0f px: %.1f px lang (%.2f L), %.1f px breit "
-                        "(%.2f Strichbreiten), Schaft %.2f px"
-                        % (L, hl, hl / L, hw, hw / strich, strich))
+        weit = max(S.kopf_masse(s.L, s.breite, s.bogen.r)[1]
+                   for s in tafel.schuebe if s.L == L)
+        for i, sch in enumerate(tafel.schuebe, 1):
+            if sch.L != L or sch.elektronen == 1:
+                continue
+            hl2, hw2 = S.kopf_masse(sch.L, sch.breite, sch.bogen.r)
+            zu = S.kopf_eng(hl2, hw2, sch.bogen.r, sch.breite)
+            if zu > 0.0:
+                b.fehler.append(
+                    "Pfeil %d K4: der Bogen ist so eng (r = %.1f px), dass der "
+                    "Schaft die innere Barbe um %.1f px ueberdeckt. Der "
+                    "Vollpfeil sieht damit aus wie ein Fischhaken."
+                    % (i, sch.bogen.r, zu))
+        b.zeilen.append("  Kopf bei L=%.0f px: %.1f px lang (%.2f L), %.1f bis "
+                        "%.1f px breit (%.2f bis %.2f Strichbreiten), Schaft %.2f px"
+                        % (L, hl, hl / L, hw, weit, hw / strich, weit / strich,
+                           strich))
 
     b.zeilen.append("  Nr Elek Art    Sehne/L  theta  Sag/Sehne  Frei/L  Anker")
     haken = 0

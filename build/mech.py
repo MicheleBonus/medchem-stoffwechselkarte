@@ -466,6 +466,17 @@ class Zentrum(object):
         self.schritt = float(schritt or self.SCHRITT)
         self._ax = [(x, y - self.schritt * (i + 1)) for i in range(len(axial))]
         st = tafel.stuecke
+        # Was hier gezeichnet wird, gehoert in die Tintenkarte des Pfeil-Solvers.
+        # Frueher stand davon nichts darin: weder Metallsymbol noch Ligandtext
+        # noch die Koordinationsstriche. Ein Pfeil konnte deshalb ungestraft
+        # quer durch das Zentrum laufen, und die Pruefung meldete Freiraum.
+        def linie(x0, y0, x1, y1):
+            tafel.tinte_extra.append(("strecke", x0, y0, x1, y1))
+
+        def wort(mx, my, text, size):
+            w = _textbreite(text, float(size) * 0.52)
+            tafel.tinte_extra.append(("kasten", mx - w / 2.0, my - size * 0.78,
+                                      mx + w / 2.0, my + size * 0.24))
 
         # Porphyrinebene: zwei Balken mit Luecke fuer das Metallsymbol.
         # ebene=False fuer Metalle ohne Makrocyclus - beim Kupfer der
@@ -477,6 +488,8 @@ class Zentrum(object):
             st.append((1, "<line x1='%.1f' y1='%.1f' x2='%.1f' y2='%.1f' stroke='currentColor' "
                           "stroke-width='1.6' opacity='.45'/>"
                        % (x + s * self.HALB, y - 5, x + s * self.HALB, y + 5)))
+            linie(x + s * self.HALB, y, x + s * 15.0, y)
+            linie(x + s * self.HALB, y - 5, x + s * self.HALB, y + 5)
         if radikal:   # Porphyrin-Radikalkation ueber das linke Ende der Ebene gesetzt:
             st.append((3, "<text x='%.1f' y='%.1f' font-size='11' font-weight='700' "
                           "text-anchor='middle' fill='var(--drug)'>&#8226;+</text>"
@@ -484,6 +497,7 @@ class Zentrum(object):
 
         st.append((3, "<text x='%.1f' y='%.1f' font-size='12.5' font-weight='700' "
                       "text-anchor='middle' fill='var(--warn)'>%s</text>" % (x, y + 4.5, metall)))
+        wort(x, y + 4.5, metall, 12.5)
 
         if unten:
             st.append((1, "<line x1='%.1f' y1='%.1f' x2='%.1f' y2='%.1f' stroke='currentColor' "
@@ -491,6 +505,8 @@ class Zentrum(object):
             st.append((3, "<text x='%.1f' y='%.1f' font-size='11' text-anchor='middle' "
                           "fill='var(--cofaktor)' font-weight='700'>%s</text>"
                        % (x, y + 33, unten)))
+            linie(x, y + 8, x, y + 20)
+            wort(x, y + 33, unten, 11)
 
         vorher = (x, y - 8)
         for i, (lab, px) in enumerate(zip(axial, self._ax)):
@@ -506,6 +522,8 @@ class Zentrum(object):
             st.append((3, "<text x='%.1f' y='%.1f' font-size='12.5' font-weight='700' "
                           "text-anchor='middle' fill='var(--enzym)'>%s</text>"
                        % (px[0], px[1] + 4.5, lab)))
+            linie(vorher[0], vorher[1], px[0], px[1] + 9)
+            wort(px[0], px[1] + 4.5, lab, 12.5)
             vorher = (px[0], px[1] - 8)
 
     # -------------------------------------------------- Ankerpunkte
@@ -553,6 +571,7 @@ class Tafel(object):
         self.anker = []            # Prueflast: jeder Pfeilendpunkt mit Bezug
         self.schuebe = []          # deklarierte Elektronenverschiebungen
         self.sperren = []          # eigene Beschriftung als Hindernis (Kasten)
+        self.tinte_extra = []      # Geometrie der Bausteine ohne SMILES (Zentrum)
         self._geloest = False
 
     # -------------------------------------------------- Bausteine
@@ -586,6 +605,12 @@ class Tafel(object):
                 t.kasten(x0, y0, x1, y1, ("glyph", m.name, i))
         for i, (x0, y0, x1, y1) in enumerate(self.sperren):
             t.kasten(x0, y0, x1, y1, ("sperre", None, i))
+        for i, stueck in enumerate(self.tinte_extra):
+            art, x0, y0, x1, y1 = stueck
+            if art == "strecke":
+                t.strecke(x0, y0, x1, y1, ("baustein", None, i))
+            else:
+                t.kasten(x0, y0, x1, y1, ("glyph", None, i))
         return t
 
     def loesen(self):
