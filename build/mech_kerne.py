@@ -135,10 +135,41 @@ KERNE = {
 
 
 def kern(name):
+    """Einen Kern aus dem Register holen. Ein Kern-Objekt geht unveraendert durch,
+    damit eine Tafel ihr eigenes Leitgeruest mitbringen kann (siehe eigener())."""
+    if isinstance(name, Kern):
+        return name
     if name not in KERNE:
         raise KeyError("Unbekannter Kern %r. Bekannt: %s"
                        % (name, ", ".join(sorted(KERNE))))
     return KERNE[name]
+
+
+def eigener(name, smiles, muster, ring, leit, folge, winkel=50.0):
+    """Ein Leitgeruest, das nur in einer Tafel gebraucht wird.
+
+    Ins Register gehoert ein Kern erst, wenn er in mehreren Tafeln vorkommt;
+    solange er einer Tafel gehoert, steht er in deren Skript. Der Unterschied
+    zur eingefrorenen Registerfassung: die Lage wird bei jedem Lauf gerechnet.
+    Festgehalten ist sie trotzdem, denn die Regel unten legt sie eindeutig fest -
+    Leitatom auf 'winkel' Grad, Folgeatom 60 Grad dahinter, notfalls gespiegelt.
+
+        TPP = mech_kerne.eigener(
+            "thiazolium", "Cc1c(CC)sc[n+]1C",
+            muster="[#6]~[#6]1~[#6]~[#16]~[#6]~[#7]~1",
+            ring=[1, 2, 4, 5, 6], leit=1, folge=2)
+
+    ring nennt die Atomindizes des Rings, an dem die Lage haengt, leit das Atom,
+    das nach 'winkel' zeigen soll, folge das im Ring darauf folgende.
+    """
+    bau = {"smiles": smiles, "ring": list(ring), "leit": int(leit),
+           "folge": int(folge), "winkel": float(winkel)}
+    mol = _bauen(bau)
+    k = Kern(name=name, muster=muster, molblock=Chem.MolToMolBlock(mol), bau=bau,
+             beschreibung="tafeleigenes Leitgeruest")
+    if not k.referenz().GetSubstructMatch(k.muster()):
+        raise ValueError("Kern %s: Muster trifft die eigene Referenz nicht" % name)
+    return k
 
 
 def passender_kern(mol):

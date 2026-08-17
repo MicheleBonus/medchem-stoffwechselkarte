@@ -56,7 +56,10 @@ Form
 
 Kopf
   K1  Voller Kopf gleich Elektronenpaar, halber Kopf gleich einzelnes
-      Elektron. Fischhaken treten paarweise auf.                             [L,B]
+      Elektron. Bei einer *Homolyse* treten Fischhaken paarweise auf; eine
+      Abstraktion braucht dagegen drei (zwei bilden die neue Bindung, einer
+      bleibt am Radikal zurueck). Eine ungerade Gesamtzahl ist deshalb nur
+      ein Hinweis, kein Fehler.                                              [L,B]
   K2  Die Barbe des Fischhakens sitzt auf der konvexen Seite des Bogens.     [L]
   K3  Kopflaenge: L misst ueber 284 Pfeile 0,20-0,30 L, B setzt ein festes
       Symbol von 0,53 L. Entschieden: 0,32 L, siehe K4.                     [L!=B]
@@ -248,7 +251,11 @@ def pruefe_schuebe(tafel):
         _anker_regeln(b, wo, sch, L)
 
     if haken % 2:
-        b.fehler.append("K1: %d Fischhaken. Sie treten paarweise auf." % haken)
+        b.hinweise.append(
+            "K1: %d Fischhaken, also eine ungerade Zahl. Bei einer Homolyse "
+            "gehoeren sie paarweise; eine Abstraktion ist dagegen mit drei "
+            "Haken richtig (zwei bilden die neue Bindung, einer bleibt am "
+            "Radikal). Zaehlen Sie nach." % haken)
 
     for i in range(1, len(tafel.schuebe)):
         a, c = tafel.schuebe[i - 1], tafel.schuebe[i]
@@ -290,7 +297,7 @@ def _anker_regeln(b, wo, sch, L):
         if h.GetSymbol() == "H":
             b.fehler.append("%s U8: kein Pfeilschwanz am Wasserstoff." % wo)
 
-    if isinstance(z, (S.Atom, S.Paar)):
+    if isinstance(z, (S.Atom, S.Paar, S.Elektron)):
         cx, cy = z.m.atom(z.idx)
         d = math.hypot(p1[0] - cx, p1[1] - cy)
         regel = "Z1" if isinstance(z, S.Atom) else "Z3"
