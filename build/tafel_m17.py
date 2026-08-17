@@ -4,6 +4,13 @@ M-17 · Glutathionperoxidase, gebaut mit mech.py.
 
 Kein Metall, sondern ein Selen. Der Zyklus laeuft ueber drei Oxidationsstufen
 desselben Atoms - deshalb sind alle drei als Struktur gezeichnet.
+
+Die drei Stufen haengen an einem gemeinsamen Leitgeruest: Enzym-CH2-Se steht in
+jedem der drei Bilder gleich, die Kette laeuft von links unten nach rechts oben.
+Vorher richtete zeige= die erste Stufe nach rechts und die beiden anderen nach
+links aus; der Leser musste jedes Bild neu einnorden, statt den Unterschied am
+Selen zu sehen. Die Pfeile beschreiben nur noch die Chemie, die Geometrie kommt
+aus dem Solver in mech_schub.py.
 """
 import os
 import sys
@@ -11,6 +18,8 @@ import sys
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 import mech
+import mech_kerne
+from mech import Atom, Bindung, Paar
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -22,6 +31,15 @@ G = "var(--ink-3)"
 
 t = mech.Tafel(1000, 1220)
 
+# Das Leitgeruest der drei Stufen: der Rest am Enzym, das CH2 und das Selen.
+# Kein Ring, sondern eine Kette - die Referenzlage haengt deshalb am Schwerpunkt
+# dieser drei Atome. Das Selen zeigt 30 Grad nach rechts oben, der Enzymrest
+# damit nach links unten; das Reagens kommt in jeder Stufe von rechts oben
+# herein, also mit der Leserichtung.
+SEC = mech_kerne.eigener("selenocystein", "CC[SeH]",
+                         muster="[!#1]~[#6]~[#34]",
+                         ring=[0, 1, 2], leit=2, folge=1, winkel=30.0)
+
 # ===================================================== ZONE A · der Selenol-Zyklus
 t.zone(24, "A · DER SELENOL-ZYKLUS: DREI STUFEN AN EINEM ATOM")
 t.text(20, 54, "Das aktive Zentrum ist ein Selenocystein, die einundzwanzigste proteinogene "
@@ -31,35 +49,40 @@ t.text(20, 73, "am Ende unverändert zurück.", size=12.5)
 
 # Gezeichnet wird das Anion: bei pH 7 liegt das Selenocystein deprotoniert vor,
 # und nur so bleibt die Ladungsbilanz des Angriffs auf H2O2 stimmig.
-sel1 = mech.Molekuel("*C[Se-]", 120, 208, labels={0: "Enzym"}, zeige={2: "rechts"},
-                     name="Selenolat")
-t.mole.append(sel1)
-lp_se = t.elektronenpaar(sel1, 2, 300)
+# Die y-Werte der drei Stufen sind nicht gleich, weil t.mol den Mittelpunkt des
+# umschliessenden Rechtecks setzt und dieses Rechteck je nach Substituent am Selen
+# anders liegt. Gleich stehen soll aber das Leitgeruest, nicht der Kasten darum:
+# alle drei Werte sind deshalb so gewaehlt, dass das CH2 auf y=242,8 liegt und die
+# Kette Enzym-CH2-Se in allen drei Bildern auf derselben Linie sitzt.
+sel1 = t.mol("*C[Se-]", 120, 236.2, labels={0: "Enzym"}, kern=SEC,
+             name="Selenolat")
 t.unterschrift(sel1, "Selenocystein als Selenolat:", "das eigentliche Nucleophil", abstand=30)
 
-h2o2 = mech.Molekuel("OO", 300, 152, name="Wasserstoffperoxid")
-t.mole.append(h2o2)
-t.pfeil(lp_se, (h2o2, 0), bogen=0.26, seite=-1, farbe=W)
-# Der Pfeil endet neben dem abgehenden Sauerstoff, nicht in seinem Symbol: bis ins
-# Zentrum waere er kuerzer als sein eigener Kopf und entartete zur Schleife.
-t.pfeil((h2o2, 0, 1), h2o2.abseits(1, 0, abstand=30), bogen=0.34, seite=-1, farbe=W)
-t.unterschrift(h2o2, "H&#8322;O&#8322;", abstand=26, farbe=G)
+h2o2 = t.mol("OO", 195, 166.2, rotate=-60, name="Wasserstoffperoxid")
+# Angriff und Bindungsbruch sind ein Schritt: das Selenolat schiebt sein freies
+# Paar auf den einen Sauerstoff, das Paar der O-O-Bindung geht auf den anderen,
+# der als Hydroxid abgeht. Deshalb als Kette angemeldet - Kopf an Schwanz.
+# Die O-O-Bindung steht steil, damit das Selen von unten links angreift und das
+# abgehende Hydroxid nach rechts oben wegzeigt. Waagerecht gezeichnet muesste die
+# Spitze des zweiten Pfeils in das H der rechten OH-Gruppe hinein, denn RDKit
+# setzt den Wasserstoff genau dorthin, wo die Konvention die Spitze verlangt.
+t.schub(Paar(sel1, 2), Atom(h2o2, 0), kette="A")
+t.schub(Bindung(h2o2, 0, 1), Paar(h2o2, 1), kette="A")
+t.ueberschrift(h2o2, "H&#8322;O&#8322;", abstand=22, size=10.5, farbe=G, gewicht=None)
 
-t.reaktionspfeil(370, 208, 436)
-t.text(403, 196, "&#8722; OH&#8315;", size=10, anchor="middle", gewicht=700, farbe=G)
+t.reaktionspfeil(300, 232, 366)
+t.text(333, 220, "&#8722; OH&#8315;", size=10, anchor="middle", gewicht=700, farbe=G)
 
-sel2 = mech.Molekuel("*C[Se]O", 520, 208, labels={0: "Enzym"}, zeige={2: "links"},
-                     name="Selenensaeure")
-t.mole.append(sel2)
+sel2 = t.mol("*C[Se]O", 490, 228.9, labels={0: "Enzym"}, kern=SEC,
+             name="Selenensaeure")
 t.unterschrift(sel2, "Selenensäure: das Selen ist oxidiert", abstand=30, farbe=W)
 
-t.reaktionspfeil(600, 208, 666)
-t.text(633, 196, "+ GSH", size=10, anchor="middle", gewicht=700, farbe=E)
-t.text(633, 230, "&#8722; H&#8322;O", size=10, anchor="middle", farbe=G)
+t.reaktionspfeil(590, 232, 656)
+t.text(623, 220, "+ GSH", size=10, anchor="middle", gewicht=700, farbe=E)
+t.text(623, 254, "&#8722; H&#8322;O", size=10, anchor="middle", farbe=G)
 
-sel3 = mech.Molekuel("*C[Se]S*", 780, 208, labels={0: "Enzym", 4: "GS"},
-                     zeige={2: "links"}, name="Selenenylsulfid")
-t.mole.append(sel3)
+sel3 = t.mol("*C[Se]S*", 780, 230.9, labels={0: "Enzym", 4: "GS"},
+             kern=SEC, name="Selenenylsulfid")
 t.unterschrift(sel3, "Selenenylsulfid: ein gemischtes", "Se&#8722;S-Zwischenprodukt", abstand=30)
 
 t.text(20, 344, "Ein zweites Glutathion löst das Sulfid wieder ab: Dabei entsteht "
@@ -157,7 +180,9 @@ ARIA = (
     "es entsteht die Selenensaeure. Ein erstes Glutathion bildet daraus das gemischte "
     "Selenenylsulfid, ein zweites loest es wieder ab; dabei entsteht das oxidierte Dimer GSSG "
     "und das Selenolat ist zurueck. Netto setzt der Zyklus ein Wasserstoffperoxid und zwei "
-    "Glutathion zu einem GSSG und zwei Wasser um. Ein Kasten erklaert, warum Selen und nicht "
+    "Glutathion zu einem GSSG und zwei Wasser um. Alle drei Stufen stehen in derselben Lage: "
+    "der Enzymrest links unten, das Selen rechts oben, damit der Unterschied am Selen ins Auge "
+    "faellt und nicht die Ausrichtung. Ein Kasten erklaert, warum Selen und nicht "
     "Schwefel: Das "
     "Selenol ist bei physiologischem pH vollstaendig deprotoniert und damit das bessere "
     "Nucleophil. Zone B nennt drei Enzyme der Familie, Zone C die Kette von Wasserstoffperoxid "

@@ -5,6 +5,18 @@ M-06 · Flavin und die MAO, gebaut mit mech.py.
 Vorher war das Isoalloxazin ein handgesetztes <use>-Template aus Sechsecken,
 Selegilin eine Zeichenkette. Jetzt kommen alle drei Flavinformen - oxidiert,
 reduziert und das N5-Addukt - aus demselben Zeichner wie der Rest des Dokuments.
+
+Die Tafel ist auf die neue Pfeilsprache umgestellt:
+
+  - KERN legt alle drei Flavinformen auf dieselbe Referenzlage. Oxidiert und
+    reduziert unterscheiden sich nur in den Bindungsordnungen, nicht im
+    Atomgeruest; das Suchmuster ist deshalb bindungs- und aromatizitaets-
+    agnostisch geschrieben (~ als Bindung, [#7] statt n). Der Isoalloxazinring
+    steht damit in jedem Bild gleich: Benzolring links, Pyrimidindion rechts,
+    N5 oben, N10 mit dem Ribityl unten.
+  - schub(quelle, ziel) beschreibt nur, welche Elektronen wohin gehen.
+    Bauchseite, Oeffnungswinkel und Ankerlage kommen aus mech_schub.py,
+    geprueft wird gegen mech_regeln.py.
 """
 import os
 import sys
@@ -12,6 +24,8 @@ import sys
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 import mech
+import mech_kerne
+from mech import Atom, Bindung, Paar
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -25,78 +39,97 @@ FLAVIN_OX = "Cc1cc2nc3c(=O)[nH]c(=O)nc-3n(*)c2cc1CS*"
 FLAVIN_RED = "Cc1cc2c(cc1CS*)N(*)C3=C(N2)C(=O)NC(=O)N3"
 ADDUKT = "Cc1cc2c(cc1CS*)N(*)C3=C(N2C=C=CN(C)*)C(=O)NC(=O)N3"
 
+# Das Leitgeruest des Isoalloxazins. Die Referenz traegt statt der Reste
+# Methylgruppen; gesucht wird der ganze Dreiring, damit die Lage nicht an einem
+# einzelnen Sechsring haengt. Ring B (C5a-N5-C4a-C10a-N10-C9a) legt die Lage
+# fest: N5 zeigt nach oben (winkel=90), das Folgeatom C4a nach oben rechts.
+# Damit liegt der Benzolring links, das Pyrimidindion rechts, und das Substrat
+# kann von oben an das N5 herankommen.
+KERN = mech_kerne.eigener(
+    "isoalloxazin", "Cc1cc2nc3c(=O)[nH]c(=O)nc-3n(C)c2cc1C",
+    muster=("[#6]1~[#6]~[#6]2~[#7]~[#6]3~[#6](~[#8])~[#7]~[#6](~[#8])~[#7]"
+            "~[#6]~3~[#7]~[#6]~2~[#6]~[#6]~1"),
+    ring=[3, 4, 5, 12, 13, 15], leit=4, folge=5, winkel=90.0)
+
 t = mech.Tafel(1000, 1452)
 
 # ===================================================== ZONE A · der Zyklus
 t.zone(24, "A · DER NORMALE KATALYSEZYKLUS DER MONOAMINOXIDASE")
 t.text(20, 54, "Das Flavin nimmt vom α-Kohlenstoff des Amins ein Hydrid auf. Zurück bleibt ein "
                "Iminium-Kation, das von selbst zum Aldehyd zerfällt.", size=12.5)
-t.text(20, 73, "Der Hydridtransfer liefert zunächst das Flavin-Anion FADH&#8315;; der gestrichelte "
-               "Pfeil trägt die Ladung ans N1. Erst ein Proton macht daraus FADH&#8322;.",
+t.text(20, 73, "Der Hydridtransfer liefert zunächst das Flavin-Anion FADH&#8315;; die Pfeilkette im "
+               "Ring trägt die Ladung ans N1. Erst ein Proton macht daraus FADH&#8322;.",
        size=12.5)
 t.text(20, 92, "Anders als NAD&#8314; führt Flavin denselben Vorgang auch in zwei "
                "Ein-Elektronen-Schritten. Genau das nutzen die irreversiblen Hemmstoffe aus.",
        size=12.5)
 
-fox = mech.Molekuel(FLAVIN_OX, 190, 208, labels={14: "Ribityl", 20: "Cys"},
-                    zeige={4: "rechts"}, name="FAD oxidiert")
-t.mole.append(fox)
-t.atomnummer(fox, 4, "N5", winkel=275, abstand=30, size=10.5, farbe=R, gewicht=700)
-# Der Hydridpfeil allein liesse das N5 mit vier Bindungen und den Ring unveraendert
-# zurueck. Das Paar der Doppelbindung N5=C4a muss ausweichen: ueber C4a=C10a weiter auf
-# das N1. Dort sitzt danach die negative Ladung des Flavin-Anions, und dort greift im
-# Produkt das Proton aus dem Medium an - deshalb ist N1 in beiden Formen beschriftet.
-# Gestrichelt, weil ein Pfeil hier zwei Verschiebungen zusammenfasst; zwei einzelne
-# Pfeile waeren bei 21 px Bindungslaenge kuerzer als ihre eigenen Koepfe.
-t.atomnummer(fox, 11, "N1", winkel=145, abstand=30, size=10.5, farbe=R, gewicht=700)
-lp_n1 = t.elektronenpaar(fox, 11, 150)
-t.pfeil((fox, 4, 5), (fox, 11), bogen=0.30, seite=-1, farbe=W, gap=3.0, strich="4 3")
-t.unterschrift(fox, "FAD, oxidiert, kovalent über einen Thioether",
-               "am Cystein des Motivs Ser-Gly-Gly-Cys-Tyr", abstand=32)
+fox = t.mol(FLAVIN_OX, 200, 250, labels={14: "Ribityl", 20: "Cys"},
+            kern=KERN, name="FAD oxidiert")
+# Die Marken stehen dicht genug am eigenen Atom, dass kein Nachbaratom naeher
+# liegt, und weichen dabei den Pfeilen aus: der Hydridpfeil kommt von oben ans
+# N5, die Ringkette endet links unter dem N1. Beide Flavinformen und das Addukt
+# bekommen dieselben Winkel und Abstaende; nur dann lassen sich die Bilder
+# nebeneinander lesen, ohne dass der Blick die Marken neu suchen muss.
+t.atomnummer(fox, 4, "N5", winkel=250, abstand=34, size=10.5, farbe=R, gewicht=700)
+t.atomnummer(fox, 11, "N1", winkel=60, abstand=26, size=10.5, farbe=R, gewicht=700)
 
-amin = mech.Molekuel("*CN", 452, 168, labels={0: "R"}, wasserstoff=[1],
-                     zeige={2: "rechts"}, name="Amin")
-t.mole.append(amin)
+# Die Lage des Amins ist nicht beliebig, und zwar wegen des ersten Pfeils. Er
+# geht vom freien Paar des Stickstoffs in die C-N-Bindung, also zurueck an das
+# eigene Atom; er muss deshalb um den Stickstoff herumgreifen. Auf welcher Seite
+# der Bindung er landet, haengt daran, wohin das Paar gesetzt wird, und das haengt
+# an der Schreibrichtung des Symbols: "NH2" reicht waagerecht weit, senkrecht
+# kaum. Stand das R nach oben (zeige={0: "oben"}), so kam das Paar rechts neben
+# den Stickstoff, die Spitze aber unter die Bindung - der Bogen kreuzte sie.
+# Bei rotate=30 liegt das Paar ueber dem Symbol und die Spitze daneben, auf
+# derselben Seite: kein Schnitt, Lot 0,22 L, Laengslage genau in der Mitte.
+amin = t.mol("*CN", 272, 165, labels={0: "R"}, wasserstoff=[1],
+             rotate=30, name="Amin")
 ha = amin.h_index[1]
-t.pfeil((amin, 1, ha), (fox, 4), bogen=0.26, seite=1, farbe=W)
-# Das Paar wird schraeg ueber dem Stickstoff gesetzt und der Pfeil laeuft von dort
-# ueber die Schrift hinweg auf die C-N-Bindung. Frueher lag das Paar nur vier Pixel
-# neben seinem Ziel; mech.py zeichnete daraus einen fast geschlossenen Kreis, der wie
-# ein Ring um die Beschriftung aussah statt wie ein Pfeil.
-lp_am = t.elektronenpaar(amin, 2, 315, abstand=18)
-t.pfeil(lp_am, (amin, 1, 2), bogen=0.60, seite=1, farbe=W, gap=4.0, mindestbogen=8.0)
-t.unterschrift(amin, "das Amin: sein α-H geht als Hydrid ans N5", abstand=30)
 
-t.reaktionspfeil(548, 208, 622)
-t.text(585, 196, "+ H&#8314;", size=10, anchor="middle", farbe=G)
+# Ein einziger Reaktionsschritt, deshalb eine Kette: Das freie Paar am Stickstoff
+# schiebt die C=N-Doppelbindung auf, das Bindungspaar der C-H-Bindung geht als
+# Hydrid an das N5, und das Paar der Doppelbindung N5=C4a weicht ueber den Ring bis
+# zum N1 aus. Frueher stand der letzte Teil als ein gestrichelter Pfeil quer durch
+# den Ring da; ausgeschrieben ist er das, was im Examen an der Tafel verlangt wird.
+# Am N1 sitzt danach die negative Ladung des Flavin-Anions, und dort greift im
+# Produkt das Proton aus dem Medium an - deshalb ist N1 in beiden Formen beschriftet.
+t.schub(Paar(amin, 2), Bindung(amin, 1, 2), kette="A")
+t.schub(Bindung(amin, 1, ha), Atom(fox, 4), kette="A")
+t.schub(Bindung(fox, 4, 5), Bindung(fox, 5, 12), kette="A")
+t.schub(Bindung(fox, 11, 12), Paar(fox, 11), kette="A")
 
-fred = mech.Molekuel(FLAVIN_RED, 800, 208, labels={9: "Cys", 11: "Ribityl"},
-                     zeige={14: "links"}, name="FADH2")
-t.mole.append(fred)
-t.atomnummer(fred, 14, "N5", winkel=95, abstand=30, size=10.5, farbe=R, gewicht=700)
-t.atomnummer(fred, 20, "N1", winkel=320, abstand=30, size=10.5, farbe=R, gewicht=700)
+t.ueberschrift(amin, "das Amin: sein α-H geht als Hydrid ans N5", abstand=26,
+               size=12.5, farbe=G, gewicht=700)
+t.unterschrift(fox, "FAD, oxidiert, kovalent über einen Thioether",
+               "am Cystein des Motivs Ser-Gly-Gly-Cys-Tyr", abstand=44)
+
+t.reaktionspfeil(320, 250, 640)
+t.text(480, 238, "+ H&#8314;", size=10, anchor="middle", farbe=G)
+
+fred = t.mol(FLAVIN_RED, 760, 250, labels={9: "Cys", 11: "Ribityl"},
+             kern=KERN, name="FADH2")
+t.atomnummer(fred, 14, "N5", winkel=250, abstand=34, size=10.5, farbe=R, gewicht=700)
+t.atomnummer(fred, 20, "N1", winkel=60, abstand=26, size=10.5, farbe=R, gewicht=700)
 t.unterschrift(fred, "FADH&#8322;: das N5 trägt das Hydrid,",
-               "das N1 das Proton aus dem Medium", abstand=32)
+               "das N1 das Proton aus dem Medium", abstand=44)
 
 # Substratseite
 t.text(20, 384, "AUF DER SUBSTRATSEITE", size=11, gewicht=700, farbe=G)
-amin2 = mech.Molekuel("*CN", 130, 446, labels={0: "R"}, zeige={2: "rechts"}, name="Amin")
-t.mole.append(amin2)
+amin2 = t.mol("*CN", 130, 446, labels={0: "R"}, zeige={2: "rechts"}, name="Amin")
 t.unterschrift(amin2, "Amin", abstand=26, farbe=G)
 t.reaktionspfeil(196, 446, 258)
 t.text(227, 422, "ans Flavin", size=10, anchor="middle", farbe=G)
 t.text(227, 436, "&#8722; H&#8315;", size=10, anchor="middle", farbe=G)
 
-imin = mech.Molekuel("*C=[NH2+]", 322, 446, labels={0: "R"}, zeige={2: "rechts"},
-                     name="Iminium")
-t.mole.append(imin)
+imin = t.mol("*C=[NH2+]", 322, 446, labels={0: "R"}, zeige={2: "rechts"},
+             name="Iminium")
 t.unterschrift(imin, "Iminium", abstand=26, farbe=G)
 t.reaktionspfeil(388, 446, 450)
 t.text(419, 422, "&#8722; NH&#8324;&#8314;", size=10, anchor="middle", farbe=G)
 t.text(419, 436, "+ H&#8322;O", size=10, anchor="middle", farbe=G)
 
-ald = mech.Molekuel("*C=O", 514, 446, labels={0: "R"}, zeige={2: "rechts"}, name="Aldehyd")
-t.mole.append(ald)
+ald = t.mol("*C=O", 514, 446, labels={0: "R"}, zeige={2: "rechts"}, name="Aldehyd")
 t.unterschrift(ald, "Aldehyd, dann ALDH", abstand=26, farbe=G)
 
 t.kasten(620, 392, 360, 108, fill="var(--warn-bg)", stroke=W)
@@ -115,13 +148,12 @@ t.text(20, 595, "und den greift das nucleophile N5 des reduzierten Flavins an. D
 
 # (R)-Konfiguration: RDKit-CIP fuer diesen SMILES ist R. Das Spiegelbild
 # C#CCN(C)[C@@H](C)Cc1ccccc1 waere (S) und damit das schwaechere Enantiomer.
-sel = mech.Molekuel("C#CCN(C)[C@H](C)Cc1ccccc1", 178, 730, zeige={0: "oben"},
-                    stereo=True, name="Selegilin")
-t.mole.append(sel)
-lp_sel = t.elektronenpaar(sel, 3, 200)
+sel = t.mol("C#CCN(C)[C@H](C)Cc1ccccc1", 178, 730, zeige={0: "oben"},
+            stereo=True, name="Selegilin")
 flavin_marke = t.marke(268, 654, "Flavin N5")
 t.text(268, 640, "Flavin", size=11, anchor="middle", gewicht=700, farbe=R)
-t.pfeil(lp_sel, flavin_marke, bogen=0.24, seite=1, typ="fischhaken", farbe=R)
+# Ein einzelnes Elektron des freien Paars geht auf das Flavin ueber: halber Kopf.
+t.schub(Paar(sel, 3), flavin_marke, elektronen=1)
 t.unterschrift(sel, "(R)-Selegilin: die Propargylgruppe oben",
                "ist der ganze Unterschied zum Substrat", abstand=32)
 
@@ -131,10 +163,12 @@ t.text(356, 722, "dann H ans Flavin", size=10, anchor="middle", farbe=R, gewicht
 t.text(356, 752, "Radikalpaar", size=10, anchor="middle", farbe=G)
 t.text(356, 766, "im Käfig", size=10, anchor="middle", farbe=G)
 
-add = mech.Molekuel(ADDUKT, 700, 730, labels={9: "Cys", 11: "Ribityl", 20: "R"},
-                    zeige={14: "links"}, name="N5-Addukt")
-t.mole.append(add)
-t.atomnummer(add, 14, "N5", winkel=125, abstand=30, size=10.5, farbe=R, gewicht=700)
+add = t.mol(ADDUKT, 700, 730, labels={9: "Cys", 11: "Ribityl", 20: "R"},
+            kern=KERN, name="N5-Addukt")
+# Am Addukt traegt das N5 drei Bindungen; oben links, wo die Marke in Zone A
+# steht, laeuft hier die Addukt-Kette. Die Marke rueckt deshalb als einzige in
+# die Luecke zwischen Ring und Kette.
+t.atomnummer(add, 14, "N5", winkel=207, abstand=34, size=10.5, farbe=R, gewicht=700)
 t.unterschrift(add, "das N5-Addukt: der Cofaktor ist kovalent blockiert,",
                "das Enzym damit endgültig aus dem Verkehr", abstand=32, farbe=R, gewicht=700)
 
@@ -183,9 +217,10 @@ ARIA = (
     "gezeichneten Strukturen: Das oxidierte Flavin, kovalent ueber einen Thioether an ein "
     "Cystein gebunden, nimmt mit einem Elektronenpaarpfeil das Wasserstoffatom vom "
     "Alpha-Kohlenstoff des Amins als Hydrid auf; gleichzeitig bildet das "
-    "Stickstoff-Elektronenpaar die Iminium-Doppelbindung. Ein zweiter, gestrichelter Pfeil "
-    "fuehrt von der Doppelbindung zwischen N5 und C4a durch den Ring auf das N1 und fasst "
-    "zusammen, wohin dieses Elektronenpaar ausweicht. Beide Flavinformen sind an N5 und "
+    "Stickstoff-Elektronenpaar die Iminium-Doppelbindung. Zwei weitere Pfeile derselben "
+    "Kette fuehren das Paar der Doppelbindung zwischen N5 und C4a in die Bindung zwischen "
+    "C4a und C10a und von dort das Paar der Doppelbindung zwischen C10a und N1 als freies "
+    "Paar auf das N1. Beide Flavinformen sind an N5 und "
     "N1 beschriftet: Das Hydrid landet am N5, die negative Ladung des Flavin-Anions ueber "
     "das Ringsystem am N1, und erst ein Proton aus dem Medium macht daraus FADH zwei. "
     "Deshalb steht am Reaktionspfeil ein Proton. Auf der Substratseite verliert das Amin ein "

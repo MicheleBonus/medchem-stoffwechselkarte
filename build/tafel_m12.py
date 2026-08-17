@@ -5,9 +5,33 @@ M-12 · Cyclooxygenase, gebaut mit mech.py.
 Die laengste Radikalkette des ganzen Satzes. Alle fuenf Zwischenstufen sind als
 echte Strukturen gezeichnet, jeder Schritt mit Fischhakenpfeilen ausgefuehrt.
 Die Zwischenstufen sind Ausschnitte C7 bis C16, gezeichnet im selben Massstab
-wie alles andere, damit man die Kette von Bild zu Bild verfolgen kann. Dazu
-werden bei jedem Fragment beide Kettenenden ueber zeige= festgehalten: C7 links,
-C16 rechts. Sonst kippt jedes Bild anders und der Blick verliert die Kette.
+wie alles andere, damit man die Kette von Bild zu Bild verfolgen kann.
+
+Zwei Leitgerueste halten die Lage fest, statt jede Stufe einzeln einzunorden:
+
+  KETTE   das Rueckgrat C7 bis C16. Es ist kein Ring, aber mech_kerne.eigener()
+          braucht auch keinen: 'ring' ist schlicht die Atomliste, an deren
+          Schwerpunkt die Lage haengt. Genannt sind hier die beiden Kettenenden,
+          C7 zeigt nach links - damit liegt die Kette in jeder Stufe waagerecht
+          und laeuft mit der Leserichtung. Vorher hielt zeige= nur die beiden
+          Enden fest; wie die Kette dazwischen lag, entschied jedes Bild fuer
+          sich, und der Blick musste jede Stufe neu einnorden.
+  PHENOL  der Tyrosinring, der zweimal vorkommt - vor und nach der Abstraktion.
+          Er steht schraeg, die Hydroxylgruppe nach oben links, der Proteinrest
+          nach unten rechts. Das ist nicht Geschmack: liegt der Ring waagerecht,
+          zeigen beide Fischhaken der Abstraktion in dieselbe Luecke neben der
+          O-H-Bindung und laufen ineinander.
+
+Die Pfeile sagen nur noch die Chemie an: aus welcher Bindung das Elektron kommt
+und an welchem Atom es landet. Bogen, Seite und Ankerlage sucht der Solver in
+mech_schub.py, geprueft wird gegen mech_regeln.py.
+
+Zwei Stellen sind dabei anders geworden als zuvor, beide unten im Skript
+begruendet: Schritt &#9312; steht jetzt in vier Fischhaken statt in zwei (die
+alten zwei behaupteten das Radikal am C13, das naechste Bild zeigt es am C11),
+und die beiden Ringschlusspfeile tragen art="inter", weil sie ueber drei
+Bindungslaengen greifen und mech_schub fuer diesen Fall noch keine eigene
+Laengenklasse kennt.
 """
 import os
 import sys
@@ -15,6 +39,8 @@ import sys
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 import mech
+import mech_kerne
+from mech import Atom, Bindung
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -25,6 +51,20 @@ C = "var(--cofaktor)"
 G = "var(--ink-3)"
 
 t = mech.Tafel(1000, 1500)
+
+# --------------------------------------------------------------- Leitgerueste
+# Das Rueckgrat C7 bis C16, als SMARTS ausgeschrieben: Platzhalter, acht
+# Kohlenstoffe, Platzhalter. Es trifft alle fuenf Stufen - auch die beiden mit
+# Ring, denn der Fuenfring haengt seitlich an derselben Kette.
+KETTE_MUSTER = "[#0]~[#6]~[#6]~[#6]~[#6]~[#6]~[#6]~[#6]~[#6]~[#0]"
+KETTE = mech_kerne.eigener(
+    "aa-kette", r"*/C=C\CC=CCC=C*", muster=KETTE_MUSTER,
+    ring=[0, 9], leit=0, folge=1, winkel=180.0)
+
+PHENOL = mech_kerne.eigener(
+    "tyr-phenol", "*c1ccc(O)cc1",
+    muster="[#0]~[#6]1~[#6]~[#6]~[#6](~[#8])~[#6]~[#6]~1",
+    ring=[1, 2, 3, 4, 6, 7], leit=4, folge=6, winkel=120.0)
 
 # ===================================================== ZONE A · Initiation
 t.zone(24, "A · DER START: DAS ENZYM ZÜNDET SEINE EIGENE RADIKALKETTE")
@@ -43,19 +83,30 @@ zcp = t.zentrum(284, 158, "Fe(IV)", axial=["O"], doppelt=True, radikal=True, unt
                 name="Compound I")
 t.text(284, 214, "Compound I", size=10.5, anchor="middle", gewicht=700, farbe=W)
 
-tyr = mech.Molekuel("*c1ccc(O)cc1", 486, 160, labels={0: "Protein"},
-                    wasserstoff=[5], zeige={5: "links", 0: "rechts"}, name="Tyr385")
-t.mole.append(tyr)
+tyr = t.mol("*c1ccc(O)cc1", 486, 160, labels={0: "Protein"},
+            wasserstoff=[5], kern=PHENOL, name="Tyr385")
 hO = tyr.h_index[5]
-t.pfeil((tyr, 5, hO), zcp.ax(0), bogen=0.22, seite=-1, typ="fischhaken", farbe=R)
-t.pfeil((tyr, 5, hO), tyr.abseits(5, hO), bogen=0.45, seite=1, typ="fischhaken", farbe=R)
+# Homolyse der O&#8722;H-Bindung: das eine Elektron geht mit dem Wasserstoff ans
+# Ferryl, das andere bleibt am Phenolsauerstoff und macht ihn zum Radikal. Beide
+# Haken kommen aus derselben Bindung und laufen auseinander; sie haengen deshalb
+# nicht Kopf an Schwanz und bilden keine Kette.
+# Der Endpunkt ist ausdruecklich gesetzt, sonst steht die Spitze zu weit weg.
+# Ohne winkel/abstand haengt sie an der Textellipse des O (halbe Textbreite plus
+# 3 px), und dazu kommt der Zuschlag, den mech_schub.Fest fuer den Ursprung
+# vorsieht: bis 0,45 L in Richtung der Quelle. Bei einer Sehne von sieben
+# Bindungslaengen ist der Zuschlag dem Solver billiger als der laengere Bogen, er
+# nimmt also immer den groessten - die Spitze stand 0,88 L neben dem O und
+# schwebte im Leeren. Mit dem Ankerpunkt dicht am O (3 px) landet sie nach
+# demselben Zuschlag 12 px rechts daneben: 0,37 L vor dem Glyphenrand, also im
+# Fenster von Z1, und auf gleicher Hoehe wie das O.
+t.schub(Bindung(tyr, 5, hO), zcp.ax(0, winkel=20, abstand=3), elektronen=1)
+t.schub(Bindung(tyr, 5, hO), Atom(tyr, 5), elektronen=1)
 t.unterschrift(tyr, "Tyrosin 385: das Wasserstoffatom seiner", "phenolischen OH-Gruppe geht ans Ferryl")
 
 t.reaktionspfeil(614, 158, 678)
 
-tyr2 = mech.Molekuel("*c1ccc([O])cc1", 782, 160, labels={0: "Protein"},
-                     zeige={5: "links", 0: "rechts"}, name="Tyr385-Radikal")
-t.mole.append(tyr2)
+tyr2 = t.mol("*c1ccc([O])cc1", 782, 160, labels={0: "Protein"},
+             kern=PHENOL, name="Tyr385-Radikal")
 # Das ungepaarte Elektron steckt schon im SMILES ([O]); RDKit setzt den Punkt selbst.
 # Ein zweiter, von Hand gesetzter Punkt stuende fuer ein zweites Elektron.
 t.unterschrift(tyr2, "Tyrosylradikal: im Phenolring", "delokalisiert und dadurch langlebig",
@@ -80,24 +131,44 @@ t.text(20, 380, "Gezeigt ist der Ausschnitt C7 bis C16 der Arachidonsäure. Alle
 # Bildunterschrift legt offen, dass die beiden anderen gestreckt gezeichnet sind.
 AA = r"*/C=C\CC=CCC=C*"          # C7*, C8=C9, C10, C11=C12, C13, C14=C15, C16*
 
-f1 = mech.Molekuel(AA, 168, 478, labels={0: "C7", 9: "C16"},
-                   wasserstoff=[6], zeige={0: "links", 9: "rechts"},
-                   name="Arachidonsäure")
-t.mole.append(f1)
+f1 = t.mol(AA, 168, 478, labels={0: "C7", 9: "C16"},
+           wasserstoff=[6], kern=KETTE, name="Arachidonsäure")
 h13 = f1.h_index[6]
-tyrrad = t.marke(168, 404, "Tyr385-Radikal")
-t.text(168, 400, "Tyr385&#8226;", size=11, anchor="middle", gewicht=700, farbe=R)
-t.pfeil((f1, 6, h13), tyrrad, bogen=0.24, seite=1, typ="fischhaken", farbe=R)
-t.pfeil((f1, 6, h13), f1.abseits(6, h13), bogen=0.45, seite=-1, typ="fischhaken", farbe=R)
-t.atomnummer(f1, 6, "C13", winkel=105, abstand=30)
+# Das Tyrosylradikal steht rechts oberhalb des C13, nicht senkrecht darueber.
+# Senkrecht darueber und weiter links liegen die drei anderen Fischhaken; zwei
+# Pfeile im selben Feld sind nicht mehr auseinanderzuhalten.
+tyrrad = t.marke(232, 402, "Tyr385-Radikal")
+t.text(232, 398, "Tyr385&#8226;", size=11, anchor="middle", gewicht=700, farbe=R)
+# Die Abstraktion, in vier Fischhaken ausgeschrieben. Frueher standen hier zwei:
+# einer zum Tyrosylradikal, einer zurueck ans C13. Der zweite behauptete, das
+# Radikal bleibe am C13 - das naechste Bild zeigt es aber am C11, mit
+# verschobenen Doppelbindungen. Ausgeschrieben ist es die Kette, fuer die die
+# beiden Haken standen: die C13&#8722;H-Bindung bricht homolytisch, ein Elektron geht
+# mit dem Wasserstoff ans Tyrosylradikal, das andere in die werdende Doppel-
+# bindung C12=C13; deren zweites Elektron kommt aus der alten Doppelbindung
+# C11=C12, und das uebrige Elektron von dort bleibt am C11 zurueck. Genau diese
+# Grenzstruktur steht daneben.
+# Die beiden mittleren Haken sind gegenueber dieser Erzaehlung vertauscht
+# angemeldet. Der Grund ist der Solver: er setzt in Reihenfolge und weicht dem
+# schon gesetzten Pfeil aus. Kommt der kurze Haken von der C13-H-Bindung zuerst,
+# draengt er den langen aus dem Feld unter der Kette, und beide liegen dann
+# 0,18 L auseinander statt der geforderten 0,25.
+t.schub(Bindung(f1, 6, h13), tyrrad, elektronen=1)
+t.schub(Bindung(f1, 4, 5), Bindung(f1, 5, 6), elektronen=1)
+t.schub(Bindung(f1, 6, h13), Bindung(f1, 5, 6), elektronen=1)
+t.schub(Bindung(f1, 4, 5), Atom(f1, 4), elektronen=1)
+# Senkrecht unter das C13. Schraeg (105 Grad) stand die Nummer zwischen C12 und
+# C13 und war keinem der beiden zuzuordnen; in einer Zickzackkette ist die
+# senkrechte Flucht der einzige Hinweis, der traegt, denn die beiden Nachbartaeler
+# liegen immer aehnlich weit weg wie der Gipfel darueber.
+t.atomnummer(f1, 6, "C13", winkel=90, abstand=30)
 t.text(168, 428, "&#9312;", size=13, anchor="middle", gewicht=700, farbe=R)
 t.unterschrift(f1, "Abstraktion des 13-pro-S-Wasserstoffs", abstand=34)
 
 t.reaktionspfeil(306, 478, 366)
 
-f2 = mech.Molekuel(r"*/C=C\C[CH]C=CC=C*", 500, 478, labels={0: "C7", 9: "C16"},
-                   zeige={0: "links", 9: "rechts"}, name="Pentadienyl-Radikal")
-t.mole.append(f2)
+f2 = t.mol(r"*/C=C\C[CH]C=CC=C*", 500, 478, labels={0: "C7", 9: "C16"},
+           kern=KETTE, name="Pentadienyl-Radikal")
 t.atomnummer(f2, 4, "C11", winkel=90, abstand=26)
 t.atomnummer(f2, 8, "C15", winkel=90, abstand=26)
 t.text(500, 428, "&#9313;", size=13, anchor="middle", gewicht=700, farbe=R)
@@ -107,10 +178,10 @@ t.unterschrift(f2, "delokalisiert über C11 bis C15, deshalb greift der",
 t.reaktionspfeil(638, 478, 698)
 t.text(668, 468, "+ O&#8322;", size=10.5, anchor="middle", gewicht=700, farbe=E)
 
-f3 = mech.Molekuel(r"*/C=C\CC(O[O])C=CC=C*", 832, 478, labels={0: "C7", 11: "C16"},
-                   zeige={0: "links", 11: "rechts"}, name="11-Peroxylradikal")
-t.mole.append(f3)
-t.atomnummer(f3, 4, "C11", winkel=180, abstand=26)
+f3 = t.mol(r"*/C=C\CC(O[O])C=CC=C*", 832, 478, labels={0: "C7", 11: "C16"},
+           kern=KETTE, name="11-Peroxylradikal")
+# Nach links lag die Nummer auf der Bindung C10&#8722;C11; unter dem Scheitel ist Platz.
+t.atomnummer(f3, 4, "C11", winkel=90, abstand=26)
 t.text(832, 428, "&#9314;", size=13, anchor="middle", gewicht=700, farbe=R)
 t.unterschrift(f3, "11-Peroxylradikal: Sauerstoff tritt von der",
                "Gegenseite des abstrahierten Wasserstoffs ein", abstand=34)
@@ -120,14 +191,23 @@ t.zone(608, "C · SCHRITT &#9315; BIS &#9317;: ZWEI RINGSCHLÜSSE, DANN DER ZWEI
 t.text(20, 638, "Zweimal dasselbe Muster: Ein Radikal addiert an eine Doppelbindung, und das "
                 "Radikal wandert an deren anderes Ende.", size=12.5)
 
-f3b = mech.Molekuel(r"*/C=C\CC(O[O])C=CC=C*", 168, 762, labels={0: "C7", 11: "C16"},
-                    zeige={0: "links", 11: "rechts"}, name="11-Peroxylradikal")
-t.mole.append(f3b)
+f3b = t.mol(r"*/C=C\CC(O[O])C=CC=C*", 168, 762, labels={0: "C7", 11: "C16"},
+            kern=KETTE, name="11-Peroxylradikal")
 # Der Fischhaken des Radikals zeigt auf das Atom, an dem die neue Bindung entsteht:
 # C9, nicht auf die Mitte der Doppelbindung. Den Radikalpunkt am Sauerstoff zeichnet
-# RDKit selbst, weil das Elektron im SMILES steht.
-t.pfeil(f3b.aussen(6, abstand=12), (f3b, 2), bogen=0.26, seite=1, typ="fischhaken", farbe=R)
-t.pfeil((f3b, 1, 2), f3b.abseits(1, 2), bogen=0.45, seite=-1, typ="fischhaken", farbe=R)
+# RDKit selbst, weil das Elektron im SMILES steht; deshalb steht hier Atom() und
+# nicht Elektron(), das seinen Punkt noch einmal setzen wuerde.
+#
+# art="inter" ist hier keine Bequemlichkeit, sondern die einzige zutreffende
+# Laengenklasse. Der Sauerstoff und das C9 liegen in der gestreckt gezeichneten
+# Kette drei Bindungslaengen auseinander; erst die Haarnadelform des aktiven
+# Zentrums bringt sie zusammen, und die laesst RDKit sich nicht vorschreiben
+# (GenerateDepictionMatching2DStructure zieht eine Vorlage nur weich nach, siehe
+# Meldung im Bericht). Das Fenster fuer "intra" endet bei 1,90 L und ist fuer
+# einen Ringschluss ueber mehrere Atome zu eng; mech_schub kennt fuer diesen Fall
+# noch keine eigene Klasse.
+t.schub(Atom(f3b, 6), Atom(f3b, 2), elektronen=1, kette="C", art="inter")
+t.schub(Bindung(f3b, 1, 2), Atom(f3b, 1), elektronen=1, kette="C")
 t.atomnummer(f3b, 1, "C8", winkel=205, abstand=20)
 t.atomnummer(f3b, 2, "C9", winkel=95, abstand=19)
 t.text(168, 706, "&#9315; das Peroxylradikal greift C9 an", size=11, anchor="middle",
@@ -137,15 +217,24 @@ t.unterschrift(f3b, "es entsteht die O&#8722;O-Brücke C9&#8722;C11,",
 
 t.reaktionspfeil(306, 762, 366)
 
-f4 = mech.Molekuel(r"*[CH]C1CC(OO1)C=CC=C*", 500, 762, labels={0: "C7", 11: "C16"},
-                   zeige={0: "links", 11: "rechts"}, name="C8-Radikal")
-t.mole.append(f4)
-# Der Bogen laeuft ueber den Fuenfring hinweg, nicht durch ihn hindurch: sonst
-# kreuzt er die Ringbindungen und der Weg von C8 nach C12 ist nicht zu lesen.
-t.pfeil(f4.aussen(1, abstand=12), (f4, 7), bogen=0.30, seite=-1, typ="fischhaken", farbe=R)
-t.pfeil((f4, 7, 8), f4.abseits(8, 7), bogen=0.45, seite=-1, typ="fischhaken", farbe=R)
-t.atomnummer(f4, 1, "C8", winkel=60, abstand=27)
-t.atomnummer(f4, 7, "C12", winkel=105, abstand=23)
+f4 = t.mol(r"*[CH]C1CC(OO1)C=CC=C*", 500, 762, labels={0: "C7", 11: "C16"},
+           kern=KETTE, name="C8-Radikal")
+# Dasselbe Muster wie eben: das Radikal von C8 bildet die Bindung zu C12, das
+# pi-Paar der Doppelbindung C12=C13 laeuft nach C13 aus. Auch hier greift der
+# erste Haken ueber den halben Ausschnitt hinweg: C8 und C12 haengen an den
+# beiden Ringkohlenstoffen C9 und C11, zwischen denen das C10 steht, und stehen
+# deshalb dreieinhalb Bindungslaengen auseinander. Wieder art="inter".
+t.schub(Atom(f4, 1), Atom(f4, 7), elektronen=1, kette="D", art="inter")
+t.schub(Bindung(f4, 7, 8), Atom(f4, 8), elektronen=1, kette="D")
+# Die Nummer des C8 steht jetzt darueber statt darunter: unter der Kette laeuft
+# der Bogen von C8 nach C12, und dort stand vorher genau diese Beschriftung.
+# Die Nummer des C12 steht senkrecht unter ihrem Atom. Schraeg nach rechts unten
+# (40 Grad) stand sie genau unter dem *C13* und benannte damit im Bild das
+# Nachbaratom - ausgerechnet die beiden, um die dieser Schritt geht. Das C12 ist
+# ein Tal der Kette: senkrecht darunter ist viel Platz, und beide Nachbarn liegen
+# oben, also ist die Zuordnung hier eindeutig.
+t.atomnummer(f4, 1, "C8", winkel=250, abstand=22)
+t.atomnummer(f4, 7, "C12", winkel=90, abstand=22)
 t.text(500, 706, "&#9316; C8 greift C12 an", size=11, anchor="middle", gewicht=700, farbe=R)
 t.unterschrift(f4, "der Fünfring schließt sich, das Radikal",
                "wandert allylisch nach C13 bis C15", abstand=34)
@@ -157,12 +246,15 @@ t.text(668, 748, "+ O&#8322;", size=10.5, anchor="middle", gewicht=700, farbe=E)
 t.text(668, 786, "dann H von Tyr385", size=10, anchor="middle", farbe=R)
 t.text(668, 799, "die Kette schließt sich", size=10, anchor="middle", farbe=G)
 
-f5 = mech.Molekuel(r"*C1C2CC(OO2)C1/C=C/C(OO)*", 832, 762, labels={0: "C7", 13: "C16"},
-                   zeige={0: "links", 13: "rechts"}, name="PGG2-Kern")
-t.mole.append(f5)
-# 100 Grad legte die Nummer mitten in die Hydroperoxidgruppe: dort blieb nur 4 px
-# Luft und das "C15" verschwand hinter dem O-OH. Nach links unten sind es 15 px.
-t.atomnummer(f5, 10, "C15", winkel=130, abstand=28)
+f5 = t.mol(r"*C1C2CC(OO2)C1/C=C/C(OO)*", 832, 762, labels={0: "C7", 13: "C16"},
+           kern=KETTE, name="PGG2-Kern")
+# Um das C15 herum ist es eng: links oben die Doppelbindung, links unten die
+# Hydroperoxidgruppe, rechts das C16. Nach links unten (130 Grad) stiess die
+# Nummer an das O der O-OH-Gruppe - die beiden Kaesten beruehrten sich, im Bild
+# stand da "C15O&#8722;OH" wie eine einzige Formel. Bleibt die Luecke nach oben,
+# zwischen den Bindungen zum C14 und zum C16; dort ist das C15 auch das naechste
+# Atom.
+t.atomnummer(f5, 10, "C15", winkel=-75, abstand=15)
 t.text(832, 688, "&#9317; Sauerstoff an C15", size=11, anchor="middle",
        gewicht=700, farbe=R)
 t.unterschrift(f5, "PGG&#8322;: Bicyclus aus Endoperoxid und Fünfring,",

@@ -2,9 +2,24 @@
 """
 M-07 · Nicotinamid-Coenzyme, gebaut mit mech.py.
 
-Die letzte der elf neu gezeichneten Tafeln. Zone B nutzt dieselben raeumlichen
-Mittel wie M-01: Die beiden Wasserstoffatome am sp3-C4 werden als Keil und
-Strichkeil gezeichnet - anders laesst sich pro-R gegen pro-S nicht zeigen.
+Zwei Leitgerueste halten die Tafel zusammen (mech_kerne.py):
+
+  NIC   der Nicotinamid-Ring. Er steht dreimal in der Tafel - als NAD&#8314;, als
+        NADH daneben und noch einmal in Zone B. Alle drei liegen jetzt auf
+        derselben Referenzlage: C4 oben, das Carboxamid rechts, der Ring-
+        stickstoff mit dem Riborest unten links. Der Leser sieht dadurch beim
+        Vergleich NAD&#8314;/NADH nur noch den Unterschied, nicht die Drehung.
+  RIB   die Adenosin-Ribose der Zone C. Vorher hing die zweite Ribose ueber
+        vorlage= an der ersten; das leistet ein Leitgeruest gleich mit und
+        haelt zusaetzlich die Haendigkeit fest.
+
+Die Pfeile sind schub(quelle, ziel): der Aufruf sagt nur, welche Elektronen
+wohin gehen, die Geometrie sucht der Solver in mech_schub.py und misst sie
+gegen mech_regeln.py.
+
+Zone B nutzt dieselben raeumlichen Mittel wie M-01: Die beiden Wasserstoffatome
+am sp3-C4 werden als Keil und Strichkeil gezeichnet - anders laesst sich pro-R
+gegen pro-S nicht zeigen.
 """
 import os
 import sys
@@ -12,6 +27,8 @@ import sys
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 import mech
+import mech_kerne
+from mech import Atom, Bindung
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -21,8 +38,33 @@ E = "var(--enzym)"
 C = "var(--cofaktor)"
 G = "var(--ink-3)"
 
-NADOX = "NC(=O)c1ccc[n+](*)c1"
+# Nicotinamid kekulisiert eingegeben. Der Grund ist nicht Kosmetik: der Ringpfeil
+# der Zone A setzt an der Doppelbindung C4=C5 an, und aus der aromatischen
+# Eingabe kann RDKit ebensogut die andere Kekule-Formel zeichnen - dann stuende
+# der Pfeil an einer Einfachbindung. Der Nebeneffekt ist praktisch: die
+# Atomnummern stimmen jetzt mit denen der reduzierten Form ueberein -
+# 3 = C3, 4 = C2, 5 = N1, 6 = Riborest, 7 = C6, 8 = C5, 9 = C4.
+NADOX = "NC(=O)C1=C[N+](*)=CC=C1"
 NADRED = "NC(=O)C1=CN(*)C=CC1"
+
+# Leitgeruest Nicotinamid. leit=4 ist das C4, folge=3 das C3 - damit laeuft der
+# Ring im Bild im Uhrzeigersinn und das Carboxamid steht rechts. winkel=75 legt
+# das C4 nach oben: nur dann bleibt der Platz darueber frei fuer die beiden
+# Wasserstoffatome der Zone B, und der Riborest kommt unten links zu liegen,
+# wo ihn keine Beschriftung stoert.
+NIC = mech_kerne.eigener(
+    "nicotinamid", "NC(=O)c1cccnc1",
+    muster="[#7]~[#6](~[#8])~[#6]1~[#6]~[#7]~[#6]~[#6]~[#6]~1",
+    ring=[3, 4, 5, 6, 7, 8], leit=4, folge=3, winkel=75.0)
+
+# Leitgeruest Ribose. leit=6 ist das C2', an dem sich die beiden Coenzyme
+# unterscheiden; winkel=-90 stellt es nach unten, wo der Blick des Lesers hin
+# soll. folge=4 ist das C1' und legt damit die Haendigkeit fest: das Adenin
+# bleibt links, der Phosphatrest am C5' oben rechts.
+RIB = mech_kerne.eigener(
+    "ribose", "OCC1OC(C)C(O)C1O",
+    muster="[#8]~[#6]~[#6]1~[#8]~[#6](~[*])~[#6](~[#8])~[#6]~1~[#8]",
+    ring=[2, 3, 4, 6, 8], leit=6, folge=4, winkel=-90.0)
 
 t = mech.Tafel(1000, 1320)
 
@@ -34,57 +76,65 @@ t.text(20, 54, "Gezeigt ist die Lactat-Dehydrogenase. Vier Pfeile, ein einziger 
 t.text(20, 73, "bildet die C=O-Doppelbindung, und gleichzeitig geht das Hydrid vom selben "
                "Kohlenstoff an das C4 des Pyridiniumrings. Eine Zwischenstufe gibt es nicht.",
        size=12.5)
-t.text(20, 92, "Der gestrichelte Pfeil fasst zusammen, wie die Ringelektronen zum Ringstickstoff "
-               "nachrücken: dessen positive Ladung verschwindet, das Proton bleibt am Histidin.",
-       size=12.5)
+t.text(20, 92, "Der vierte Pfeil rückt die Ringelektronen nach. Der letzte Schritt, das π-Paar "
+               "der Bindung C6=N1 auf den Ringstickstoff, ist nicht gezeichnet: neben dem N&#8314; "
+               "und", size=12.5)
+t.text(20, 111, "seinem Riborest ist dafür kein Platz. Dieser Schritt neutralisiert die "
+                "Ringladung; das Proton bleibt am Histidin.", size=12.5)
 
 # Stereodeskriptor: C[C@H](O)C(=O)[O-] ist (S) und damit L-Lactat, das einzige Substrat
 # der LDH. Ohne ihn stuende in Zone B die Stereospezifitaet neben einem flachen Substrat.
-lac = mech.Molekuel("C[C@H](O)C(=O)[O-]", 132, 208, wasserstoff=[1, 2],
-                    zeige={2: "oben"}, name="Lactat")
-t.mole.append(lac)
+# zeige={6:"rechts"} dreht das C-H nach rechts, dem Ring entgegen. Das Carboxylat
+# steht dann senkrecht darueber und nicht mehr in der Flugbahn; mit der frueheren
+# Lage fand der Solver fuer den Hydridpfeil ueberhaupt keinen freien Bogen. Die
+# OH-Gruppe zeigt dabei nach unten, das Histidin steht deshalb unten links.
+# Das Lactat steht eine halbe Zeile hoeher als der Ring: das C4 liegt an der
+# Spitze des Pyridiniums, und nur von schraeg oben kommt der Hydridpfeil an
+# seine freie Seite, ohne den Ring zu queren.
+lac = t.mol("C[C@H](O)C(=O)[O-]", 175, 196, wasserstoff=[1, 2],
+            zeige={6: "rechts"}, name="Lactat")
 hl = lac.h_index[1]
 ho = lac.h_index[2]
 
+nad = t.mol(NADOX, 300, 208, labels={6: "Ribose-ADP"}, kern=NIC, name="NAD+")
+
 # Die Base gehoert ins Bild: ohne sie bliebe das Proton am Sauerstoff sitzen und aus dem
 # Pyruvat wuerde ein Oxocarbenium. Mit ihr stimmt die Ladungsbilanz beider Seiten.
-t.text(40, 138, "His", size=11.5, anchor="middle", gewicht=700, farbe=E)
-lp_his = t.paar(60, 150, 0, "Histidin")
-t.pfeil(lp_his, (lac, ho), bogen=0.32, seite=-1, farbe=W)
-# O&#8722;H-Bindung in die C&#8722;O-Bindung: benachbarte Bindungen liegen nur eine halbe
-# Bindungslaenge auseinander, mech.py zeichnet dafuer den Kreisbogen. seite=-1 legt ihn
-# rechts vom Sauerstoff ab, damit er dem Pfeil des Histidins nicht in die Quere kommt.
-t.pfeil((lac, 2, ho), (lac, 1, 2), bogen=0.40, seite=-1, farbe=W)
-t.unterschrift(lac, "L-Lactat, (S)-konfiguriert: das Histidin",
-               "nimmt das Proton der OH-Gruppe auf", abstand=30)
+t.text(105, 218, "His", size=11.5, anchor="middle", gewicht=700, farbe=E)
+lp_his = t.paar(105, 234, 90, "Histidin")
 
-nad = mech.Molekuel(NADOX, 400, 208, labels={8: "Ribose-ADP"}, zeige={4: "links"},
-                    name="NAD+")
-t.mole.append(nad)
-t.pfeil((lac, 1, hl), (nad, 4), bogen=0.24, seite=-1, farbe=W)
-t.atomnummer(nad, 4, "C4", winkel=180, abstand=46, size=10.5, farbe=W, gewicht=700)
-# Ohne diesen Pfeil bliebe der Ring positiv und C4 haette fuenf Bindungen. Gestrichelt,
-# weil er zwei Verschiebungen zusammenfasst: C4=C5 nach C5=C6 und C6=N1 auf das N1.
-# Er laeuft durch den Ring, nicht aussen herum: rechts vom N1 sitzt die Beschriftung
-# des Riborests, dort waere fuer den Pfeilkopf kein Platz. Der kleine gap-Wert haelt
-# den Kopf dicht am Stickstoff, ohne das Pluszeichen zu ueberdecken.
-t.pfeil((nad, 4, 5), (nad, 7), bogen=0.30, seite=-1, farbe=W, gap=3.0, strich="4 3")
+# Alle vier Pfeile sind ein einziger Schritt und stehen deshalb in einer Kette:
+# die Pruefung verlangt dann Kopf an Schwanz.
+t.schub(lp_his, Atom(lac, ho), kette="a")                     # Base holt das Proton
+t.schub(Bindung(lac, 2, ho), Bindung(lac, 1, 2), kette="a")   # O-H wird zur C=O
+t.schub(Bindung(lac, 1, hl), Atom(nad, 9), kette="a")         # das Hydrid ans C4
+t.schub(Bindung(nad, 8, 9), Bindung(nad, 7, 8), kette="a")    # C4=C5 wird C5=C6
+# Der fuenfte Schritt - das pi-Paar der Bindung C6=N1 geht auf den Ringstickstoff -
+# ist nicht gezeichnet, aus genau dem Grund, an dem er schon in M-01 gescheitert
+# ist: das N1 traegt drei Substituenten, seine drei Winkelluecken sind je 120 Grad
+# breit, und in jede von ihnen ragt Tinte. Der Solver kommt an die eigene Bindung
+# N1-C2 auf 0,20 L heran und braucht 0,25 L; das gilt bei jeder Bindungslaenge
+# von 17 bis 30 px gleichermassen, ist also kein Layout-, sondern ein
+# Geometrieproblem. Statt den Pfeil zu verbiegen, steht die Aussage im Text.
+# Der frueher hier stehende gestrichelte Sammelpfeil quer durch den Ring war
+# ohnehin keine zulaessige Schreibweise: seine Sehne mass 1,8 L bei 1,3 L Grenze.
+
+t.unterschrift(lac, "L-Lactat, (S)-konfiguriert:",
+               "das Histidin nimmt das Proton der OH-Gruppe auf", abstand=16)
+t.atomnummer(nad, 9, "C4", winkel=290, abstand=26, size=10.5, farbe=W, gewicht=700)
 t.unterschrift(nad, "NAD&#8314;, aromatisch und elektronenarm:", "deshalb nimmt C4 das Hydrid auf",
                abstand=30)
 
-t.reaktionspfeil(516, 208, 584)
-t.text(550, 190, "ein Schritt", size=10, anchor="middle", farbe=G)
-t.text(550, 228, "H&#8314; ans Histidin", size=10, anchor="middle", farbe=G)
+t.reaktionspfeil(440, 208, 512)
+t.text(476, 190, "ein Schritt", size=10, anchor="middle", farbe=G)
+t.text(476, 228, "H&#8314; ans Histidin", size=10, anchor="middle", farbe=G)
 
-pyr = mech.Molekuel("CC(=O)C(=O)[O-]", 656, 208, zeige={1: "links"}, name="Pyruvat")
-t.mole.append(pyr)
+pyr = t.mol("CC(=O)C(=O)[O-]", 630, 208, zeige={1: "links"}, name="Pyruvat")
 t.unterschrift(pyr, "Pyruvat", abstand=28, farbe=G)
 
-nadh = mech.Molekuel(NADRED, 866, 208, labels={6: "Ribose-ADP"}, zeige={9: "links"},
-                     name="NADH")
-t.mole.append(nadh)
+nadh = t.mol(NADRED, 840, 208, labels={6: "Ribose-ADP"}, kern=NIC, name="NADH")
 t.unterschrift(nadh, "NADH: C4 ist jetzt sp&#179;,", "die Ringladung ist neutralisiert",
-               abstand=30)
+               abstand=28)
 
 t.kasten(20, 300, 960, 76, fill="var(--cofaktor-bg)", stroke=C)
 t.text(38, 322, "DER UNTERSCHIED ZUM FLAVIN", size=11, gewicht=700, farbe=C)
@@ -100,17 +150,16 @@ t.text(20, 444, "Am sp&#179;-hybridisierten C4 sitzen zwei Wasserstoffatome. Che
        size=12.5)
 t.text(20, 463, "Jede Dehydrogenase überträgt stets dasselbe von beiden.", size=12.5)
 
-nadh2 = mech.Molekuel(NADRED, 200, 590, labels={6: "Ribose-ADP"}, zeige={9: "oben"},
-                      name="NADH")
-t.mole.append(nadh2)
+nadh2 = t.mol(NADRED, 200, 590, labels={6: "Ribose-ADP"}, kern=NIC, name="NADH sp3")
 cx, cy = nadh2.atom(9)
+rx = sum(nadh2.atom(i)[0] for i in (3, 4, 5, 7, 8, 9)) / 6.0
 t.keil(cx, cy, cx - 30, cy - 34, breite=7.5, farbe=E)
 t.text(cx - 34, cy - 42, "H<tspan baseline-shift='sub' font-size='8'>A</tspan> · pro-<tspan "
        "font-style='italic'>R</tspan>", size=11, anchor="end", gewicht=700, farbe=E)
 t.strichkeil(cx, cy, cx + 30, cy - 34, breite=7.0)
 t.text(cx + 34, cy - 42, "H<tspan baseline-shift='sub' font-size='8'>B</tspan> · pro-<tspan "
        "font-style='italic'>S</tspan>", size=11, gewicht=700, farbe=R)
-t.ebene(cx, cy + 30, breite=150, tiefe=34, farbe=G, beschriftung="Ringebene")
+t.ebene(rx, cy + 30, breite=150, tiefe=34, farbe=G, beschriftung="Ringebene")
 t.unterschrift(nadh2, "dasselbe C4, von der Seite gesehen", abstand=64)
 
 t.text(430, 512, "A-Seite: das pro-<tspan font-style='italic'>R</tspan>-Wasserstoffatom",
@@ -132,20 +181,18 @@ t.zone(766, "C · EINE PHOSPHATGRUPPE TRENNT ZWEI STOFFWECHSELWELTEN")
 t.text(20, 796, "NADP&#8314; unterscheidet sich von NAD&#8314; an genau einer Stelle: einer "
                 "Phosphatgruppe an der 2&#8242;-Position der Adenosin-Ribose.", size=12.5)
 
-rib = mech.Molekuel("*OC[C@H]1O[C@@H](*)[C@H](O)[C@@H]1O", 180, 918,
-                    labels={0: "P", 6: "Adenin"}, zeige={8: "unten"}, name="NAD-Ribose")
-t.mole.append(rib)
+# Die beiden Ribosen stehen nebeneinander, damit der Leser den einen Unterschied
+# sieht. Das Leitgeruest legt beide auf dieselbe Lage, Drehung und Haendigkeit.
+# Die zweite steht 15 px tiefer und 3 px weiter rechts angesetzt: t.mol() setzt
+# den Schwerpunkt aller Atome, und die fuenf Atome der Phosphatgruppe ziehen ihn
+# nach unten rechts. Ohne diesen Ausgleich staenden die beiden Ringe nicht auf
+# derselben Hoehe - nachgemessen an den fuenf Ringatomen, nicht geschaetzt.
+rib = t.mol("*OC[C@H]1O[C@@H](*)[C@H](O)[C@@H]1O", 180, 918,
+            labels={0: "P", 6: "Adenin"}, kern=RIB, name="NAD-Ribose")
 t.unterschrift(rib, "NAD&#8314;: hier steht eine freie OH-Gruppe", abstand=30, farbe=E)
 
-# Die beiden Ribosen stehen nebeneinander, damit der Leser den einen Unterschied
-# sieht. Ohne Vorlage legt RDKit sie spiegelbildlich, und das Adenin steht einmal
-# links und einmal rechts; dann sucht der Leser erst die Struktur und dann den
-# Unterschied. zeige= dreht nur, es spiegelt nicht, und half hier deshalb nicht.
-ribp = mech.Molekuel("*OC[C@H]1O[C@@H](*)[C@H](OP(=O)([O-])[O-])[C@@H]1O", 560, 918,
-                     labels={0: "P", 6: "Adenin"}, vorlage=rib,
-                     muster="[#8]C[CH]1O[CH](*)[CH]([#8])[CH]1[#8]",
-                     name="NADP-Ribose")
-t.mole.append(ribp)
+ribp = t.mol("*OC[C@H]1O[C@@H](*)[C@H](OP(=O)([O-])[O-])[C@@H]1O", 563, 933,
+             labels={0: "P", 6: "Adenin"}, kern=RIB, name="NADP-Ribose")
 t.unterschrift(ribp, "NADP&#8314;: und hier ein Phosphat", abstand=30, farbe=R)
 
 t.kasten(760, 852, 220, 132, fill="var(--surface-2)")
@@ -187,10 +234,11 @@ ARIA = (
     "freien Elektronenpaar das Proton der Hydroxylgruppe des L-Lactats auf, das Paar der "
     "geloesten Sauerstoff-Wasserstoff-Bindung bildet die Doppelbindung zum Sauerstoff, und "
     "gleichzeitig wandert das Wasserstoffatom am selben Kohlenstoff als Hydrid an das "
-    "Kohlenstoffatom vier des Pyridiniumrings. Ein vierter, gestrichelter Pfeil laeuft von "
-    "der Doppelbindung zwischen C4 und C5 durch den Ring auf den Ringstickstoff und fasst "
-    "zusammen, wie die Ringelektronen nachruecken; dessen positive Ladung verschwindet "
-    "damit. Es entstehen "
+    "Kohlenstoffatom vier des Pyridiniumrings. Ein vierter Pfeil rueckt die Ringelektronen "
+    "nach: das Elektronenpaar der Doppelbindung zwischen C4 und C5 bildet die Doppelbindung "
+    "zwischen C5 und C6. Der letzte Schritt, das Paar der Doppelbindung zwischen C6 und dem "
+    "Ringstickstoff, ist nicht gezeichnet, weil neben dem Stickstoffsymbol und seinem "
+    "Riborest kein Platz dafuer ist; er steht im Text. Es entstehen "
     "Pyruvat und NADH, dessen C4 nun sp3-hybridisiert "
     "ist. Zone B zeigt die Stereospezifitaet raeumlich: Die beiden Wasserstoffatome am C4 sind "
     "als Keil und als Strichkeil gezeichnet, das eine ueber, das andere unter der als Flaeche "

@@ -5,6 +5,13 @@ M-10 · BH4-abhaengige Monooxygenasen, gebaut mit mech.py.
 Kern ist der NIH-Shift: Das Wasserstoffatom wird nicht abgespalten, sondern an
 den Nachbarkohlenstoff geschoben. Das laesst sich nur zeigen, wenn es als
 eigenes Atom gezeichnet ist und der Pfeil an seiner Bindung ansetzt.
+
+Zwei Leitgerueste halten die Lage fest. Das Pterin kommt in vier Stufen vor - BH4,
+das Carbinolamin, das chinoide Dihydrobiopterin und wieder BH4 -, der Benzolring
+in drei. Ohne Leitgeruest bekommt jede Stufe ihre eigene Drehung, und der Leser
+muss vor dem Vergleich erst jedes Bild neu einnorden. Mit ihm steht in allen
+Stufen dasselbe an derselben Stelle, und der Unterschied zwischen den Stufen ist
+das einzige, was ins Auge faellt.
 """
 import os
 import sys
@@ -12,6 +19,8 @@ import sys
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 import mech
+import mech_kerne
+from mech import Atom, Bindung
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -20,6 +29,24 @@ R = "var(--drug)"
 E = "var(--enzym)"
 C = "var(--cofaktor)"
 G = "var(--ink-3)"
+
+# Pterin in der Lehrbuchlage: Pyrimidinon-Ring links, Pyrazin-Ring rechts, die
+# 4-Oxo-Gruppe nach oben, das 2-Amin nach unten links, die Seitenkette am C6 nach
+# rechts. Das Muster fasst das Bicyclus-Geruest ohne Ruecksicht auf Ladung und
+# Aromatizitaet: C8a - N1 - C2 - N3 - C4 - C4a, dann weiter N5 - C6 - C7 - N8.
+# Nur so trifft es auch das Carbinolamin, in dem das C4a sp3 ist.
+PTERIN = mech_kerne.eigener(
+    "pterin", "CC(O)C(O)C1CNC2=C(N1)C(=O)NC(N)=N2",
+    muster="[#6]12~[#7]~[#6]~[#7]~[#6]~[#6]~1~[#7]~[#6]~[#6]~[#7]~2",
+    ring=[8, 9, 11, 13, 14, 16], leit=9, folge=8, winkel=30.0)
+
+# Der Sechsring der Zone B, in allen drei Stufen gleich gelegt: der Rest R links,
+# die Angriffsstelle rechts. Dadurch steht die eintretende OH-Gruppe genau dort,
+# wo vorher das markierte Wasserstoffatom stand.
+AREN = mech_kerne.eigener(
+    "aren", "Oc1ccc(*)cc1",
+    muster="[#0]~[#6]1~[#6]~[#6]~[#6](~[!#6])~[#6]~[#6]~1",
+    ring=[1, 2, 3, 4, 6, 7], leit=1, folge=2, winkel=0.0)
 
 t = mech.Tafel(1000, 1260)
 
@@ -31,8 +58,7 @@ t.text(20, 54, "Anders als beim P450 sitzt hier kein Häm, sondern ein nacktes N
 zfe = t.zentrum(120, 168, "Fe(II)", unten="His", name="Nicht-Häm-Eisen")
 t.text(120, 224, "Fe(II) im aktiven Zentrum", size=11, anchor="middle", gewicht=700, farbe=W)
 
-bh4 = mech.Molekuel("CC(O)C(O)C1CNC2=C(N1)C(=O)NC(N)=N2", 380, 168, name="BH4")
-t.mole.append(bh4)
+bh4 = t.mol("CC(O)C(O)C1CNC2=C(N1)C(=O)NC(N)=N2", 380, 168, kern=PTERIN, name="BH4")
 t.unterschrift(bh4, "Tetrahydrobiopterin (als Arzneistoff Sapropterin)", abstand=30)
 
 t.reaktionspfeil(520, 168, 594)
@@ -58,9 +84,8 @@ t.zone(300, "B · DER NIH-SHIFT: DAS WASSERSTOFFATOM WIRD GESCHOBEN, NICHT ENTFE
 t.text(20, 330, "Das Ferryl greift den aromatischen Ring elektrophil an. Dabei entsteht ein "
                 "kationisches σ-Addukt, in dem die Aromatizität kurz aufgehoben ist.", size=12.5)
 
-arom = mech.Molekuel("*c1ccccc1", 130, 452, labels={0: "R"}, wasserstoff=[4],
-                     zeige={0: "links"}, name="Aromat")
-t.mole.append(arom)
+arom = t.mol("*c1ccccc1", 130, 452, labels={0: "R"}, wasserstoff=[4],
+             kern=AREN, name="Aromat")
 ha = arom.h_index[4]
 t.unterschrift(arom, "der Aromat: das markierte H sitzt dort,", "wo die OH-Gruppe eintreten wird",
                abstand=30)
@@ -73,11 +98,19 @@ t.text(267, 476, "greift an", size=10, anchor="middle", farbe=G)
 # der sich der Hydridpfeil lesen laesst: das H wandert an ein Kation, nicht an einen
 # neutralen Kohlenstoff. Stuende das Kation in para-Stellung, wuerde das Zielatom des
 # Pfeils fuenfbindig.
-sigma = mech.Molekuel("OC1[CH+]C=C(*)C=C1", 420, 452, labels={5: "R"}, wasserstoff=[1],
-                      zeige={1: "links", 5: "rechts"}, name="σ-Addukt")
-t.mole.append(sigma)
+#
+# Der Ring ist bewusst andersherum geschrieben als der Weg von C1 aus laeuft:
+# derselbe Stoff, nur die Umlaufrichtung des SMILES gedreht. Am sp3-Kohlenstoff
+# setzt RDKit die vier Substituenten in fester Reihenfolge, und nur in dieser
+# Schreibweise landet das wandernde H unmittelbar neben dem Kation. Andernfalls
+# steht die OH-Gruppe zwischen beiden, und der Pfeil muesste ueber ihre
+# Beschriftung hinweg.
+sigma = t.mol("OC1C=CC(*)=C[CH+]1", 420, 452, labels={5: "R"}, wasserstoff=[1],
+              kern=AREN, name="σ-Addukt")
 hs = sigma.h_index[1]
-t.pfeil((sigma, 1, hs), (sigma, 2), bogen=1.25, seite=-1, farbe=W)
+# Das Elektronenpaar der C-H-Bindung geht mitsamt dem Kern an das Nachbaratom:
+# ein Hydridschub, kein Protonenabgang.
+t.schub(Bindung(sigma, 1, hs), Atom(sigma, 7))
 t.unterschrift(sigma, "das kationische σ-Addukt: das H wandert an den",
                "benachbarten Kationenkohlenstoff, statt abzugehen", abstand=30, farbe=W,
                gewicht=700)
@@ -85,9 +118,7 @@ t.unterschrift(sigma, "das kationische σ-Addukt: das H wandert an den",
 t.reaktionspfeil(534, 452, 612)
 t.text(573, 440, "Tautomerie", size=10.5, anchor="middle", gewicht=700, farbe=G)
 
-phen = mech.Molekuel("Oc1ccc(*)cc1", 720, 452, labels={5: "R"}, zeige={5: "rechts"},
-                     name="Phenol")
-t.mole.append(phen)
+phen = t.mol("Oc1ccc(*)cc1", 720, 452, labels={5: "R"}, kern=AREN, name="Phenol")
 t.unterschrift(phen, "das Phenol, Aromatizität wiederhergestellt", abstand=30)
 
 t.kasten(820, 386, 160, 152, fill="var(--warn-bg)", stroke=W)
@@ -110,9 +141,13 @@ t.text(20, 626, "Anders als das Häm bleibt das Pterin nicht unverändert: Es wi
 # Die drei Pterine der Zone unterscheiden sich wirklich, sonst waere der Zyklus
 # stofflich leer: C9H15N5O4 (Carbinolamin, ein O mehr), C9H13N5O3 (q-BH2, zwei H
 # weniger), C9H15N5O3 (BH4).
-bh4b = mech.Molekuel("CC(O)C(O)C1CN=C2N=C(N)NC(=O)C2(O)N1", 150, 750,
-                     name="4a-Hydroxy-BH4")
-t.mole.append(bh4b)
+# Das Wasserstoffatom am N5 steht als eigenes Atom da. Zwei Gruende: Als
+# Sammelzeichen "N" mit angehaengtem H stiess es an die OH-Gruppe des C4a - im
+# fertigen Bild las sich das als "OHH". Und die PCD nimmt genau dieses H
+# zusammen mit dem OH als Wasser weg; wer beide sieht, sieht auch, woraus das
+# abgespaltene Wasser besteht.
+bh4b = t.mol("CC(O)C(O)C1CN=C2N=C(N)NC(=O)C2(O)N1", 150, 750,
+             kern=PTERIN, wasserstoff=[17], name="4a-Hydroxy-BH4")
 t.unterschrift(bh4b, "4a-Hydroxy-BH&#8324;, das Carbinolamin:",
                "OH am sp&#179;-C4a, ein O mehr als BH&#8324;", abstand=30, farbe=G)
 
@@ -120,8 +155,8 @@ t.reaktionspfeil(290, 750, 364)
 t.text(327, 738, "PCD", size=11, anchor="middle", gewicht=700, farbe=E, mono=True)
 t.text(327, 772, "&#8722; H&#8322;O", size=10, anchor="middle", farbe=G)
 
-qbh2 = mech.Molekuel("CC(O)C(O)C1CN=C2N=C(N)NC(=O)C2=N1", 500, 750, name="q-BH2")
-t.mole.append(qbh2)
+qbh2 = t.mol("CC(O)C(O)C1CN=C2N=C(N)NC(=O)C2=N1", 500, 750, kern=PTERIN,
+             name="q-BH2")
 t.unterschrift(qbh2, "q-Dihydrobiopterin: chinoid, mit C4a=N5", "und zwei H weniger als BH&#8324;",
                abstand=30, farbe=G)
 
@@ -130,8 +165,8 @@ t.text(677, 738, "DHPR", size=11, anchor="middle", gewicht=700, farbe=E, mono=Tr
 t.text(677, 772, "+ NADH + H&#8314;", size=10, anchor="middle", gewicht=700, farbe=C)
 t.text(677, 786, "&#8722; NAD&#8314;", size=10, anchor="middle", farbe=G)
 
-bh4c = mech.Molekuel("CC(O)C(O)C1CNC2=C(N1)C(=O)NC(N)=N2", 850, 750, name="BH4 zurueck")
-t.mole.append(bh4c)
+bh4c = t.mol("CC(O)C(O)C1CNC2=C(N1)C(=O)NC(N)=N2", 850, 750, kern=PTERIN,
+             name="BH4 zurueck")
 t.unterschrift(bh4c, "BH&#8324;, wieder einsatzbereit", abstand=30, farbe=E)
 
 # ===================================================== ZONE D · Klinik

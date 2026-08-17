@@ -5,13 +5,28 @@ M-14 · NO-Synthase, gebaut mit mech.py.
 Die letzte der siebzehn Tafeln. Zone A ist bewusst ein Schema und keine
 Strukturzeichnung: Es geht um die Anordnung zweier Untereinheiten, nicht um
 Bindungen. Zone B dagegen zeigt die drei Substratstufen als echte Strukturen.
+
+Zwei Dinge kommen aus der neuen Pfeilsprache:
+
+  - Die drei Substratstufen der Zone B haengen an einem tafeleigenen Leitgeruest
+    (mech_kerne.eigener). Sie standen vorher nur zufaellig gleich, weil RDKit
+    dreimal fast dasselbe Molekuel einnordete; jetzt steht das Rueckgrat in allen
+    drei Bildern fest, und zwar so, dass die Guanidingruppe - die Stelle, an der
+    sich von Bild zu Bild etwas aendert - nach oben rechts zeigt, also in die
+    Leserichtung.
+  - Der Fischhaken der Zone C ist ueber schub(Paar(...), ..., elektronen=1)
+    angemeldet. Das Punktpaar am N5 zeichnet der Solver selbst, ebenso Bauchseite,
+    Oeffnungswinkel und Ankerlage; geprueft wird gegen mech_regeln.py.
 """
+import math
 import os
 import sys
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 import mech
+import mech_kerne
+from mech import Paar
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -49,10 +64,37 @@ def monomer(y, beschriftung):
 monomer(112, "Monomer A")
 monomer(216, "Monomer B")
 
-t.stuecke.append((1, "<path d='M 340 156 Q 411 186 482 216' fill='none' stroke='var(--warn)' "
-                     "stroke-width='2' marker-end='url(#rxn)'/>"))
-t.stuecke.append((1, "<path d='M 482 156 Q 411 186 340 216' fill='none' stroke='var(--warn)' "
-                     "stroke-width='2' stroke-dasharray='5 3' marker-end='url(#rxn)'/>"))
+def kreuzpfeil(x0, y0, x1, y1, gestrichelt=False):
+    """Ein Elektronenweg von einer Reduktase zur Oxygenase des anderen Monomers.
+
+    Der Kopf wird selbst gezeichnet und nicht ueber marker-end='#rxn' geholt.
+    Jener Marker fuellt sich mit currentColor, und currentColor erbt ein Marker
+    aus seinem eigenen Elternbaum, nicht aus dem Pfad, der ihn aufruft: der
+    rote Schaft bekam dadurch eine schwarze Spitze. Die Masse sind die des
+    Markers - 14 px lang, 14 px breit, die Spitze 1,4 px hinter dem Linienende.
+    """
+    lx, ly = x1 - x0, y1 - y0
+    laenge = math.hypot(lx, ly)
+    ux, uy = lx / laenge, ly / laenge
+    px, py = -uy, ux
+    ecken = [(x1 + 1.4 * ux, y1 + 1.4 * uy),
+             (x1 - 12.6 * ux + 7.0 * px, y1 - 12.6 * uy + 7.0 * py),
+             (x1 - 12.6 * ux - 7.0 * px, y1 - 12.6 * uy - 7.0 * py)]
+    t.stuecke.append((1, "<line x1='%.1f' y1='%.1f' x2='%.1f' y2='%.1f' "
+                         "stroke='var(--warn)' stroke-width='2'%s/>"
+                      % (x0, y0, x1, y1,
+                         " stroke-dasharray='5 3'" if gestrichelt else "")))
+    t.stuecke.append((1, "<polygon points='%s' fill='var(--warn)'/>"
+                      % " ".join("%.1f,%.1f" % e for e in ecken)))
+
+
+# Beide Pfeile laufen von einer Reduktase zur Oxygenase des anderen Monomers -
+# das ist die Aussage der Zone und des Kastens daneben. Der gestrichelte lief
+# bisher andersherum, von der Oxygenase des Monomers A zur Reduktase des
+# Monomers B, und behauptete damit das Gegenteil. Getauscht sind nur Anfang und
+# Ende; es ist dieselbe Diagonale wie zuvor.
+kreuzpfeil(340, 156, 482, 216)
+kreuzpfeil(340, 216, 482, 156, gestrichelt=True)
 
 t.kasten(680, 112, 300, 148, fill="var(--warn-bg)", stroke=W)
 t.text(698, 134, "DIE ELEKTRONEN WECHSELN DIE SEITE", size=11, gewicht=700, farbe=W)
@@ -79,8 +121,21 @@ t.text(20, 434, "Der erste Schritt ist eine gewöhnliche Monooxygenierung wie be
 t.text(20, 453, "Beispiel in der Biochemie. Ein voller Umsatz verbraucht zwei Sauerstoffmoleküle "
                 "und 1,5 NADPH und setzt je Schritt ein Wasser frei.", size=12.5)
 
-arg = mech.Molekuel("N[C@@H](CCCNC(N)=N)C(=O)O", 150, 566, stereo=True, name="L-Arginin")
-t.mole.append(arg)
+# Ein Leitgeruest fuer alle drei Stufen: Aminosaeure-Rueckgrat, Seitenkette und
+# Guanidinkohlenstoff. Das Muster laesst offen, was am Guanidin haengt - in den
+# drei Stufen ist das =NH, =N-OH und =O -, und faengt die zweite Stelle mit
+# [#7,#8] ab. Die Verzweigung ist ueber [#7;D1] festgenagelt, sonst koennte das
+# Muster bei NOHA die beiden Stickstoffe vertauschen und das N-OH von Bild zu
+# Bild die Seite wechseln. Leitatom ist der Guanidinkohlenstoff bei 50 Grad, also
+# oben rechts; das Folgeatom ist der Carboxylkohlenstoff und legt damit fest,
+# dass die Aminosaeure unten links steht und die Kette nach oben rechts zieht.
+ARG = mech_kerne.eigener(
+    "arginin-rueckgrat", "N[C@@H](CCCNC(N)=N)C(=O)O",
+    muster="[#7]~[#6](~[#6]~[#6]~[#6]~[#7]~[#6](~[#7;D1])~[#7,#8])~[#6](~[#8])~[#8]",
+    ring=[0, 1, 2, 3, 4, 5, 6, 9], leit=6, folge=9, winkel=50.0)
+
+arg = t.mol("N[C@@H](CCCNC(N)=N)C(=O)O", 150, 566, stereo=True, kern=ARG,
+            name="L-Arginin")
 t.unterschrift(arg, "L-Arginin: die Guanidingruppe trägt", "den Stickstoff, aus dem NO wird",
                abstand=30)
 
@@ -90,8 +145,15 @@ t.text(337, 588, "&#8722; H&#8322;O, NADP&#8314;", size=10, anchor="middle", far
 t.text(337, 604, "gewöhnliche", size=10, anchor="middle", farbe=G)
 t.text(337, 618, "Monooxygenierung", size=10, anchor="middle", farbe=G)
 
-noha = mech.Molekuel("N[C@@H](CCCNC(N)=NO)C(=O)O", 540, 566, stereo=True, name="NOHA")
-t.mole.append(noha)
+# t.mol setzt die Mitte des *Kastens* auf den genannten Punkt. NOHA traegt als
+# einzige Stufe das zusaetzliche O; ihr Kasten ist dadurch groesser, und das
+# Ruecken-an-die-Kastenmitte schiebt das Rueckgrat um 5,4 px nach links und
+# 3,5 px nach unten gegen die beiden Nachbarn. Genau das soll das Leitgeruest
+# verhindern, also wird der Ankerpunkt um denselben Betrag zurueckgenommen;
+# danach liegen alle drei Alpha-Kohlenstoffe und alle drei Guanidingruppen
+# gleich hoch, und auch die drei Unterschriften stehen auf einer Linie.
+noha = t.mol("N[C@@H](CCCNC(N)=NO)C(=O)O", 545.4, 562.5, stereo=True, kern=ARG,
+             name="NOHA")
 t.unterschrift(noha, "N<tspan baseline-shift='super' font-size='8'>ω</tspan>-Hydroxy-L-arginin",
                abstand=30, farbe=W)
 
@@ -101,8 +163,8 @@ t.text(717, 588, "&#8722; H&#8322;O, ½ NADP&#8314;", size=10, anchor="middle", 
 t.text(717, 604, "Drei-Elektronen-", size=10, anchor="middle", farbe=W, gewicht=700)
 t.text(717, 618, "Oxidation", size=10, anchor="middle", farbe=W, gewicht=700)
 
-cit = mech.Molekuel("N[C@@H](CCCNC(N)=O)C(=O)O", 890, 566, stereo=True, name="L-Citrullin")
-t.mole.append(cit)
+cit = t.mol("N[C@@H](CCCNC(N)=O)C(=O)O", 890, 566, stereo=True, kern=ARG,
+            name="L-Citrullin")
 t.unterschrift(cit, "L-Citrullin, daneben entsteht", "das freigesetzte NO", abstand=30, farbe=E)
 
 # ===================================================== ZONE C · BH4
@@ -111,27 +173,37 @@ t.text(20, 746, "Derselbe Cofaktor wie in Tafel M-10, aber mit einer anderen Auf
                 "erklärt, warum ein BH&#8324;-Mangel zwei ganz verschiedene Bilder erzeugen "
                 "kann.", size=12.5)
 
-zh = t.zentrum(140, 852, "Fe(II)", axial=["O", "O"], unten="S&#8722;Cys", schritt=46,
+# Haem und Pterin stehen naeher beieinander als frueher: der Fischhaken ist ein
+# Pfeil zwischen zwei Teilchen, und dafuer nennen die Buecher 1,5 bis 4 Bindungs-
+# laengen. Der alte Pfeil lief ueber 180 px, also ueber achteinhalb Bindungs-
+# laengen; jetzt sind es knapp vier. Die axiale Kette ist aus demselben Grund
+# kuerzer (38 statt 46 px je Schritt): das setzt den distalen Sauerstoff, an dem
+# der Pfeil endet, um 16 px tiefer und damit naeher an das Pterin.
+zh = t.zentrum(185, 850, "Fe(II)", axial=["O", "O"], unten="S&#8722;Cys", schritt=38,
                name="Oxy-Komplex")
-t.text(140, 908, "Fe(II)&#8722;O&#8322;-Komplex", size=11, anchor="middle", gewicht=700, farbe=W)
-t.text(140, 924, "wartet auf ein Elektron", size=10.5, anchor="middle", farbe=G)
+t.text(185, 900, "Fe(II)&#8722;O&#8322;-Komplex", size=11, anchor="middle", gewicht=700, farbe=W)
+t.text(185, 916, "wartet auf ein Elektron", size=10.5, anchor="middle", farbe=G)
 
 # zeige={10:"links"} dreht das Pterin so, dass das N5 zum Haem hin zeigt. In der
 # unveraenderten Lage laege die Dihydroxypropyl-Seitenkette genau im Weg des
 # Fischhakens, und der Pfeil liefe durch eine OH-Gruppe.
-bh4 = mech.Molekuel("CC(O)C(O)C1CNC2=C(N1)C(=O)NC(N)=N2", 380, 830,
-                    zeige={10: "links"}, name="BH4")
-t.mole.append(bh4)
-# Das Elektron kommt vom N5 des Tetrahydropterins (Atomindex 10: der Ringstickstoff
-# zwischen C4a und C6), nicht von der CH2-Gruppe C7. Zurueck bleibt das am N5
+bh4 = t.mol("CC(O)C(O)C1CNC2=C(N1)C(=O)NC(N)=N2", 290, 828,
+            zeige={10: "links"}, name="BH4")
+# Das Elektron kommt vom freien Paar am N5 des Tetrahydropterins (Atomindex 10:
+# der Ringstickstoff zwischen C4a und C6), nicht von der CH2-Gruppe C7. Der halbe
+# Kopf sagt, dass nur eines der beiden Elektronen geht; zurueck bleibt das am N5
 # lokalisierte Radikalkation BH4-Punkt-plus. Ein Methylenkohlenstoff haette weder
-# ein freies Paar noch ein Einzelelektron abzugeben.
-lp_b = t.elektronenpaar(bh4, 10, 180, abstand=21)
+# ein freies Paar noch ein Einzelelektron abzugeben. Das Punktpaar zeichnet der
+# Solver selbst, sobald Paar(...) die Quelle ist.
 t.atomnummer(bh4, 10, "N5", winkel=237, abstand=25, size=9.5, farbe=R, gewicht=700)
-t.pfeil(lp_b, zh.ax(1, winkel=20, abstand=36), bogen=0.18, seite=1, typ="fischhaken",
-        farbe=R)
+# Ziel ist der distale Sauerstoff: dort sitzt die Ladung, sobald aus dem
+# Fe(II)-O2-Komplex das Ferri-Peroxid geworden ist. ax(1) ohne Winkel brachte
+# seine Beschriftungsbreite als Mindestabstand mit, und die Spitze blieb dadurch
+# 19 px vor dem O stehen - zu weit, um noch auf es zu zeigen. Mit abstand=0 ist
+# der Anker das O selbst, und der Solver setzt die Spitze knapp davor.
+t.schub(Paar(bh4, 10), zh.ax(1, winkel=0, abstand=0), elektronen=1)
 t.unterschrift(bh4, "BH&#8324; gibt ein einzelnes Elektron vom N5 ab",
-               "und wird sofort wieder reduziert", abstand=26)
+               "und wird sofort wieder reduziert", abstand=38)
 
 t.kasten(560, 784, 420, 138, fill="var(--cofaktor-bg)", stroke=C)
 t.text(578, 806, "ZWEI ROLLEN FÜR DENSELBEN COFAKTOR", size=11, gewicht=700, farbe=C)

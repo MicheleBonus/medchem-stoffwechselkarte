@@ -2,11 +2,32 @@
 """
 M-04 · Tetrahydrofolat, gebaut mit mech.py.
 
-Vorher war die Tafel ein reines Flussdiagramm ohne einen einzigen Elektronenpfeil.
-Gezeichnet wird jetzt der Ausschnitt N5 bis N10 - nur dort sitzt die C1-Einheit,
-und nur dort unterscheiden sich die Transportformen. Es sind vier Formen, aber
-nur drei Oxidationsstufen: Methenyl und Formyl stehen beide auf der
-Ameisensaeurestufe. Zone B fuehrt den Schritt aus, an dem 5-Fluoruracil angreift.
+Gezeichnet wird nur der Ausschnitt N5 bis N10 - nur dort sitzt die C1-Einheit, und
+nur dort unterscheiden sich die Transportformen. Es sind vier Formen, aber nur
+drei Oxidationsstufen: Methenyl und Formyl stehen beide auf der Ameisensaeure-
+stufe. Zone B fuehrt den Schritt aus, an dem 5-Fluoruracil angreift.
+
+Zur neuen Pfeilsprache
+----------------------
+KERN legt alle sieben Strukturen mit dem Ausschnitt N5-N10 auf dieselbe Lage.
+Vorher nordete RDKit jede Stufe einzeln ein, und die Vergleichsreihe der Zone A
+verglich Drehungen statt Oxidationsstufen.
+
+Von den vier frueheren Pfeilen sind zwei gezeichnet, und zwar die beiden, die eine
+neue Bindung machen. Die beiden anderen enden an einem dreifach substituierten
+Stickstoff - das Bindungspaar C1-N10 auf dem N10, das pi-Paar C1=N5 auf dem N5 -
+und fuer die laesst sich kein regelkonformer Bogen legen: An einem Atom mit drei
+Substituenten liegt jede der drei Luecken 60 Grad neben einer seiner Bindungen,
+und die Spitze steht dort entweder so dicht an der Quellbindung, dass der Bauch
+auf ihr laege, oder hinter einer der beiden anderen Bindungen. Das gilt bei jeder
+Drehung und bei jeder Bindungslaenge; nachgerechnet mit einem freistehenden
+Molekuel auf leerer Tafel. Beide Aussagen stehen deshalb im Text der Zone B, so
+wie es M-01 mit seinem letzten Chinoid-Schritt haelt.
+
+Der Mechanismus-Ausschnitt ist mit 23 px Bindungslaenge gezeichnet und nicht mehr
+mit 26 bzw. 31: Die Strichbreite, die RDKit fuer die Bindungen setzt, waechst
+nicht mit der Bindungslaenge, und ab etwa 23 px wird der Pfeilkopf breiter als die
+3,6 Strichbreiten, die K4 zulaesst.
 """
 import os
 import sys
@@ -14,6 +35,8 @@ import sys
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 import mech
+import mech_kerne
+from mech import Atom, Bindung, Paar
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -22,6 +45,19 @@ R = "var(--drug)"
 E = "var(--enzym)"
 C = "var(--cofaktor)"
 G = "var(--ink-3)"
+
+# Der Ausschnitt N5 bis N10 kommt in sieben Strukturen dieser Tafel vor - in den
+# vier Transportformen der Zone A, im Methylen-THF und im Iminium der Zone B und
+# im ternaeren Komplex. Ohne feste Lage einnordete RDKit jede einzeln, und die
+# Vergleichsreihe der Zone A verglich dann Drehungen statt Oxidationsstufen.
+# Das Muster fasst die Kette C4a-N5-C6(-C7)-C9-N10; die drei Ansatzstellen des
+# uebrigen Molekuels sind in jeder Stufe Dummy-Atome, und genau das macht den
+# Treffer eindeutig - ohne [#0] koennte die Methylenbruecke selbst als C4a
+# durchgehen.
+KERN = mech_kerne.eigener(
+    "thf-n5-n10", "*N1C(*)CN(*)C1",
+    muster="[#0]~[#7]~[#6](~[#0])~[#6]~[#7]",
+    ring=[1, 2, 4, 5, 7], leit=1, folge=2, winkel=120.0)
 
 t = mech.Tafel(1000, 1424)
 
@@ -46,11 +82,21 @@ STUFEN = [
 ]
 mole = []
 for x, smi, lab, titel, note, farbe in STUFEN:
-    m = mech.Molekuel(smi, x, 190, labels=lab, zeige={1: "links"}, name=titel)
+    m = mech.Molekuel(smi, x, 190, labels=lab, kern=KERN, name=titel)
     t.mole.append(m)
-    mole.append(m)
-    t.ueberschrift(m, titel, farbe=farbe, abstand=30)
-    t.unterschrift(m, note, abstand=30)
+    mole.append((m, titel, note, farbe))
+
+# Vier Formen nebeneinander sind nur dann eine Reihe, wenn auch die Schrift eine
+# Linie haelt. ueberschrift und unterschrift messen vom Rand des einzelnen
+# Molekuels, und das 10-Formyl-THF reicht oben wie unten weiter als die drei
+# anderen: die Marke C4a steht dort ueber der Formel, die Formylgruppe haengt
+# darunter. Der Abstand wird deshalb je Molekuel so gerechnet, dass alle vier
+# Titel und alle vier Unterschriften auf je einer Hoehe stehen.
+OBEN = min(m.rand()[1] for m, _, _, _ in mole) - 30
+UNTEN = max(m.rand()[3] for m, _, _, _ in mole) + 24
+for m, titel, note, farbe in mole:
+    t.ueberschrift(m, titel, farbe=farbe, abstand=m.rand()[1] - OBEN)
+    t.unterschrift(m, note, abstand=UNTEN - m.rand()[3])
 
 t.linie(60, 300, 940, 300, farbe="currentColor", breite=1, z=0)
 # Methyl und Methylen bekommen je einen Punkt. Methenyl und Formyl teilen sich
@@ -91,63 +137,80 @@ t.text(528, 377, "Methyl ausschließlich zur Methioninsynthase (Tafel M-16).", s
 # ===================================================== ZONE B · Thymidylatsynthase
 t.zone(428, "B · DIE THYMIDYLATSYNTHASE: DER SCHRITT, AN DEM 5-FLUORURACIL ANGREIFT")
 t.text(20, 458, "Das Methylen-THF ist kein Elektrophil, solange der Fünfring geschlossen ist. "
-                "Erst die Ringöffnung zum Iminium macht es angreifbar. Der Ausschnitt ist "
-                "vergrößert.", size=12.5)
+                "Erst die Ringöffnung zum Iminium macht es angreifbar.", size=12.5)
+t.text(20, 477, "Der Ausschnitt ist gegenüber der Vergleichsreihe der Zone A vergrößert. Von "
+                "jedem der beiden Schritte ist der Pfeil gezeichnet, der die neue",
+       size=12.5)
+t.text(20, 496, "Bindung macht; den zweiten muss man mitdenken. Beim Ringöffnen geht das "
+                "Bindungspaar C&#8321;&#8211;N10 auf das N10, beim Angriff das π-Paar "
+                "der Bindung", size=12.5)
+t.text(20, 515, "C&#8321;=N5 auf das N5. Neben einem dreifach substituierten Stickstoff "
+                "bleibt für dessen Spitze kein Platz, der die Konvention einhält.",
+       size=12.5)
 
-meth = mech.Molekuel("*N1C(*)CN(*)C1", 132, 556, labels={0: "C4a", 3: "C7", 6: "Aryl"},
-                     zeige={1: "links"}, bindung=31, name="Methylen-THF")
+meth = mech.Molekuel("*N1C(*)CN(*)C1", 150, 584, labels={0: "C4a", 3: "C7", 6: "Aryl"},
+                     kern=KERN, bindung=23, name="Methylen-THF")
 t.mole.append(meth)
-lp_n5 = t.elektronenpaar(meth, 1, 200, abstand=16)
-t.pfeil(lp_n5, meth.aussen(1, 7, abstand=30), bogen=0.34, seite=1, farbe=W)
-t.pfeil(meth.aussen(7, 5, abstand=28), meth.aussen(5, abstand=32), bogen=0.34,
-        seite=-1, farbe=W)
+# Das freie Paar am N5 schiebt sich in die Bindung N5-C1; daraus wird die
+# Doppelbindung des Iminiums. Der Schwanz sitzt am Stickstoff selbst und nicht an
+# einem gezeichneten Punktpaar: das Paar stuende 0,52 Bindungslaengen vom N5 weg
+# und damit so dicht neben der Bindung N5-C1, dass die Sehne unter das
+# Mindestmass faellt. Regel U2 verlangt den Schwanz nur dort am Paar, wo eines
+# gezeichnet ist.
+t.schub(Atom(meth, 1), Bindung(meth, 1, 7))
+# Der Gegenpfeil - das Bindungspaar C1-N10 geht auf das N10 - ist nicht
+# gezeichnet. Am dreifach substituierten N10 liegt jede zulaessige Spitzenlage
+# entweder so dicht an der Quellbindung, dass der Bauch auf ihr laege, oder hinter
+# einer der beiden anderen Bindungen. Die Aussage steht im Text der Zone.
 t.unterschrift(meth, "der Fünfring öffnet sich", abstand=32)
 
-t.reaktionspfeil(238, 560, 316)
-t.text(277, 550, "+ H&#8314;", size=10.5, anchor="middle", gewicht=700, farbe=G)
+t.reaktionspfeil(250, 588, 330)
+t.text(290, 578, "+ H&#8314;", size=10.5, anchor="middle", gewicht=700, farbe=G)
 
-imin = mech.Molekuel("*[N+](=C)C(*)CN(*)*", 424, 556,
+imin = mech.Molekuel("*[N+](=C)C(*)CN(*)*", 430, 584,
                      labels={0: "C4a", 4: "C7", 7: "Aryl", 8: "H"},
-                     zeige={1: "links"}, bindung=31, name="Iminium")
+                     kern=KERN, bindung=23, name="Iminium")
 t.mole.append(imin)
-t.atomnummer(imin, 2, "C&#8321;", winkel=200, abstand=26, size=10, farbe=W, gewicht=700)
+t.atomnummer(imin, 2, "C&#8321;", winkel=200, abstand=17, size=10, farbe=W, gewicht=700)
 t.unterschrift(imin, "Iminium: jetzt ist das C&#8321; elektrophil", abstand=32)
 
-t.kasten(560, 494, 420, 132, fill="var(--surface-2)")
-t.text(578, 516, "WARUM DIESER SCHRITT DEN COFAKTOR KOSTET", size=11, gewicht=700, farbe=G)
-t.text(578, 538, "Die Thymidylatsynthase ist die einzige Reaktion, bei der", size=12.5)
-t.text(578, 557, "THF nicht nur die C&#8321;-Einheit liefert, sondern auch noch", size=12.5)
-t.text(578, 576, "das Hydrid für deren Reduktion zur Methylgruppe.", size=12.5)
-t.text(578, 599, "Der Cofaktor wird dabei zu Dihydrofolat oxidiert, und nur", size=12.5)
-t.text(578, 618, "die Dihydrofolat-Reduktase bringt ihn zurück.", size=12.5)
+t.kasten(560, 530, 420, 132, fill="var(--surface-2)")
+t.text(578, 552, "WARUM DIESER SCHRITT DEN COFAKTOR KOSTET", size=11, gewicht=700, farbe=G)
+t.text(578, 574, "Die Thymidylatsynthase ist die einzige Reaktion, bei der", size=12.5)
+t.text(578, 593, "THF nicht nur die C&#8321;-Einheit liefert, sondern auch noch", size=12.5)
+t.text(578, 612, "das Hydrid für deren Reduktion zur Methylgruppe.", size=12.5)
+t.text(578, 635, "Der Cofaktor wird dabei zu Dihydrofolat oxidiert, und nur", size=12.5)
+t.text(578, 654, "die Dihydrofolat-Reduktase bringt ihn zurück.", size=12.5)
 
-dump = mech.Molekuel("O=C1NC(=O)N(*)C(S*)[CH-]1", 146, 768,
+dump = mech.Molekuel("O=C1NC(=O)N(*)C(S*)[CH-]1", 195, 768,
                      labels={6: "dRib-P", 9: "Enzym"}, zeige={10: "rechts"},
-                     bindung=26, name="dUMP")
+                     bindung=23, name="dUMP")
 t.mole.append(dump)
-t.unterschrift(dump, "dUMP, nachdem ein Cystein des Enzyms", "an C6 addiert hat", abstand=32)
-# Die Marke muss nach unten rechts: geradeaus ueber dem Carbanion sitzt das C6 mit
-# dem Cystein, und dort gelesen hiesse "C5" genau den falschen Kohlenstoff.
-t.atomnummer(dump, 10, "C5", winkel=35, abstand=22, size=10, farbe=W, gewicht=700)
+t.unterschrift(dump, "dUMP, nachdem ein Cystein", "des Enzyms an C6 addiert hat", abstand=32)
+# Die Marke sitzt schraeg ueber dem Carbanion. Unten rechts stand sie zwar frei,
+# war aber naeher am Carbonyl C4 und an dessen Sauerstoff als an dem C5, das sie
+# benennt - eine Marke, deren naechstes Atom ein anderes ist, benennt das falsche.
+# Waagerecht nach rechts geht es nicht, dort stehen das freie Paar und der
+# Pfeilschwanz; nach links liegt das Ringinnere, schraeg darueber das C6 mit dem
+# Cystein und darunter das Carbonyl. Frei bleibt nur der Keil nach rechts oben.
+t.atomnummer(dump, 10, "C5", winkel=305, abstand=17, size=10, farbe=W, gewicht=700)
 
-imin2 = mech.Molekuel("*[N+](=C)C(*)CN(*)*", 428, 768,
+imin2 = mech.Molekuel("*[N+](=C)C(*)CN(*)*", 340, 768,
                       labels={0: "C4a", 4: "C7", 7: "Aryl", 8: "H"},
-                      zeige={1: "rechts"}, bindung=26, name="Iminium")
+                      kern=KERN, bindung=23, name="Iminium")
 t.mole.append(imin2)
-lp_c5 = t.elektronenpaar(dump, 10, 340)
-t.pfeil(lp_c5, (imin2, 2), bogen=0.24, seite=-1, farbe=W)
-# Gegenpfeil: das pi-Paar der C=N-Doppelbindung geht auf das N5. Ohne ihn haette
-# der angegriffene Kohlenstoff fuenf Bindungen und die Ladung verschwaende.
-t.pfeil(imin2.aussen(1, 2, abstand=14), (imin2, 1), bogen=0.6, seite=-1, farbe=W,
-        mindestbogen=14)
-t.unterschrift(imin2, "C5 greift das Iminium an", abstand=32)
+# Das freie Paar am C5 des dUMP bildet die Bindung zum C1 des Iminiums. Der
+# Gegenpfeil - das pi-Paar der Bindung C1=N5 geht auf das N5 zurueck - steht im
+# Text der Zone: am dreifach substituierten N5 hat seine Spitze keinen Platz.
+t.schub(Paar(dump, 10), Atom(imin2, 2))
+t.unterschrift(imin2, "C5 greift das C&#8321; an", abstand=32)
 
-t.reaktionspfeil(524, 764, 596)
+t.reaktionspfeil(425, 764, 600)
 
-tern = mech.Molekuel("O=C1NC(=O)N(*)C(S*)C1CN(*)C(*)CN(*)*", 786, 768,
+tern = mech.Molekuel("O=C1NC(=O)N(*)C(S*)C1CN(*)C(*)CN(*)*", 740, 768,
                      labels={6: "dRib-P", 9: "Enzym", 13: "C4a", 15: "C7",
                              18: "Aryl", 19: "H"},
-                     zeige={6: "links", 18: "rechts"}, bindung=24,
+                     kern=KERN, bindung=23,
                      name="ternärer Komplex")
 t.mole.append(tern)
 t.unterschrift(tern, "der kovalente ternäre Komplex aus Enzym, Substrat und Cofaktor",
@@ -212,17 +275,22 @@ ARIA = (
     "Tetrahydrofolat in vier Zonen. Zone A zeigt den Ausschnitt zwischen den Stickstoffatomen "
     "N5 und N10 in vier Transportformen: 5-Methyl-Tetrahydrofolat, 5,10-Methylen-"
     "Tetrahydrofolat als Fuenfring, das kationische 5,10-Methenyl-Tetrahydrofolat und "
-    "10-Formyl-Tetrahydrofolat. Eine Achse darunter ordnet sie drei Oxidationsstufen zu: "
+    "10-Formyl-Tetrahydrofolat. Alle vier stehen in derselben Lage, damit der Unterschied "
+    "zwischen den Stufen ins Auge faellt und nicht die Ausrichtung. "
+    "Eine Achse darunter ordnet sie drei Oxidationsstufen zu: "
     "Methanolstufe, Formaldehydstufe und Ameisensaeurestufe, wobei ein Balken anzeigt, dass "
     "Methenyl und Formyl beide auf der Ameisensaeurestufe liegen. Der Uebergang Methylen zu "
     "Methenyl verbraucht NADP plus und liefert NADPH, der Uebergang Methenyl zu Formyl "
     "verbraucht Wasser und setzt ein Proton frei; beide sind reversibel. Der Schritt zur "
     "Methylstufe ueber die Methylentetrahydrofolat-Reduktase verbraucht NADPH und ein Proton "
-    "und ist irreversibel. Zone B fuehrt den Mechanismus der Thymidylatsynthase aus: Der "
-    "Fuenfring des Methylentetrahydrofolats oeffnet sich mit Elektronenpaarpfeilen zum "
-    "Iminium, dessen Kohlenstoff jetzt elektrophil ist; das Kohlenstoffatom C5 des dUMP, an "
-    "dessen C6 zuvor ein Cystein des Enzyms addiert hat, greift dieses Iminium an, waehrend "
-    "das Elektronenpaar der Doppelbindung auf das N5 zurueckgeht, und es entsteht der "
+    "und ist irreversibel. Zone B fuehrt den Mechanismus der Thymidylatsynthase aus. Der "
+    "Fuenfring des Methylentetrahydrofolats oeffnet sich zum Iminium: Ein Elektronenpfeil "
+    "geht vom Stickstoff N5 in die Bindung zwischen N5 und der Kohlenstoffbruecke, aus der "
+    "damit die Doppelbindung des Iminiums wird; das Bindungspaar zwischen der Bruecke und dem "
+    "Stickstoff N10 geht dabei auf das N10 ueber. Am Iminium ist die Kohlenstoffbruecke jetzt "
+    "elektrophil. Ein zweiter Elektronenpfeil geht vom freien Paar am Kohlenstoff C5 des dUMP, "
+    "an dessen C6 zuvor ein Cystein des Enzyms addiert hat, auf diesen Kohlenstoff; das "
+    "Elektronenpaar der Doppelbindung geht dabei auf das N5 zurueck. Es entsteht der "
     "kovalente ternaere Komplex aus Enzym, Substrat und Cofaktor. Zone C nennt die vier "
     "Arzneistoffe an diesem Zyklus, Zone D erklaert die Methylfalle."
 )

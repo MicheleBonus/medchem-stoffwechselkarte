@@ -5,6 +5,32 @@ M-15 · Vitamin K, gebaut mit mech.py.
 Vorher stand die ganze Tafel als Text da - selbst der Glutamatrest war die
 Zeichenkette "Protein-CH2-CH2-COO". Zone A fuehrt jetzt beide Schritte aus:
 die Deprotonierung durch das Alkoxid und den Angriff des Carbanions auf CO2.
+
+Beide Gerueste dieser Tafel kommen dreimal vor und haengen deshalb an einem
+Leitgeruest (mech_kerne.eigener):
+
+  NAPH  Naphthochinon in Hydrochinon, Epoxid und Chinon. Lehrbuchlage: der
+        Benzoring links, der Chinonring rechts, die beiden Carbonyle oben und
+        unten, das 2-Methyl oben rechts, die Seitenkette R unten rechts.
+  GLU   der Glutamatrest in Ausgangsstoff, Carbanion und Gla. Das Protein
+        liegt links, die Kette laeuft nach rechts, und das γ-C sitzt in der
+        unteren Zacke - der γ-Wasserstoff zeigt dadurch nach unten, dorthin,
+        wo das Alkoxid steht und wo spaeter das CO2 angreift.
+
+Die Elektronenpfeile sind ueber schub() angemeldet; Bauchseite, Oeffnungswinkel
+und Ankerlage sucht der Solver in mech_schub.py, geprueft wird gegen
+mech_regeln.py.
+
+Ein Pfeil des alten Bestandes ist nicht mehr gezeichnet: das Paar der
+C-H-Bindung, das am γ-C zurueckbleibt. Am γ-C haengen drei Bindungen, die den
+Vollkreis in drei Sektoren von je 120 Grad teilen. Der Schwanz eines solchen
+Pfeils sitzt neben der C-H-Bindung, die Spitze hoechstens 0,45 L vom Atom
+entfernt - beide liegen damit im selben Sektor, und die Sehne wird kuerzer als
+die zugelassenen 0,60 L. Der einzige laengere Weg fuehrt ueber eine der beiden
+anderen Bindungen hinweg. Das ist keine Frage der Lage: der Bau bricht bei jeder
+Bindungslaenge von 21 bis 36 px und in jeder Drehung ab. Die Aussage steht
+deshalb im Text der Zone, und das freie Paar ist am Carbanion gezeichnet, wo es
+den naechsten Pfeil traegt.
 """
 import os
 import sys
@@ -12,6 +38,8 @@ import sys
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 import mech
+import mech_kerne
+from mech import Atom, Bindung, Paar
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -20,6 +48,22 @@ R = "var(--drug)"
 E = "var(--enzym)"
 C = "var(--cofaktor)"
 G = "var(--ink-3)"
+
+# Der Chinonring traegt die Lage: C2 (mit dem Methyl) auf 30 Grad, C3 (mit der
+# Seitenkette) 60 Grad dahinter. Damit steht die Ringfusion senkrecht links, und
+# der Benzoring liegt links davon - so, wie das Naphthochinon im Buch steht.
+# Das Muster verlangt den Substituenten an C3 ausdruecklich; ohne ihn traefe es
+# den Ring auch in der Gegenrichtung, und die drei Stufen stuenden gespiegelt.
+NAPH = mech_kerne.eigener(
+    "naphthochinon", "CC1=C(CC)C(=O)c2ccccc2C1=O",
+    muster=("[#6]~[#6]1~[#6](~[#0,#6])~[#6](~[#8])~[#6]2~[#6]~[#6]~[#6]~[#6]"
+            "~[#6]~2~[#6]~1~[#8]"),
+    ring=[1, 2, 5, 7, 12, 13], leit=1, folge=2, winkel=30.0)
+
+GLU = mech_kerne.eigener(
+    "glutamat", "CCCC(=O)[O-]",
+    muster="[#0,#6]~[#6]~[#6]~[#6](~[#8])~[#8]",
+    ring=[0, 1, 2, 3], leit=0, folge=1, winkel=180.0)
 
 t = mech.Tafel(1000, 1260)
 
@@ -31,50 +75,47 @@ t.text(20, 54, "Der γ-Wasserstoff eines Glutamatrests hat einen pK<tspan baseli
 t.text(20, 73, "Kandidaten, dem Serin-Alkoholat mit pK<tspan baseline-shift='sub' "
                "font-size='9'>a</tspan> um 16, fehlen zwölf Zehnerpotenzen. Die nötige "
                "Basenstärke entsteht erst bei der Vitamin-K-Oxygenierung.", size=12.5)
+t.text(20, 92, "Der Pfeil der Base endet am Wasserstoffkern; das Paar der C&#8211;H-Bindung "
+               "bleibt am γ-C zurück und steht unter dem γ-C des Carbanions als freies Paar.",
+       size=12.5)
 
-glu = mech.Molekuel("*CCC(=O)[O-]", 150, 196, labels={0: "Protein"},
-                    wasserstoff=[2], zeige={0: "links"}, name="Glutamatrest")
-t.mole.append(glu)
+glu = t.mol("*CCC(=O)[O-]", 150, 190, labels={0: "Protein"}, wasserstoff=[2],
+            kern=GLU, name="Glutamatrest")
 hg = glu.h_index[2]
-# Die Marke sitzt links unter dem Kohlenstoff: genau unter ihm steht der
-# ausgeschriebene γ-Wasserstoff, an dem der Pfeil der Base endet.
-t.atomnummer(glu, 2, "γ-C", winkel=130, abstand=36, size=10.5, farbe=W, gewicht=700)
-
-# Die Base greift den Wasserstoffkern an, nicht die C-H-Bindung: Der Pfeil endet
-# deshalb am H-Atom selbst. Der Gegenpfeil traegt das Bindungspaar zum Kohlenstoff.
-# RDKit haengt den ausgeschriebenen Wasserstoff unter den Kohlenstoff; das Alkoxid
-# steht deshalb links unter dem Rest und nicht darueber, sonst muesste sein Pfeil
-# quer durch das Geruest greifen.
-alkoxid = t.paar(96, 254, 30, "Alkoxid aus Vitamin K")
-t.text(96, 278, "R&#8722;O&#8315;", size=12.5, anchor="middle", gewicht=700, farbe=C)
-t.text(96, 294, "das Alkoxid aus Zone B", size=10, anchor="middle", farbe=G)
-t.pfeil(alkoxid, (glu, hg), bogen=0.30, seite=1, farbe=W, gap=4)
-t.pfeil((glu, 2, hg), glu.abseits(2, hg), bogen=0.45, seite=-1, farbe=W)
+t.atomnummer(glu, 2, "γ-C", winkel=50, abstand=22, size=10.5, farbe=W, gewicht=700)
 t.ueberschrift(glu, "Glutamatrest im unreifen Gerinnungsfaktor", abstand=26,
                size=10.5, farbe=G, gewicht=None)
 
-t.reaktionspfeil(258, 196, 326)
-t.text(292, 186, "&#8722; H&#8314;", size=10.5, anchor="middle", gewicht=700, farbe=W)
+# Die Base greift den Wasserstoffkern an, nicht die C-H-Bindung: Der Pfeil endet
+# deshalb am H-Atom selbst. Der ausgeschriebene Wasserstoff haengt unter dem γ-C;
+# das Alkoxid steht deshalb links unter dem Rest und nicht darueber, sonst muesste
+# sein Pfeil quer durch das Geruest greifen.
+alkoxid = t.paar(109, 264, 90, "Alkoxid aus Vitamin K")
+t.text(104, 280, "R&#8722;O&#8315;", size=12.5, anchor="middle", gewicht=700, farbe=C)
+t.text(104, 296, "das Alkoxid aus Zone B", size=10, anchor="middle", farbe=G)
+t.schub(alkoxid, Atom(glu, hg))
 
-carb = mech.Molekuel("*C[CH-]C(=O)[O-]", 420, 196, labels={0: "Protein"},
-                     zeige={0: "links"}, name="Carbanion")
-t.mole.append(carb)
-lp_c = t.elektronenpaar(carb, 2, 30)
-t.unterschrift(carb, "das Carbanion: kurzlebig,", "aber stark nucleophil", abstand=30)
+t.reaktionspfeil(258, 190, 326)
+t.text(292, 180, "&#8722; H&#8314;", size=10.5, anchor="middle", gewicht=700, farbe=W)
 
-# CO2 senkrecht stellen: das Nucleophil greift den Kohlenstoff quer zur
-# O=C=O-Achse an, und der Pfeilkopf landet dann nicht auf einem Sauerstoff.
-co2 = mech.Molekuel("O=C=O", 600, 150, zeige={0: "oben"}, name="Kohlendioxid")
-t.mole.append(co2)
-t.pfeil(lp_c, (co2, 1), bogen=0.30, seite=-1, farbe=W, gap=5)
-t.pfeil((co2, 1, 2), co2.abseits(2, 1), bogen=0.45, seite=1, farbe=W)
+carb = t.mol("*C[CH-]C(=O)[O-]", 410, 190, labels={0: "Protein"}, kern=GLU,
+             name="Carbanion")
+t.ueberschrift(carb, "das Carbanion: kurzlebig, aber stark nucleophil", abstand=26,
+               size=10.5, farbe=G, gewicht=None)
+
+# CO2 steht senkrecht: das freie Paar des Carbanions zeigt nach schraeg unten,
+# und der Pfeil trifft den Kohlenstoff dadurch quer zur O=C=O-Achse, nicht auf
+# einen der beiden Sauerstoffe. Angriff und Ausweichen des pi-Paars sind ein
+# Schritt und deshalb als Kette angemeldet: die Pruefung verlangt Kopf an Schwanz.
+co2 = t.mol("O=C=O", 465, 244, zeige={0: "oben"}, name="Kohlendioxid")
+t.schub(Paar(carb, 2), Atom(co2, 1), kette="b")
+t.schub(Bindung(co2, 0, 1), Paar(co2, 0), kette="b")
 t.unterschrift(co2, "CO&#8322;", abstand=24, farbe=G)
 
-t.reaktionspfeil(654, 196, 716)
+t.reaktionspfeil(556, 190, 700)
 
-gla = mech.Molekuel("*CC(C(=O)[O-])C(=O)[O-]", 830, 196, labels={0: "Protein"},
-                    zeige={0: "links"}, name="Gla")
-t.mole.append(gla)
+gla = t.mol("*CC(C(=O)[O-])C(=O)[O-]", 812, 190, labels={0: "Protein"},
+            kern=GLU, name="Gla")
 t.unterschrift(gla, "γ-Carboxyglutamat: zwei Carboxylate",
                "an einem Kohlenstoff binden Calcium", abstand=30)
 
@@ -93,9 +134,8 @@ t.text(20, 449, "und weil das Alkoxid in einer wasserfreien Tasche entsteht, ste
                 "Basenstärke um viele Zehnerpotenzen. Carboxylierung und Epoxidbildung sind "
                 "gekoppelt.", size=12.5)
 
-kh2 = mech.Molekuel("Cc1c(*)c(O)c2ccccc2c1O", 156, 578, labels={3: "R"},
-                    zeige={3: "rechts"}, name="Hydrochinon")
-t.mole.append(kh2)
+kh2 = t.mol("Cc1c(*)c(O)c2ccccc2c1O", 156, 578, labels={3: "R"}, kern=NAPH,
+            name="Hydrochinon")
 t.unterschrift(kh2, "KH&#8322;, das Hydrochinon:", "die einzige wirksame Form", abstand=30)
 
 t.reaktionspfeil(268, 578, 396)
@@ -104,23 +144,22 @@ t.text(332, 558, "über Peroxid und Dioxetan", size=10, anchor="middle", farbe=G
 t.text(332, 602, "&#8722; H&#8322;O. Hier entsteht das Alkoxid am C2,", size=10, anchor="middle",
        farbe=W, gewicht=700)
 
-epox = mech.Molekuel("CC12OC1(*)C(=O)c1ccccc1C2=O", 520, 578, labels={4: "R"},
-                     zeige={4: "rechts"}, name="K-2,3-Epoxid")
-t.mole.append(epox)
+epox = t.mol("CC12OC1(*)C(=O)c1ccccc1C2=O", 520, 578, labels={4: "R"}, kern=NAPH,
+             name="K-2,3-Epoxid")
 t.unterschrift(epox, "K-2,3-Epoxid: der Cofaktor ist verbraucht", abstand=30)
 
 t.reaktionspfeil(632, 578, 750)
-t.text(691, 560, "VKORC1", size=11, anchor="middle", gewicht=700, farbe=E, mono=True)
-t.text(691, 596, "&#8867; Cumarine", size=10.5, anchor="middle", gewicht=700, farbe=R)
-t.text(691, 616, "+ 2 [H], &#8722; H&#8322;O", size=10, anchor="middle", farbe=C)
+t.text(691, 550, "VKORC1", size=11, anchor="middle", gewicht=700, farbe=E, mono=True)
+t.text(691, 600, "&#8867; Cumarine", size=10.5, anchor="middle", gewicht=700, farbe=R)
+t.text(691, 620, "+ 2 [H], &#8722; H&#8322;O", size=10, anchor="middle", farbe=C)
 
-chin = mech.Molekuel("CC1=C(*)C(=O)c2ccccc2C1=O", 862, 578, labels={3: "R"},
-                     zeige={3: "rechts"}, name="Vitamin-K-Chinon")
-t.mole.append(chin)
+chin = t.mol("CC1=C(*)C(=O)c2ccccc2C1=O", 862, 578, labels={3: "R"}, kern=NAPH,
+             name="Vitamin-K-Chinon")
 t.unterschrift(chin, "Vitamin-K-Chinon: die Form,", "die im Präparat steckt", abstand=30)
 
-# Rueckweg vom Chinon zum Hydrochinon
-t.stuecke.append((1, "<path d='M 862 676 L 862 716 L 156 716 L 156 664' fill='none' "
+# Rueckweg vom Chinon zum Hydrochinon: aussen herum, damit der Pfeil weder die
+# Bildunterschriften kreuzt noch von unten in das Hydrochinon hineinsticht.
+t.stuecke.append((1, "<path d='M 862 682 L 862 716 L 70 716 L 70 578 L 100 578' fill='none' "
                      "stroke='currentColor' stroke-width='1.5' marker-end='url(#rxn)'/>"))
 t.text(509, 734, "VKORC1 führt auch diesen zweiten Schritt aus und wird ebenso von den "
                  "Cumarinen gehemmt.", size=11, anchor="middle", gewicht=700, farbe=E)

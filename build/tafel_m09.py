@@ -5,6 +5,19 @@ M-09 · Aromatase, gebaut mit mech.py.
 Kern der Tafel ist ein Gegensatz zwischen zwei Eisenspezies: Compound I ist
 elektrophil, der Ferri-Peroxo-Komplex nucleophil. Beide werden mit demselben
 Zentrum-Bausatz gezeichnet, damit man sieht, dass nur der axiale Ligand anders ist.
+
+Zwei Dinge halten die Tafel zusammen:
+
+  - STERAN legt alle vier Stufen der Zone A auf dieselbe Referenzlage. Die vier
+    Geruestformeln unterscheiden sich nur am C19 und am Ring A; ohne Leitgeruest
+    einigt sich der Koordinatengenerator auf vier verschiedene Drehungen, und
+    der Leser sucht den Unterschied erst, statt ihn zu sehen. Festgelegt ist die
+    Lage ueber den Ring A: C10 nach 30 Grad, C5 darunter. Damit steht C3 mit dem
+    Keton links unten, das C19 zeigt nach oben, und der Ring D liegt rechts oben -
+    die Lehrbuchlage, und die drei Zyklen laufen mit der Leserichtung.
+  - schub(quelle, ziel) beschreibt nur, welche Elektronen wohin gehen. Bauchseite,
+    Oeffnungswinkel, Ankerlage und der Winkel jedes freien Elektronenpaars kommen
+    aus dem Solver in mech_schub.py; geprueft wird gegen mech_regeln.py.
 """
 import os
 import sys
@@ -12,6 +25,8 @@ import sys
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 import mech
+import mech_kerne
+from mech import Atom, Bindung, Paar
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -22,6 +37,16 @@ C = "var(--cofaktor)"
 G = "var(--ink-3)"
 
 t = mech.Tafel(1000, 1330)
+
+# Das Steran-Geruest der Zone A. Das Muster nennt nur die siebzehn Ringkohlenstoffe
+# und laesst Bindungsordnung und Aromatizitaet offen (~ und [#6]); sonst faende es
+# den aromatischen Ring A des Estrons nicht, und gerade dort wird der Vergleich
+# gebraucht. Es trifft jede der vier Stufen genau einmal.
+STERAN = mech_kerne.eigener(
+    "steran", "CC12CCC3C(CCC4=CC(=O)CCC34C)C1CCC2=O",
+    muster=("[#6]~1~2~[#6]~[#6]~[#6]~3~[#6](~[#6]~[#6]~[#6]~4~[#6]~[#6]~[#6]"
+            "~[#6]~[#6]~3~4)~[#6]~1~[#6]~[#6]~[#6]~2"),
+    ring=[8, 9, 10, 12, 13, 14], leit=14, folge=8, winkel=30.0)
 
 # ===================================================== ZONE A · drei Durchgaenge
 t.zone(24, "A · DREI DURCHGÄNGE AN EINEM EINZIGEN KOHLENSTOFF")
@@ -39,8 +64,7 @@ STUFEN = [
     (880, "CC12CCC3c4ccc(O)cc4CCC3C1CCC2=O", "Estron", "C19 abgespalten, Ring A aromatisch"),
 ]
 for x, smi, titel, note in STUFEN:
-    m = mech.Molekuel(smi, x, 216, name=titel)
-    t.mole.append(m)
+    m = t.mol(smi, x, 216, kern=STERAN, name=titel)
     t.ueberschrift(m, titel, abstand=28)
     t.unterschrift(m, note, abstand=28, farbe=G)
 
@@ -79,32 +103,40 @@ t.text(360, 566, "Ferri-Peroxo-Komplex", size=12.5, anchor="middle", gewicht=700
 t.text(360, 586, "nucleophil: greift den Aldehyd-", size=11, anchor="middle", farbe=G)
 t.text(360, 602, "kohlenstoff an · nur Zyklus 3", size=11, anchor="middle", farbe=G)
 
-ald = mech.Molekuel("*C=O", 560, 434, labels={0: "C10"}, zeige={1: "links"},
-                    name="19-Oxo-Gruppe")
-t.mole.append(ald)
-t.pfeil(lp_p, (ald, 1), bogen=0.24, seite=-1, farbe=W)
-t.pfeil((ald, 1, 2), ald.abseits(2, 1), bogen=0.42, seite=1, farbe=W)
+# Der Aldehyd steht dicht neben dem Peroxo-Komplex. Frueher lag er 90 px weiter
+# rechts; der Angriffspfeil wurde damit 7,7 Bindungslaengen lang und holte weit
+# aus. Levy nennt fuer einen Pfeil zwischen zwei Teilchen 1,5 bis 4 L, und in
+# diesem Fenster liegt er jetzt.
+ald = t.mol("*C=O", 470, 434, labels={0: "C10"}, zeige={1: "links"},
+            name="19-Oxo-Gruppe")
+# Ein Schritt, zwei Pfeile: das freie Paar des Peroxo-Sauerstoffs bildet die
+# Bindung zum Carbonylkohlenstoff, das pi-Paar der C=O weicht auf den Sauerstoff
+# aus. Als Kette angemeldet, damit die Pruefung Kopf an Schwanz verlangt.
+t.schub(lp_p, Atom(ald, 1), kette="B1")
+t.schub(Bindung(ald, 1, 2), Paar(ald, 2), kette="B1")
 t.unterschrift(ald, "das C19 als Aldehyd:", "hier greift der Peroxo-Komplex an", abstand=28)
 
-t.reaktionspfeil(646, 434, 712)
-t.text(679, 424, "Addition", size=10, anchor="middle", gewicht=700, farbe=C)
+t.reaktionspfeil(600, 434, 680)
+t.text(640, 424, "Addition", size=10, anchor="middle", gewicht=700, farbe=C)
 
 # Das tetraedrische Addukt gehoert ins Bild, sonst steht der Schritt, der die Zone
 # traegt, nur als Text da: der Peroxo-Sauerstoff haengt jetzt am C19, daneben das
 # Alkoholat. Wie die O-O-Bindung danach bricht, ist in der Literatur strittig und
 # deshalb hier nicht mit Pfeilen behauptet.
-# Das Alkoholat weist nach unten, die Peroxidkette nach links oben, das C10 nach
-# rechts. So bleibt um jedes der drei Atomlabel Platz, und die beiden Pfeile
-# greifen von verschiedenen Seiten an.
-adukt = mech.Molekuel("[O-]C(OO*)*", 848, 424, labels={4: "Fe", 5: "C10"},
-                      zeige={0: "unten", 5: "rechts"}, name="Peroxyhalbacetal")
-t.mole.append(adukt)
-# Der Weg vom freien Paar in die Nachbarbindung ist kurz. Ohne den kleineren
-# Spalt frisst die Verkuerzung den Bogen auf, und uebrig bleibt ein Kreis, der
-# das Minuszeichen des Alkoholats verdeckt.
-lp_a = t.elektronenpaar(adukt, 0, 140, abstand=18)
-t.pfeil(lp_a, (adukt, 0, 1), bogen=0.38, seite=-1, gap=3, farbe=W)
-t.pfeil((adukt, 1, 5), adukt.abseits(5, 1, 24), bogen=0.30, seite=-1, gap=4, farbe=W)
+# Die Drehung steht fest bei 125 Grad: Alkoholat links, Peroxidkette nach rechts
+# oben zum Eisen, C10 nach rechts unten. So bleibt um jedes der drei Atomlabel
+# Platz, und - der eigentliche Grund - beide Pfeile dieses Schrittes finden neben
+# ihren Bindungen Platz. Bei 90 Grad lief der Pfeil aus dem Alkoholat mit Bogen
+# und Kopf genau auf der Bindung O-C19, die er schliessen soll: gemessen 0,00 L
+# Abstand, im Bild ein Knoten aus Bindungsstrich und Pfeilspitze. Die Pruefung
+# sieht das nicht, weil die Zielbindung von der Freiraummessung ausgenommen ist.
+# Bei 125 Grad liegen beide Pfeile 0,22 bzw. 0,28 L neben der naechsten Tinte.
+adukt = t.mol("[O-]C(OO*)*", 848, 424, labels={4: "Fe", 5: "C10"},
+              rotate=125.0, name="Peroxyhalbacetal")
+# Wieder ein Schritt aus zwei Pfeilen: ein freies Paar des Alkoholats schliesst
+# die Carbonylbindung, und das Paar der Bindung C19-C10 bleibt am Steroid.
+t.schub(Paar(adukt, 0), Bindung(adukt, 0, 1), kette="B2")
+t.schub(Bindung(adukt, 1, 5), Atom(adukt, 5), kette="B2")
 t.unterschrift(adukt, "Peroxyhalbacetal am C19: die Elektronen",
                "der Bindung C10&#8722;C19 bleiben am Steroid", abstand=34)
 

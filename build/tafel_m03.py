@@ -5,6 +5,12 @@ M-03 · Biotin, gebaut mit mech.py.
 Die Tafel hatte bisher keine einzige Struktur, nur Kaesten und einen
 schematischen Arm. Jetzt sind beide Halbreaktionen ausgefuehrt: die
 Carboxylierung des Biotins und die Uebertragung auf das Enolat.
+
+Der Ureido-Bicyclus kommt in drei Stufen vor - Biotin, Carboxybiotin in Zone B,
+dasselbe Carboxybiotin noch einmal in Zone C. Er haengt deshalb an einem eigenen
+Leitgeruest (KERN, siehe unten), damit er in allen drei Bildern gleich steht.
+Die Pfeile sind ueber schub() angemeldet; Bauchseite, Oeffnungswinkel und
+Ankerlage kommen aus dem Solver in mech_schub.py.
 """
 import os
 import sys
@@ -12,6 +18,8 @@ import sys
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 import mech
+import mech_kerne
+from mech import Atom, Bindung, Paar
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -36,6 +44,17 @@ CARBOXY = "O=C1N(C(=O)[O-])[C@H]2CS[C@@H](*)[C@H]2N1"
 # HTML-Entitaeten noch Tiefstellungszeichen kennt; beides faellt im Bild aus.
 # Deshalb hier nur "Lys"; die Amidbindung erklaert die Unterschrift.
 KETTE = "Lys"
+
+# Das Leitgeruest des Bicyclus. Lehrbuchlage: der Harnstoff-Carbonyl zeigt nach
+# oben, der Schwefel des Tetrahydrothiophens nach unten, die Valeriansaeurekette
+# nach links unten - und damit steht N1' oben rechts, also auf der Seite, von der
+# das Kohlendioxid kommt und auf der spaeter das Carbamat sitzt. Das Muster fasst
+# den ganzen Bicyclus samt dem ersten Kettenatom; ohne dieses Atom waere der
+# Bicyclus spiegelsymmetrisch und die Vorlage koennte umklappen.
+KERN = mech_kerne.eigener(
+    "biotin-bicyclus", "O=C1N[C@H]2CS[C@@H](CCCCC(=O)O)[C@H]2N1",
+    muster="[#8]~[#6]1~[#7]~[#6]2~[#6]~[#16]~[#6](~*)~[#6]~2~[#7]~1",
+    ring=[1, 2, 3, 14, 15], leit=2, folge=3, winkel=30.0)
 
 t = mech.Tafel(1000, 1420)
 
@@ -81,31 +100,38 @@ t.text(20, 330, "Carboxyliert wird N1&#8242;: der Ureidostickstoff am Ringfusion
 t.text(20, 349, "ist er von sich aus kein Nucleophil. Erst wenn das Phosphat aus Zone A ihm sein "
                 "Proton abnimmt, greift er das Kohlendioxid an.", size=12.5)
 
-bio = mech.Molekuel(BIOTIN, 190, 486, labels={7: KETTE},
-                    zeige={2: "oben", 7: "links"}, wasserstoff=[2], name="Biotin")
+bio = mech.Molekuel(BIOTIN, 270, 486, labels={7: KETTE},
+                    wasserstoff=[2], kern=KERN, name="Biotin")
 t.mole.append(bio)
 hn = bio.h_index[2]
 
-# Das Phosphat steht ueber dem N-H, damit sein Pfeil von oben hereinkommt und
-# der Pfeil aus der N-H-Bindung nach rechts unten abziehen kann.
-pi = t.paar(150, 402, 250, "Phosphat")
-t.text(150, 386, "P&#7522;", size=12.5, anchor="middle", gewicht=700, farbe=C)
-t.text(150, 370, "das Phosphat aus Zone A", size=10, anchor="middle", farbe=G)
+# Das Phosphat steht dicht ueber dem N-H: sein Pfeil kommt von oben herein, der
+# Pfeil aus der N-H-Bindung zieht nach rechts oben zum Kohlendioxid ab. Stuende
+# das Phosphat weiter rechts, kaemen sich die beiden ins Gehege.
+pi = t.paar(320, 398, 105, "Phosphat")
+t.text(320, 382, "P&#7522;", size=12.5, anchor="middle", gewicht=700, farbe=C)
+t.text(320, 366, "das Phosphat aus Zone A", size=10, anchor="middle", farbe=G)
 
-co2b = mech.Molekuel("O=C=O", 440, 440, zeige={0: "oben"}, name="Kohlendioxid")
+# Das Kohlendioxid steht rechts oberhalb, in der Verlaengerung der N-H-Bindung.
+# Weiter unten geht es nicht: dort stehen die beiden gezeichneten Ringprotonen so
+# eng, dass zwischen ihnen kein Bogen mit dem vorgeschriebenen Freiraum durchgeht.
+co2b = mech.Molekuel("O=C=O", 365, 435, zeige={0: "oben"}, name="Kohlendioxid")
 t.mole.append(co2b)
-t.text(474, 445, "CO&#8322;", size=10.5, farbe=G)
+t.text(382, 440, "CO&#8322;", size=10.5, farbe=G)
 
-t.pfeil(pi, (bio, hn), bogen=0.30, seite=-1, farbe=W)
-t.pfeil((bio, 2, hn), (co2b, 1), bogen=0.18, seite=1, farbe=W)
-t.pfeil((co2b, 0, 1), co2b.abseits(0, 1, abstand=18), bogen=0.42, seite=1, farbe=W)
+# Ein Schritt, drei Pfeile: das Phosphat nimmt das Proton, das Paar der
+# N-H-Bindung wird zur neuen N-C-Bindung, und ein pi-Paar des Kohlendioxids
+# weicht auf den Sauerstoff aus.
+t.schub(pi, Atom(bio, hn), kette="B")
+t.schub(Bindung(bio, 2, hn), Atom(co2b, 1), kette="B")
+t.schub(Bindung(co2b, 0, 1), Paar(co2b, 0), kette="B")
 t.unterschrift(bio, "Biotin, über (CH&#8322;)&#8324;&#8722;CO an ein Lysin gebunden;",
                "das Elektronenpaar der N&#8722;H-Bindung wird zur neuen N&#8722;C-Bindung", abstand=30)
 
 t.reaktionspfeil(560, 486, 634)
 
 cbio = mech.Molekuel(CARBOXY, 790, 486, labels={10: KETTE},
-                     zeige={10: "links", 3: "rechts"}, name="Carboxybiotin")
+                     kern=KERN, name="Carboxybiotin")
 t.mole.append(cbio)
 t.unterschrift(cbio, "Carboxybiotin: das CO&#8322; ist jetzt gebunden",
                "und wird nicht mehr in die Lösung entlassen", abstand=30)
@@ -117,33 +143,57 @@ t.text(20, 644, "Dort zerfällt das Carboxybiotin, und das dabei frei werdende B
 t.text(20, 663, "Deprotonierung und Carboxylierung praktisch gleichzeitig ab. Das Enolat greift den "
                 "Carboxylkohlenstoff an, und die N&#8722;C-Bindung bricht.", size=12.5)
 
-cbio2 = mech.Molekuel(CARBOXY, 190, 762, labels={10: KETTE},
-                      zeige={10: "links", 3: "rechts"}, name="Carboxybiotin")
+cbio2 = mech.Molekuel(CARBOXY, 200, 772, labels={10: KETTE},
+                      kern=KERN, name="Carboxybiotin")
 t.mole.append(cbio2)
-# Der Stickstoff sitzt im Ring: das frei werdende Paar hat nur nach aussen
-# unten Platz. Bezugspunkt ist der Harnstoff-Kohlenstoff, damit der Pfeilkopf
-# nicht in den Ring hinein zeigt.
-t.pfeil((cbio2, 2, 3), cbio2.abseits(2, 1, abstand=26), bogen=0.34, seite=1, farbe=W)
-t.unterschrift(cbio2, "die N&#8722;C-Bindung bricht, das Biotin-Anion",
-               "wird frei und wirkt als Base", abstand=30)
 
 # Der Carboxylkohlenstoff ist trigonal: seine drei Nachbarn stehen 120 Grad
-# auseinander. Das Enolat steht deshalb rechts unterhalb, in der Luecke
-# zwischen den beiden Sauerstoffen; von schraeg oben kaeme der Pfeilkopf auf
-# dem Carboxylat-Sauerstoff zu liegen.
-enol = mech.Molekuel("[CH2-]C(=O)*", 494, 848, labels={3: "SCoA"}, zeige={0: "links"},
+# auseinander. Die einzige Luecke, die nicht auf den Ring zeigt, liegt zwischen
+# den beiden Carboxylat-Sauerstoffen nach rechts oben; dort steht das Enolat.
+# Gedreht statt waagerecht gelegt: RDKit setzt das Minuszeichen als Hochstellung
+# dicht rechts neben das C, und bei waagerechter C-C-Bindung steht es genau im
+# Abstand einer zweiten Bindungslinie darueber - das Minus und der Strich lesen
+# sich dann zusammen als Doppelbindung. Mit 20 Grad Drehung laeuft die Bindung
+# schraeg unter dem Zeichen weg.
+enol = mech.Molekuel("[CH2-]C(=O)*", 326, 742, labels={3: "SCoA"}, rotate=20.0,
                      name="Acetyl-CoA-Enolat")
 t.mole.append(enol)
-lp_e = t.elektronenpaar(enol, 0, 190)
-t.pfeil(lp_e, (cbio2, 3), bogen=0.16, seite=1, farbe=W)
+
+# Wieder ein Schritt, und in dieser Reihenfolge, damit die Pfeile Kopf an
+# Schwanz haengen: erst der Angriff des Enolats auf den Carboxylkohlenstoff,
+# dann der Bruch der N-C-Bindung.
+#
+# Wohin das Paar dieser Bindung geht, ist ausgeschrieben. Am Stickstoff selbst
+# laesst es sich nicht zeigen: er sitzt im Ring, seine beiden Ringbindungen
+# lassen ihm nur zwei schmale Luecken nach aussen, und beide liegen so dicht an
+# der brechenden Bindung, dass jeder Bogen dorthin kuerzer waere als das erlaubte
+# Mindestmass - der Solver lehnt alle 840 Kandidaten ab. Ausgeschrieben ist es
+# ohnehin die bessere Aussage: das Biotin-Anion ist ein Amid-Anion und damit
+# mesomeriestabilisiert, das Paar wird vom Ureido-Carbonyl aufgenommen. Genau
+# deshalb zerfaellt das Carbamat so bereitwillig.
+#
+# art="ring": der zweite Pfeil endet an einer Ringbindung des Ureido-Rings und
+# ist der Resonanzpfeil des Amid-Anions. Regel F4 gibt dafuer 0,60-0,90 L vor,
+# nicht die 0,75-1,20 L eines gewoehnlichen innermolekularen Pfeils. Mit dem
+# weiteren Fenster waehlte der Solver eine Sehne von 1,02 L, und dabei setzte
+# der Schwanz unterhalb der brechenden N-C-Bindung an: der Bogen kreuzte die
+# Bindung, aus der er kommt. Mit dem Resonanzfenster liegen Schwanz und Bogen
+# geschlossen oberhalb der Bindung.
+t.schub(Paar(enol, 0), Atom(cbio2, 3), kette="C")
+t.schub(Bindung(cbio2, 2, 3), Bindung(cbio2, 1, 2), kette="C", art="ring")
+t.schub(Bindung(cbio2, 0, 1), Paar(cbio2, 0), kette="C")
+
+t.unterschrift(cbio2, "die N&#8722;C-Bindung bricht, das Biotin-Anion",
+               "wird frei und wirkt als Base; sein Paar",
+               "wandert ins Ureido-Carbonyl", abstand=30)
 # Wer die Base ist, steht im Zonentext: das Biotin-Anion aus dem Bild links.
 # Eine laengere Beschriftung an dieser Stelle kreuzt den Angriffspfeil.
 t.ueberschrift(enol, "Acetyl-CoA, als Enolat deprotoniert", abstand=26, size=10.5,
                farbe=G, gewicht=None)
 
-t.reaktionspfeil(620, 762, 694)
+t.reaktionspfeil(560, 772, 634)
 
-mal = mech.Molekuel("[O-]C(=O)CC(=O)*", 830, 762, labels={6: "SCoA"}, zeige={0: "links"},
+mal = mech.Molekuel("[O-]C(=O)CC(=O)*", 790, 772, labels={6: "SCoA"}, zeige={0: "links"},
                     name="Malonyl-CoA")
 t.mole.append(mal)
 t.unterschrift(mal, "Malonyl-CoA: der Baustein, an dem",
@@ -209,8 +259,10 @@ ARIA = (
     "Kohlendioxids an, und eine der beiden Doppelbindungen weicht auf den Sauerstoff aus. Es "
     "entsteht Carboxybiotin als Carbamat-Anion. Zone C zeigt die Uebertragung am zweiten aktiven "
     "Zentrum: Das als Enolat deprotonierte Acetyl-CoA greift den Carboxylkohlenstoff an, die "
-    "Stickstoff-Kohlenstoff-Bindung bricht, das frei werdende Biotin-Anion ist dabei selbst die "
-    "Base, und es entsteht Malonyl-CoA. Zone D erklaert den sechzehn Angstroem langen Schwenkarm "
+    "Stickstoff-Kohlenstoff-Bindung bricht, und ihr Elektronenpaar bleibt nicht am Stickstoff "
+    "stehen, sondern geht weiter in das Ureido-Carbonyl. Das frei werdende Biotin-Anion ist "
+    "deshalb ein mesomeriestabilisiertes Amid-Anion und dabei selbst die Base. "
+    "Es entsteht Malonyl-CoA. Zone D erklaert den sechzehn Angstroem langen Schwenkarm "
     "aus Biotin und Lysin, nennt die vier humanen Carboxylasen und die klinischen Sonderfaelle."
 )
 

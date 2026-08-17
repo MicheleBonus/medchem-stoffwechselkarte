@@ -5,6 +5,15 @@ M-11 · Kupfer-Monooxygenasen, gebaut mit mech.py.
 Das Kupfer traegt keinen Makrocyclus - deshalb wird das Zentrum hier ohne
 Ebenenbalken gezeichnet (ebene=False). Sonst suggerierte das Bild ein Porphyrin,
 das es nicht gibt.
+
+Die beiden Catecholamine liegen auf einem gemeinsamen Leitgeruest: Dopamin und
+Noradrenalin unterscheiden sich nur um die eine Hydroxylgruppe, und genau die
+soll ins Auge fallen - nicht eine verdrehte Ringlage. Der Kern stellt den
+Brenzcatechinring so, dass die Seitenkette nach links zeigt und die beiden
+Hydroxylgruppen nach rechts und rechts unten. Damit steht das benzylische
+Wasserstoffatom auf der dem Kupfer zugewandten Seite, und die beiden Fischhaken
+finden zwischen Substrat und Superoxo-Sauerstoff einen kurzen Weg, ohne das
+Geruest zu kreuzen.
 """
 import os
 import sys
@@ -12,8 +21,17 @@ import sys
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 import mech
+import mech_kerne
+from mech import Atom, Bindung
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+
+# Brenzcatechin-Ring samt benzylischem Kohlenstoff. Ladungs- und
+# aromatizitaetsagnostisch geschrieben, damit beide Stufen sicher getroffen werden.
+CATECHOLAMIN = mech_kerne.eigener(
+    "catecholamin", "NCCc1ccc(O)c(O)c1",
+    muster="[#6]~[#6]1~[#6]~[#6]~[#6](~[#8])~[#6](~[#8])~[#6]~1",
+    ring=[3, 4, 5, 6, 8, 10], leit=3, folge=4, winkel=180.0)
 
 W = "var(--warn)"
 R = "var(--drug)"
@@ -64,25 +82,45 @@ t.text(20, 430, "Der Sauerstoff wird nicht bis zum Ferryl-Äquivalent aktiviert.
 z1 = t.zentrum(110, 540, "Cu(I)", unten="", ebene=False, schritt=46, name="Cu(I)")
 t.text(110, 596, "Cu(I)", size=11, anchor="middle", gewicht=700, farbe=E)
 
-t.reaktionspfeil(160, 540, 226)
-t.text(193, 528, "+ O&#8322;", size=10.5, anchor="middle", gewicht=700, farbe=C)
+t.reaktionspfeil(160, 540, 320)
+t.text(240, 528, "+ O&#8322;", size=10.5, anchor="middle", gewicht=700, farbe=C)
 
-z2 = t.zentrum(300, 540, "Cu(II)", axial=["O", "O&#8226;"], unten="", ebene=False,
+# Das Superoxo-Zentrum steht so weit rechts, dass die beiden Fischhaken zum
+# Dopamin im Sehnenfenster der Buecher bleiben (1,5 bis 4 Bindungslaengen).
+z2 = t.zentrum(358, 540, "Cu(II)", axial=["O", "O&#8226;"], unten="", ebene=False,
                schritt=46, name="Superoxo")
-t.text(300, 596, "Superoxo-Komplex", size=11, anchor="middle", gewicht=700, farbe=W)
-t.text(300, 614, "nach der Abstraktion Cu(II)&#8722;OOH", size=10, anchor="middle", farbe=G)
+t.text(358, 596, "Superoxo-Komplex", size=11, anchor="middle", gewicht=700, farbe=W)
+t.text(358, 614, "nach der Abstraktion Cu(II)&#8722;OOH", size=10, anchor="middle", farbe=G)
 
 # Atom 2 ist der benzylische Kohlenstoff (Nachbar des Rings); Atom 1 die CH2-Gruppe
 # am Stickstoff. Nur an Atom 2 sitzt im Produkt die Hydroxylgruppe, also muss auch
 # der Fischhaken dort ansetzen.
-dop = mech.Molekuel("NCCc1ccc(O)c(O)c1", 500, 500, wasserstoff=[2], zeige={2: "links"},
-                    name="Dopamin")
-t.mole.append(dop)
+dop = t.mol("NCCc1ccc(O)c(O)c1", 475, 500, wasserstoff=[2], kern=CATECHOLAMIN,
+            name="Dopamin")
 hd = dop.h_index[2]
-t.pfeil((dop, 2, hd), z2.ax(1, winkel=20, abstand=34), bogen=0.24, seite=-1,
-        typ="fischhaken", farbe=R)
-t.pfeil((dop, 2, hd), dop.abseits(2, hd, abstand=26), bogen=0.40, seite=-1,
-        typ="fischhaken", farbe=R)
+# Die Abstraktion, in Fischhaken: das ungepaarte Elektron des Superoxo-Sauerstoffs
+# holt sich das Wasserstoffatom, ein Elektron der benzylischen C-H-Bindung geht mit
+# - zusammen bilden die beiden die neue O-H-Bindung.
+#
+# Der dritte Haken - das zweite Elektron derselben Bindung bleibt am benzylischen
+# Kohlenstoff zurueck - ist nicht gezeichnet. Er fuehrte aus der C-H-Bindung auf
+# deren eigenes Kohlenstoffatom, und dafuer ist am Atom kein Platz: es traegt drei
+# Bindungen und damit drei gleich weite Winkelluecken. Die Luecke neben der
+# C-H-Bindung liegt nur ein Drittel der geforderten Sehnenlaenge vom Schwanz
+# entfernt; die beiden anderen erreicht kein Bogen, ohne eine Nachbarbindung zu
+# kreuzen. Der Solver lehnt alle 768 Kandidaten ab. Wie in M-08 an derselben
+# Stelle steht die Aussage deshalb im Text - unten in Zone C, beim stabilisierten
+# benzylischen Radikal - statt als verbogener Pfeil im Bild.
+#
+# Beide Haken haengen am selben Sauerstoff. Ohne Angabe setzt der Solver ihre
+# Anker auf dieselbe Gerade vom Sauerstoff zum Substrat, und die beiden Boegen
+# laufen dort fuenf Pixel nebeneinander her - unter dem geforderten Mindestabstand
+# zweier Pfeile. Deshalb sind die beiden Ankerorte ausdruecklich getrennt: das
+# ungepaarte Elektron rechts neben dem Symbol, wo der Haken zum Wasserstoff
+# hinausgeht, und die ankommende Spitze schraeg darunter, dort also, wo die neue
+# O-H-Bindung entsteht.
+t.schub(z2.ax(1, winkel=8, abstand=15), Atom(dop, hd), elektronen=1)
+t.schub(Bindung(dop, 2, hd), z2.ax(1, winkel=70, abstand=12), elektronen=1)
 t.unterschrift(dop, "Dopamin: abstrahiert wird das benzylische",
                "Wasserstoffatom, nicht ein beliebiges", abstand=30)
 
@@ -91,8 +129,8 @@ t.text(693, 528, "Rebound", size=10.5, anchor="middle", gewicht=700, farbe=G)
 t.text(693, 562, "+ e&#8722;, + H&#8314;", size=10, anchor="middle", farbe=G)
 t.text(693, 576, "&#8722; H&#8322;O", size=10, anchor="middle", farbe=G)
 
-nor = mech.Molekuel("NC[C@H](O)c1ccc(O)c(O)c1", 850, 540, stereo=True, name="Noradrenalin")
-t.mole.append(nor)
+nor = t.mol("NC[C@H](O)c1ccc(O)c(O)c1", 850, 540, stereo=True, kern=CATECHOLAMIN,
+            name="Noradrenalin")
 t.unterschrift(nor, "Noradrenalin: die Hydroxylgruppe steht",
                "immer (<tspan font-style='italic'>R</tspan>)-konfiguriert", abstand=30)
 
@@ -143,10 +181,13 @@ ARIA = (
     "Elektronentransfer-Zentrum mit drei Histidinen und das katalytische Zentrum mit zwei "
     "Histidinen und einem Methionin, getrennt durch etwa elf Angstroem ohne verbindende "
     "Proteinkette; daneben das gezeichnete Ascorbat, das beide reduziert. Zone B zeigt den "
-    "Zyklus: Aus Kupfer eins und Sauerstoff entsteht ein Superoxo-Komplex, der mit "
-    "Fischhakenpfeilen das benzylische Wasserstoffatom vom Dopamin abstrahiert: ein Haken "
-    "fuehrt zum Superoxo-Sauerstoff, der zweite laesst das Elektron am benzylischen "
-    "Kohlenstoff zurueck. Aus dem Superoxo wird dabei ein Hydroperoxo. Nach dem Rebound, der "
+    "Zyklus: Aus Kupfer eins und Sauerstoff entsteht ein Superoxo-Komplex, der mit zwei "
+    "Fischhakenpfeilen das benzylische Wasserstoffatom vom Dopamin abstrahiert. Der eine Haken "
+    "bringt das ungepaarte Elektron des Superoxo-Sauerstoffs an das Wasserstoffatom, der andere "
+    "fuehrt ein Elektron der benzylischen Kohlenstoff-Wasserstoff-Bindung zum Sauerstoff; "
+    "zusammen bilden die beiden die neue Sauerstoff-Wasserstoff-Bindung. Das zweite Elektron "
+    "dieser Bindung bleibt als Radikal am benzylischen Kohlenstoff zurueck. "
+    "Aus dem Superoxo wird dabei ein Hydroperoxo. Nach dem Rebound, der "
     "ein Elektron und ein Proton verbraucht und Wasser freisetzt, "
     "entsteht Noradrenalin mit R-konfigurierter Hydroxylgruppe. Zone C stellt die "
     "beiden Enzyme dieses Bauplans nebeneinander, die Dopamin-beta-Hydroxylase und die "

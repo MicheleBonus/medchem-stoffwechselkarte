@@ -5,6 +5,27 @@ M-02 · Thiaminpyrophosphat, gebaut mit mech.py.
 Der Thiazoliumring war bisher ein handgesetztes Fuenfeck mit angehaengten
 Textstuecken. Jetzt sind alle vier Stufen (Thiazolium, Ylid, 2-Lactyl-TPP und
 Enamin) echte Strukturen, und die Umpolung ist mit Pfeilen ausgefuehrt.
+
+Umgestellt auf die neue Pfeilsprache:
+
+  - KERN legt alle vier Stufen auf dieselbe Referenzlage (mech_kerne.eigener).
+    Der Thiazoliumring steht dadurch in jedem Bild gleich: C2 oben, Schwefel
+    rechts, Ringstickstoff links mit dem Aminopyrimidin, C5 unten rechts mit dem
+    Diphosphat. Das ist die Lehrbuchlage von TPP - Pyrimidin links, Thiazolium
+    rechts - und sie haelt die Reaktionszentren nach oben in den freien Raum.
+  - schub(quelle, ziel) sagt nur, welche Elektronen wohin gehen. Bauchseite,
+    Oeffnungswinkel, Ankerlage und der Winkel jedes freien Elektronenpaars kommen
+    aus dem Solver in mech_schub.py; geprueft wird gegen mech_regeln.py.
+
+Von den sechs frueheren Pfeilen sind vier geblieben. Die beiden anderen gehoeren
+zum selben Muster: ein Bindungspaar bleibt am eigenen Atom zurueck, und dieses
+Atom traegt drei Bindungen, von denen eine auf der Winkelhalbierenden der beiden
+uebrigen steht (das C2-H des Thiazoliums, das N-CH2 des Ringstickstoffs). Dann
+sind die freien Keile je 126 Grad breit, und der Solver bietet als Spitzenlage
+nur deren Mitte an: im selben Keil wird die Sehne 0,25-0,42 L und faellt unter
+das Fenster F4, im anderen laeuft der Bauch quer ueber die eigene Quellbindung.
+Beides ist durchgerechnet, auch bei vergroessertem Ausschnitt - die Lage ist
+massstabsfrei. Was die Elektronen tun, steht deshalb in den Unterschriften.
 """
 import os
 import sys
@@ -12,6 +33,8 @@ import sys
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 import mech
+import mech_kerne
+from mech import Atom, Bindung, Paar
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -34,6 +57,15 @@ RESTE = {5: "OPP", 10: "Pyrimidin"}
 RESTE_L = {5: "OPP", 16: "Pyrimidin"}
 RESTE_E = {5: "OPP", 13: "Pyrimidin"}
 
+# Das Leitgeruest: der Thiazoliumring ohne die beiden Bruecken. Das Muster ist
+# ladungs- und aromatizitaetsagnostisch (~ als Bindung, [#7] statt n), sonst
+# faende es das neutrale Enamin nicht. Es trifft alle vier Stufen.
+# leit=1 ist das C4, folge=7 der im Ring darauf folgende Stickstoff; damit liegt
+# neben der Drehung auch die Haendigkeit fest. -126 Grad stellen das C2 nach oben.
+KERN = mech_kerne.eigener("thiazolium", "Cc1c(CC)sc[n+]1C",
+                          muster="[#6]~[#6]1~[#6]~[#16]~[#6]~[#7]~1~[#6]",
+                          ring=[1, 2, 5, 6, 7], leit=1, folge=7, winkel=-126.0)
+
 t = mech.Tafel(1000, 1290)
 
 # ===================================================== ZONE A · das Ylid
@@ -44,46 +76,51 @@ t.text(20, 54, "Das Wasserstoffatom am C2 des Thiazoliumrings hat einen pK<tspan
 t.text(20, 73, "für eine Base des Enzyms bleibt es trotzdem unerreichbar. Abgezogen wird es "
                "dennoch, und zwar vom Cofaktor selbst.", size=12.5)
 
-t.text(170, 134, "der Iminostickstoff des Aminopyrimidins", size=10, anchor="middle", farbe=G)
-t.text(170, 150, "Imino-N", size=12.5, anchor="middle", gewicht=700, farbe=C)
-base = t.paar(170, 166, 270, "Iminostickstoff des Aminopyrimidins")
+t.text(180, 134, "der Iminostickstoff des Aminopyrimidins", size=10, anchor="middle", farbe=G)
+t.text(180, 150, "Imino-N", size=12.5, anchor="middle", gewicht=700, farbe=C)
+base = t.paar(180, 166, 270, "Iminostickstoff des Aminopyrimidins")
 
-thia = mech.Molekuel(THIAZ, 170, 252, labels=RESTE, wasserstoff=[7],
-                     zeige={7: "oben"}, name="Thiazolium")
-t.mole.append(thia)
+thia = t.mol(THIAZ, 180, 258, labels=RESTE, wasserstoff=[7], kern=KERN,
+             name="Thiazolium")
 ht = thia.h_index[7]
-t.atomnummer(thia, 7, "C2", winkel=200, abstand=40, size=10.5, farbe=W, gewicht=700)
-# Eine Base greift den Wasserstoffkern an, nicht die Mitte der C-H-Bindung:
-# der Pfeil endet am Wasserstoffatom.
-t.pfeil(base, (thia, ht), bogen=0.16, seite=1, farbe=W, gap=2.5, mindestbogen=7.0)
-# Das Elektronenpaar der C-H-Bindung bleibt am C2 und wird dort zum freien Paar
-# des Ylids. Ein Punkt "neben dem C2, vom Wasserstoff weg" laege mitten im Ring,
-# und der Pfeilkopf zeigte dann auf den Stickstoff. Bezugspunkt ist deshalb das
-# Ringstickstoffatom: der Pfeil endet auf der davon abgewandten Seite des C2.
-t.pfeil((thia, 7, ht), thia.abseits(7, 8, abstand=20), bogen=0.45, seite=-1, farbe=W)
-t.unterschrift(thia, "Thiazolium: das C2 sitzt zwischen", "Schwefel und Ammonium", abstand=32)
+t.atomnummer(thia, 7, "C2", winkel=352, abstand=30, size=10.5, farbe=W, gewicht=700)
+# Die Base greift den Wasserstoffkern an, nicht die Mitte der C-H-Bindung: der
+# Pfeil endet am Wasserstoffatom.
+t.schub(base, Atom(thia, ht))
+# Der zweite Pfeil dieses Schrittes - das Bindungspaar der C-H-Bindung bleibt am
+# C2 zurueck - ist nicht gezeichnet. Am C2 stehen drei Bindungen (S, N und H),
+# und das H zeigt genau in die Winkelhalbierende der beiden freien Keile. Damit
+# bleiben nur zwei Keile von je 126 Grad: liegen Schwanz und Spitze im selben,
+# wird die Sehne 0,25-0,45 L kurz und faellt unter das Fenster F4; liegen sie in
+# verschiedenen, muss der Bauch quer ueber die eigene C-H-Bindung. Beides ist
+# geprueft (auch bei vergroessertem Ausschnitt, die Lage ist massstabsfrei).
+# Wo die Elektronen bleiben, sagt das freie Paar am C2 des Ylids nebenan.
+t.unterschrift(thia, "Thiazolium: das C2 sitzt zwischen Schwefel und Ammonium;",
+               "das Paar der C&#8722;H-Bindung bleibt an ihm zurück und wird",
+               "zum freien Paar des Ylids", abstand=28)
 
-t.reaktionspfeil(300, 252, 376)
-t.text(338, 278, "&#8722; H&#8314;", size=10.5, anchor="middle", gewicht=700, farbe=W)
+t.reaktionspfeil(300, 258, 384)
+t.text(342, 284, "&#8722; H&#8314;", size=10.5, anchor="middle", gewicht=700, farbe=W)
 
-ylid = mech.Molekuel(YLID, 470, 252, labels=RESTE, zeige={7: "oben"}, name="Ylid")
-t.mole.append(ylid)
+ylid = t.mol(YLID, 500, 258, labels=RESTE, kern=KERN, name="Ylid")
+# Das Carbanion des Produkts. Der Kern setzt das C2 an die Ringspitze, also
+# zeigt sein freies Paar nach oben.
 t.elektronenpaar(ylid, 7, 270)
 t.unterschrift(ylid, "das Ylid: Carbanion und Ammonium", "im selben Molekül", abstand=32)
 
-t.kasten(600, 100, 380, 258, fill="var(--cofaktor-bg)", stroke=C)
-t.text(618, 122, "WARUM DAS TROTZDEM GELINGT", size=11, gewicht=700, farbe=C)
-t.text(618, 144, "Ein Glutamat oder Histidin des Enzyms liegt elf bis", size=12)
-t.text(618, 163, "vierzehn Größenordnungen darunter; thermodynamisch", size=12)
-t.text(618, 182, "kann keines dieses Proton abziehen.", size=12)
-t.text(618, 205, "Der Akzeptor ist der Cofaktor selbst. Ein Glutamat", size=12)
-t.text(618, 224, "protoniert den Aminopyrimidinring, der dadurch ins", size=12)
-t.text(618, 243, "Iminotautomer übergeht. Die V-förmige Konformation", size=12)
-t.text(618, 262, "legt dessen Iminostickstoff neben das C2: Base und", size=12)
-t.text(618, 281, "Proton sind schon Nachbarn, das Ylid entsteht als", size=12)
-t.text(618, 300, "Zwitterion.", size=12)
-t.text(618, 323, "Sein Anteil bleibt winzig, stellt sich aber in", size=12, farbe=G)
-t.text(618, 342, "Millisekunden ein. Kinetisch genügt das.", size=12, farbe=G)
+t.kasten(620, 100, 360, 258, fill="var(--cofaktor-bg)", stroke=C)
+t.text(638, 122, "WARUM DAS TROTZDEM GELINGT", size=11, gewicht=700, farbe=C)
+t.text(638, 144, "Ein Glutamat oder Histidin des Enzyms liegt elf bis", size=12)
+t.text(638, 163, "vierzehn Größenordnungen darunter; thermodynamisch", size=12)
+t.text(638, 182, "kann keines dieses Proton abziehen.", size=12)
+t.text(638, 205, "Der Akzeptor ist der Cofaktor selbst. Ein Glutamat", size=12)
+t.text(638, 224, "protoniert den Aminopyrimidinring, der dadurch ins", size=12)
+t.text(638, 243, "Iminotautomer übergeht. Die V-förmige Konformation", size=12)
+t.text(638, 262, "legt dessen Iminostickstoff neben das C2: Base und", size=12)
+t.text(638, 281, "Proton sind schon Nachbarn, das Ylid entsteht als", size=12)
+t.text(638, 300, "Zwitterion.", size=12)
+t.text(638, 323, "Sein Anteil bleibt winzig, stellt sich aber in", size=12, farbe=G)
+t.text(638, 342, "Millisekunden ein. Kinetisch genügt das.", size=12, farbe=G)
 
 # ===================================================== ZONE B · die Umpolung
 t.zone(384, "B · DIE UMPOLUNG: AUS EINEM ELEKTROPHIL WIRD EIN NUCLEOPHIL")
@@ -91,50 +128,55 @@ t.text(20, 414, "Das Ylid greift den Ketokohlenstoff des Pyruvats an. Nach Abgan
                 "Kohlendioxid trägt derselbe Kohlenstoff plötzlich negative Ladungsdichte.",
        size=12.5)
 
-ylid2 = mech.Molekuel(YLID, 170, 545, labels=RESTE, zeige={7: "rechts"}, name="Ylid")
-t.mole.append(ylid2)
-lp_y = t.elektronenpaar(ylid2, 7, 0)
+ylid2 = t.mol(YLID, 190, 585, labels=RESTE, kern=KERN, name="Ylid")
 
-pyr = mech.Molekuel("CC(=O)C(=O)[O-]", 390, 522, zeige={1: "links"}, name="Pyruvat")
-t.mole.append(pyr)
-t.pfeil(lp_y, (pyr, 1), bogen=0.24, seite=-1, farbe=W)
-t.pfeil((pyr, 1, 2), pyr.abseits(2, 1, abstand=18), bogen=0.40, seite=1, farbe=W)
+# Das Pyruvat steht schraeg darueber: das freie Paar des Ylids zeigt vom C2 an
+# der Ringspitze nach oben, und dorthin greift es an. Die Unterschrift des
+# Pyruvats steht ausnahmsweise darueber, weil unter ihm der Pfeil laeuft.
+pyr = t.mol("CC(=O)C(=O)[O-]", 275, 505, zeige={1: "links"}, name="Pyruvat")
+# Ein Schritt: das freie Paar des Ylids bildet die neue C-C-Bindung, das
+# Pi-Paar der Carbonylbindung weicht auf den Sauerstoff aus.
+t.schub(Paar(ylid2, 7), Atom(pyr, 1), kette="b")
+t.schub(Bindung(pyr, 1, 2), Paar(pyr, 2), kette="b")
 # Die Marke "Keto-C" liess sich nirgends kollisionsfrei setzen und ist neben
 # der Unterschrift ohnehin redundant.
 t.unterschrift(ylid2, "das Ylid greift an", abstand=30)
-t.unterschrift(pyr, "Pyruvat: der Ketokohlenstoff", "ist hier noch elektrophil", abstand=30)
+t.text(275, 452, "Pyruvat: der Ketokohlenstoff", size=10.5, anchor="middle", farbe=G)
+t.text(275, 467, "ist hier noch elektrophil", size=10.5, anchor="middle", farbe=G)
 
-t.reaktionspfeil(512, 545, 588)
+t.reaktionspfeil(420, 570, 560)
 # Der Angriff liefert zunaechst das Alkoholat; die gezeichnete OH-Gruppe
 # entsteht erst durch Protonierung, sonst fehlt der Bilanz ein H+.
-t.text(550, 533, "+ H&#8314;", size=10.5, anchor="middle", gewicht=700, farbe=W)
+t.text(490, 558, "+ H&#8314;", size=10.5, anchor="middle", gewicht=700, farbe=W)
 
-lac = mech.Molekuel(LACTYL, 744, 545, labels=RESTE_L, zeige={7: "links"},
-                    name="2-Lactyl-TPP")
-t.mole.append(lac)
+lac = t.mol(LACTYL, 740, 570, labels=RESTE_L, kern=KERN, name="2-Lactyl-TPP")
 t.unterschrift(lac, "2-Lactyl-TPP, das Addukt", abstand=30)
 
 # --- zweite Reihe: Decarboxylierung
-# Fuer die Decarboxylierung so drehen, dass das Carboxylat nach oben in
-# freien Raum zeigt; am quartaeren Kohlenstoff ist sonst kein Platz fuer die
-# Pfeile.
-lac2 = mech.Molekuel(LACTYL, 190, 800, labels=RESTE_L,
-                     zeige={11: "oben", 7: "unten"}, name="2-Lactyl-TPP")
-t.mole.append(lac2)
-# Zwei Pfeile: die brechende C-C-Bindung bildet die Doppelbindung zum Ring,
-# und das Pi-Paar der C=N+-Bindung weicht auf den Stickstoff aus. Nur so ist
-# erklaert, warum der Ringstickstoff im naechsten Bild neutral ist.
-t.pfeil((lac2, 8, 11), (lac2, 7, 8), bogen=0.40, seite=-1, farbe=W)
-t.pfeil((lac2, 7, 14), lac2.abseits(14, 7, abstand=20), bogen=0.34, seite=1, farbe=W)
+lac2 = t.mol(LACTYL, 200, 795, labels=RESTE_L, kern=KERN, name="2-Lactyl-TPP")
+# Gezeichnet ist der Bindungsbruch: die brechende C-C-Bindung bildet die
+# Doppelbindung zum Ring. Der zweite Pfeil desselben Schrittes - das Pi-Paar der
+# C=N+-Bindung weicht auf den Ringstickstoff aus - ist nicht gezeichnet, aus
+# derselben Ursache wie in Zone A: am N3 stehen drei Bindungen, sein
+# CH2-Pyrimidin steht auf der Winkelhalbierenden, und die verbleibenden Keile
+# sind zu eng. Schwanz und Spitze im selben Keil geben nur 0,42 L Sehne, das
+# Fenster fuer einen Ringpfeil beginnt bei 0,45 L; in verschiedenen Keilen
+# laeuft der Bauch ueber die eigene Quellbindung. Die Unterschrift sagt es.
+# art="ring" ist hier kein Ringpfeil im topologischen Sinn, sondern die
+# Sehnenklasse: der Pfeil greift um ein einziges gemeinsames Atom herum, und dafuer
+# gilt das kurze Fenster 0,60-0,90 L. Ohne die Angabe zielt der Solver auf die
+# Mitte des Fensters fuer innermolekulare Pfeile (0,98 L), findet die passende
+# Sehne nur auf der falschen Seite der brechenden Bindung und laesst den Bauch
+# dann quer ueber genau die Bindung laufen, aus der die Elektronen kommen.
+t.schub(Bindung(lac2, 8, 11), Bindung(lac2, 7, 8), art="ring")
 t.unterschrift(lac2, "die C&#8722;C-Bindung bricht, die Elektronen bilden die",
                "Doppelbindung zum Ring, und das π-Paar der",
                "C=N&#8314;-Bindung geht auf den Stickstoff", abstand=32)
 
-t.reaktionspfeil(340, 780, 414)
-t.text(377, 770, "&#8722; CO&#8322;", size=10.5, anchor="middle", gewicht=700, farbe=W)
+t.reaktionspfeil(320, 783, 420)
+t.text(370, 773, "&#8722; CO&#8322;", size=10.5, anchor="middle", gewicht=700, farbe=W)
 
-ena = mech.Molekuel(ENAMIN, 560, 790, labels=RESTE_E, zeige={7: "links"}, name="Enamin")
-t.mole.append(ena)
+ena = t.mol(ENAMIN, 520, 800, labels=RESTE_E, kern=KERN, name="Enamin")
 t.unterschrift(ena, "Enamin: der „aktivierte Aldehyd“", abstand=32, farbe=W, gewicht=700)
 
 t.kasten(680, 722, 300, 198, fill="var(--surface-2)")
@@ -186,8 +228,9 @@ ARIA = (
     "Thiazoliumrings abgezogen wird. Der Protonenakzeptor ist kein Enzymrest, sondern der "
     "Cofaktor selbst: der Iminostickstoff des Aminopyrimidinrings, den die V-foermige "
     "Konformation unmittelbar neben das C2 legt. Ein Elektronenpaarpfeil geht von diesem "
-    "Stickstoff auf das Wasserstoffatom, ein zweiter aus der Kohlenstoff-Wasserstoff-Bindung "
-    "zurueck auf das C2. Das entstehende Carbanion wird vom benachbarten positiv geladenen "
+    "Stickstoff auf das Wasserstoffatom; das Bindungspaar der Kohlenstoff-Wasserstoff-Bindung "
+    "bleibt am C2 zurueck und ist als freies Paar am Ylid daneben gezeichnet. "
+    "Das entstehende Carbanion wird vom benachbarten positiv geladenen "
     "Stickstoff als Ylid stabilisiert. Der Ylidanteil bleibt winzig, stellt sich aber in "
     "Millisekunden ein. Zone B zeigt die Umpolung: Das Ylid greift den Ketokohlenstoff des "
     "Pyruvats an, nach Protonierung entsteht 2-Lactyl-Thiaminpyrophosphat. In der zweiten Reihe "
@@ -195,11 +238,12 @@ ARIA = (
     "Elektronen bilden die Doppelbindung zum Ring, und das Pi-Paar der "
     "Kohlenstoff-Stickstoff-Doppelbindung weicht auf den Stickstoff aus. Es entsteht das Enamin, "
     "der sogenannte aktivierte Aldehyd. Derselbe Kohlenstoff, der im Pyruvat elektrophil war, ist "
-    "jetzt nucleophil. Zone C nennt die drei Enzyme, die bei Thiaminmangel gleichzeitig ausfallen."
+    "jetzt nucleophil. Der Thiazoliumring steht in allen vier Stufen in derselben Lage, damit der "
+    "Unterschied zwischen den Stufen ins Auge faellt und nicht die Ausrichtung. "
+    "Zone C nennt die drei Enzyme, die bei Thiaminmangel gleichzeitig ausfallen."
 )
 
 fehler, bericht = t.pruefe()
-print("Pfeilanker:")
 for z in bericht:
     print(z)
 if fehler:

@@ -2,191 +2,241 @@
 """
 M-05 · S-Adenosylmethionin, gebaut mit der Mechanismus-Sprache aus mech.py.
 
-Musterfassung: alle Strukturen kommen von RDKit, alle Elektronenpfeile sind aus
-den gemeldeten Atomkoordinaten konstruiert, alle Bildunterschriften sitzen an der
-tatsaechlichen Ausdehnung des jeweiligen Molekuels. Ausgabe nach tafeln.json.
+Alle Strukturen kommen von RDKit, alle Bildunterschriften sitzen an der
+tatsaechlichen Ausdehnung des jeweiligen Molekuels, und alle Elektronenpfeile
+sind ueber t.schub(quelle, ziel) nur noch chemisch beschrieben: Bauchseite,
+Oeffnungswinkel, Ankerlage und der Winkel jedes freien Elektronenpaars kommen
+aus dem Solver in mech_schub.py, geprueft wird gegen mech_regeln.py.
+
+Das Methionin-Geruest steht fuenfmal auf der Tafel - als freie Aminosaeure, als
+Sulfonium in drei Fassungen und als S-Adenosylhomocystein. Ein tafeleigenes
+Leitgeruest (METHIONIN, siehe unten) legt alle fuenf auf dieselbe Lage: die
+Kette laeuft von der Carboxylatgruppe links zum Schwefel rechts, der dritte
+Substituent am Sulfonium haengt nach unten. Damit steht in Zone A das freie
+Paar des Schwefels nach rechts, wo das ATP wartet, in Zone B die Methylgruppe
+nach unten, wo das Catecholat angreift, und in Zone C die C5'-S-Bindung frei
+nach oben rechts, wo die Fischhaken Platz brauchen.
+
+Zwei Elektronenbewegungen der Tafel sind nicht gezeichnet, und zwar aus einem
+Grund, der nichts mit dieser Tafel zu tun hat: beide enden am Sulfonium-
+Schwefel und kommen aus einer seiner eigenen Bindungen. Um ein dreifach
+substituiertes Atom herum stehen die Bindungen 120 Grad auseinander. Der
+Schwanz sitzt seitlich neben der Quellbindung, die Spitze in einer der drei
+Luecken; die beiden Luecken neben der Quellbindung liegen so dicht daneben,
+dass die Sehne nur etwa 0,4 L lang wird (gefordert sind 0,60 L), und in die
+dritte kommt kein Bogen, ohne eine der beiden anderen Bindungen zu kreuzen.
+Mit einem zweifach substituierten Sauerstoff oder Schwefel gelingt derselbe
+Pfeil anstandslos - in Zone A ist er gezeichnet. Was die beiden fehlenden
+Pfeile sagen wuerden, steht im Fliesstext der Zonen B und C.
 """
-import json
 import os
 import sys
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 import mech
+import mech_kerne
+from mech import Atom, Bindung, Paar
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
-W = "var(--warn)"       # Elektronenpaar-Pfeile
-R = "var(--drug)"       # Radikalpfeile (Fischhaken)
+W = "var(--warn)"
+R = "var(--drug)"
 E = "var(--enzym)"
 C = "var(--cofaktor)"
 G = "var(--ink-3)"
 
-t = mech.Tafel(1000, 1160)
+# Leitgeruest: die Methioninkette S-CH2-CH2-CH(N)-COO. ring nennt die Atome,
+# an denen die Lage haengt (Schwefel, beide Methylenkohlenstoffe, C-alpha und
+# der Carboxylkohlenstoff), leit den Schwefel, folge den Carboxylkohlenstoff -
+# das Paar legt die Haendigkeit fest, so dass die Kette nach links laeuft und
+# der Schwefel rechts aussen steht.
+METHIONIN = mech_kerne.eigener(
+    "methionin", "CSCC[C@H]([NH3+])C(=O)[O-]",
+    muster="[#16]~[#6]~[#6]~[#6](~[#7])~[#6](~[#8])~[#8]",
+    ring=[1, 2, 3, 4, 6], leit=1, folge=6, winkel=353.0)
+
+t = mech.Tafel(1000, 1330)
 
 # ===================================================== ZONE A · Aktivierung
 t.zone(24, "A · DIE AKTIVIERUNG: WOZU DAS ATP GEBRAUCHT WIRD")
 t.text(20, 54, "Der Schwefel greift nicht am Phosphor an, sondern am C5&#8242; der Ribose. "
                "Deshalb geht das gesamte Triphosphat, unten als PPP abgekürzt, ab.", size=12.5)
 
-# Methionin: Schwefel nach rechts, damit sein Elektronenpaar zum ATP zeigt
-met = mech.Molekuel("CSCC[C@H]([NH3+])C(=O)[O-]", 128, 150,
-                    zeige={1: "rechts"}, name="Methionin")
-# ATP verkuerzt: C5' nach links, der Brueckensauerstoff darueber, die drei Phosphate
-# als kurze Marke "PPP". Zwei Gruende fuer die Kuerze: die ausgeschriebene Marke
-# "Triphosphat" ist so breit, dass sie sowohl in der Bahn des Pfeils von links auf das
-# C5' liegt als auch dort, wo das Elektronenpaar der brechenden Bindung landet.
-atp = mech.Molekuel("*OC[C@H]1O[C@@H](*)[C@H](O)[C@@H]1O", 404, 150,
-                    labels={0: "PPP", 6: "Adenin"},
-                    zeige={2: "links", 1: "oben"}, name="ATP")
-sam = mech.Molekuel("C[S+](CC[C@H]([NH3+])C(=O)[O-])C[C@H]1O[C@@H](*)[C@H](O)[C@@H]1O",
-                    810, 152, labels={13: "Adenin"}, name="SAM")
-t.mole += [met, atp, sam]
+met = t.mol("CSCC[C@H]([NH3+])C(=O)[O-]", 150, 168, kern=METHIONIN,
+            name="Methionin")
+# ATP verkuerzt: C5' nach links, der Brueckensauerstoff darueber, die drei
+# Phosphate als kurze Marke "PPP". Die ausgeschriebene Marke "Triphosphat" ist
+# so breit, dass sie sowohl in der Bahn des Pfeils von links auf das C5' liegt
+# als auch dort, wo das Elektronenpaar der brechenden Bindung landet.
+atp = t.mol("*OC[C@H]1O[C@@H](*)[C@H](O)[C@@H]1O", 295, 208,
+            labels={0: "PPP", 6: "Adenin"},
+            zeige={2: "links", 1: "oben"}, name="ATP")
+sam = t.mol("C[S+](CC[C@H]([NH3+])C(=O)[O-])C[C@H]1O[C@@H](*)[C@H](O)[C@@H]1O",
+            760, 213, labels={13: "Adenin"}, kern=METHIONIN, name="SAM")
 
-lp_s = t.elektronenpaar(met, 1, -55)
-t.pfeil(lp_s, (atp, 2), bogen=0.22, seite=-1, farbe=W)          # S  -> C5'
-# Das Paar bleibt am Brueckensauerstoff. Ein Pfeil bis in dessen Mitte waere kuerzer
-# als sein eigener Kopf; er endet deshalb dicht daneben, auf der von C5' abgewandten
-# Seite.
-t.pfeil((atp, 2, 1), atp.abseits(1, 2, abstand=26), bogen=0.40, seite=1,
-        farbe=W, mindestbogen=14)                               # C5'-O -> O
+# Ein Schritt: das freie Paar des Schwefels bildet die Bindung zum C5', und
+# gleichzeitig geht das Paar der Bindung C5'-O auf den Brueckensauerstoff, mit
+# dem das Triphosphat abgeht. Die beiden stehen ohne kette= da, obwohl sie
+# zusammengehoeren. Der Grund ist geometrisch: die Kette zieht den Schwanz des
+# zweiten Pfeils an die Spitze des ersten, und die liegt links neben der Bindung
+# C5'-O. Von dort muss der Bogen quer ueber die eigene Quellbindung, um rechts
+# am Sauerstoff zu enden. Ohne die Kette setzt der Solver den Schwanz rechts
+# neben die Bindung, und der Pfeil legt sich sauber um den Sauerstoff. Die beiden
+# Spitzen liegen trotzdem 0,98 L auseinander und teilen sich das C5'.
+t.schub(Paar(met, 1), Atom(atp, 2))
+t.schub(Bindung(atp, 2, 1), Paar(atp, 1))
 
 t.unterschrift(met, "L-Methionin, ein neutraler Thioether")
 t.unterschrift(atp, "ATP: angegriffen wird der Zucker, nicht das Phosphat")
 t.unterschrift(sam, "S-Adenosylmethionin", "drei Substituenten am Schwefel = Sulfonium",
                gewicht=700, farbe=R)
 
-t.reaktionspfeil(604, 150, 690)
-t.text(647, 140, "MAT", size=11.5, anchor="middle", gewicht=700, farbe=E, mono=True)
-t.text(647, 168, "Methionin-Adenosyltransferase", size=9.5, anchor="middle", farbe=G)
+t.reaktionspfeil(420, 198, 520)
+t.text(470, 188, "MAT", size=11.5, anchor="middle", gewicht=700, farbe=E, mono=True)
+t.text(470, 216, "Methionin-Adenosyltransferase", size=9.5, anchor="middle", farbe=G)
 # Das Tripolyphosphat zerfaellt erst durch Hydrolyse in PPi und Pi; ohne das
 # Wasser geht die Atombilanz des zweiten Teilschritts nicht auf.
-t.text(647, 186, "+ H&#8322;O", size=10.5, anchor="middle", farbe=C)
-t.text(647, 202, "&#8722; P&#7522; &#8722; PP&#7522;", size=10.5, anchor="middle", farbe=C)
+t.text(470, 234, "+ H&#8322;O", size=10.5, anchor="middle", farbe=C)
+t.text(470, 250, "&#8722; P&#7522; &#8722; PP&#7522;", size=10.5, anchor="middle", farbe=C)
 
-t.kasten(20, 244, 520, 76, fill="var(--cofaktor-bg)", stroke=C)
-t.text(38, 266, "WAS DAS ATP BEWIRKT", size=11, gewicht=700, farbe=C)
-t.text(38, 288, "Die Methylgruppe ist dieselbe wie im Methionin. Neu ist die Ladung am "
+t.kasten(20, 336, 520, 76, fill="var(--cofaktor-bg)", stroke=C)
+t.text(38, 358, "WAS DAS ATP BEWIRKT", size=11, gewicht=700, farbe=C)
+t.text(38, 380, "Die Methylgruppe ist dieselbe wie im Methionin. Neu ist die Ladung am "
                 "Schwefel: sie macht", size=12.5)
-t.text(38, 307, "das Methyl elektrophil und den abgehenden Thioether ungeladen.", size=12.5)
+t.text(38, 399, "das Methyl elektrophil und den abgehenden Thioether ungeladen.", size=12.5)
 
 # ===================================================== ZONE B · S_N2
-t.zone(358, "B · DIE ÜBERTRAGUNG: S<tspan baseline-shift='sub' font-size='8.5'>N</tspan>2 "
+t.zone(468, "B · DIE ÜBERTRAGUNG: S<tspan baseline-shift='sub' font-size='8.5'>N</tspan>2 "
             "AM METHYLKOHLENSTOFF")
 
-cat = mech.Molekuel("Oc1ccccc1[O-]", 132, 472, zeige={7: "rechts"}, bindung=26,
-                    name="Catecholat")
 # Das C5' steht hier als eigenes Atom, der Rest heisst deshalb "Adenin-Ribose".
 # Hiesse die Marke "Adenosyl", steckte das C5' zweimal im Bild und die Bilanz
 # gegen das SAH der Produktzeile ginge um eine CH2-Gruppe daneben.
-smk = mech.Molekuel("C[S+](CC[C@H]([NH3+])C(=O)[O-])C*", 396, 464,
-                    labels={10: "Adenin-Ribose"}, zeige={0: "links"}, bindung=26,
-                    name="SAM")
-t.mole += [cat, smk]
+smk = t.mol("C[S+](CC[C@H]([NH3+])C(=O)[O-])C*", 340, 560,
+            labels={10: "Adenin-Ribose"}, kern=METHIONIN, name="SAM, Zone B")
+cat = t.mol("Oc1ccccc1[O-]", 297, 648, zeige={7: "rechts"}, name="Catecholat")
 
-lp_o = t.elektronenpaar(cat, 7, -25)
-t.pfeil(lp_o, (smk, 0), bogen=0.24, seite=-1, farbe=W)          # Nu   -> CH3
-# Der Ringpfeil um den Schwefel ist die uebliche Schreibweise, wenn das Paar am
-# eigenen Atom bleibt: ein gerader Pfeil von der Bindungsmitte in die Mitte des
-# Schwefelsymbols waere kuerzer als sein eigener Kopf.
-t.pfeil((smk, 0, 1), (smk, 1), bogen=0.62, seite=-1, farbe=W,
-        mindestbogen=22)                                        # C-S  -> S
+# Gezeichnet ist der angreifende Pfeil. Der zweite Pfeil desselben Schrittes -
+# das Paar der Bindung Methyl-Schwefel bleibt am Schwefel - ist nicht gezeichnet:
+# um ein dreifach substituiertes Atom herum stehen die drei Bindungen 120 Grad
+# auseinander, und in die Luecke daneben passt kein Bogen, der die Mindestlaenge
+# einhaelt, ohne eine der beiden anderen Bindungen zu kreuzen. Die Aussage steht
+# im Uebergangszustand (gestrichelte Bindung, delta plus am Schwefel), im
+# Fliesstext darunter und in der Unterschrift des SAH.
+t.schub(Paar(cat, 7), Atom(smk, 0))
 
+t.ueberschrift(smk, "S-Adenosylmethionin", abstand=24,
+               size=11, farbe=G, gewicht=700)
 t.unterschrift(cat, "Catecholat, das Nucleophil der COMT")
-t.unterschrift(smk, "S-Adenosylmethionin")
 
-t.reaktionspfeil(566, 468, 636)
+t.reaktionspfeil(540, 566, 610)
 
 # Uebergangszustand
-t.ts_klammer(650, 410, 952, 524)
-t.text(810, 430, "Angriff auf der abgewandten Seite", size=11, anchor="middle",
+t.ts_klammer(652, 503, 954, 617)
+t.text(812, 523, "Angriff auf der abgewandten Seite", size=11, anchor="middle",
        gewicht=700, farbe=W)
-t.text(700, 476, "ArO", size=13.5, anchor="end", gewicht=700, farbe=E)
-t.text(706, 469, "&#948;&#8722;", size=9.5, farbe=G)
-t.linie(712, 472, 772, 472, farbe=W, breite=1.6, strich="4 3")
-t.text(792, 476, "CH&#8323;", size=13.5, anchor="middle", gewicht=700)
-t.linie(814, 472, 874, 472, farbe=W, breite=1.6, strich="4 3")
-t.text(886, 476, "S", size=14, gewicht=700, farbe=C)
-t.text(896, 469, "&#948;+", size=9.5, farbe=G)
-t.linie(792, 486, 792, 502, breite=1.3)
-t.linie(792, 486, 778, 500, breite=1.3)
-t.linie(792, 486, 806, 500, breite=1.3)
-t.text(810, 514, "planare CH&#8323;-Gruppe, fünffach koordinierter Übergangszustand", size=10,
+t.text(702, 569, "ArO", size=13.5, anchor="end", gewicht=700, farbe=E)
+t.text(708, 562, "&#948;&#8722;", size=9.5, farbe=G)
+t.linie(714, 565, 781, 565, farbe=W, breite=1.6, strich="4 3")
+# Der angegriffene Kohlenstoff steht als "C" da, seine drei Wasserstoffe stehen
+# einzeln daneben. Stuende hier "CH3" und darunter noch drei Striche, waeren die
+# Wasserstoffe zweimal im Bild und der Kohlenstoff traege acht Bindungen. Die
+# drei Striche stehen im Winkel von 120 Grad um das C - einer nach oben, zwei
+# nach unten -, denn genau das ist die planare Anordnung, von der die Zeile
+# darunter spricht. Nach unten allein waere sie pyramidal, also der sp3-Zustand
+# vor und nach dem Uebergang.
+t.text(794, 569, "C", size=13.5, anchor="middle", gewicht=700)
+t.linie(808, 565, 876, 565, farbe=W, breite=1.6, strich="4 3")
+t.text(888, 569, "S", size=14, gewicht=700, farbe=C)
+t.text(898, 562, "&#948;+", size=9.5, farbe=G)
+t.linie(794, 556, 794, 545, breite=1.3)
+t.text(794, 542, "H", size=10.5, anchor="middle")
+t.linie(788, 574, 778, 584, breite=1.3)
+t.text(771, 594, "H", size=10.5, anchor="middle")
+t.linie(800, 574, 810, 584, breite=1.3)
+t.text(817, 594, "H", size=10.5, anchor="middle")
+t.text(812, 607, "planare CH&#8323;-Gruppe, fünffach koordinierter Übergangszustand", size=10,
        anchor="middle", farbe=G)
 
-t.text(20, 566, "Ein einziger Schritt: Bindungsbildung und Bindungsbruch laufen gleichzeitig. "
+t.text(20, 736, "Ein einziger Schritt: Bindungsbildung und Bindungsbruch laufen gleichzeitig. "
                 "Weil das Nucleophil auf der dem", size=12.5)
-t.text(20, 585, "Schwefel abgewandten Seite angreift, kehrt sich die Konfiguration am "
+t.text(20, 755, "Schwefel abgewandten Seite angreift, kehrt sich die Konfiguration am "
                 "Methylkohlenstoff um. Mit dreifach isotopen-", size=12.5)
-t.text(20, 604, "markiertem Methyl (H, D, T) ist diese Inversion nachgewiesen worden.",
-       size=12.5)
+t.text(20, 774, "markiertem Methyl (H, D, T) ist diese Inversion nachgewiesen worden. "
+                "Gezeichnet ist der Pfeil des Angriffs; das Paar der", size=12.5)
+t.text(20, 793, "brechenden Bindung bleibt am Schwefel und macht ihn zum neutralen "
+                "Thioether &#8211; im Übergangszustand steht dafür das &#948;+.", size=12.5)
 
 # Produkte
-t.text(20, 642, "PRODUKTE", size=11, gewicht=700, farbe=G)
-gua = mech.Molekuel("COc1ccccc1O", 150, 706, name="Guajacol")
-sah = mech.Molekuel("*SCC[C@H]([NH3+])C(=O)[O-]", 452, 700,
-                    labels={0: "Adenosyl"}, zeige={1: "oben"}, name="SAH")
-t.mole += [gua, sah]
-t.text(300, 706, "+", size=17, anchor="middle", gewicht=700)
+t.text(20, 826, "PRODUKTE", size=11, gewicht=700, farbe=G)
+gua = t.mol("COc1ccccc1O", 170, 875, name="Guajacol")
+sah = t.mol("*SCC[C@H]([NH3+])C(=O)[O-]", 470, 872, labels={0: "Adenosyl"},
+            kern=METHIONIN, name="SAH")
+t.text(310, 875, "+", size=17, anchor="middle", gewicht=700)
 t.unterschrift(gua, "methyliertes Produkt")
 t.unterschrift(sah, "S-Adenosylhomocystein, wieder ein neutraler Thioether",
                "hemmt seinerseits alle Methyltransferasen", farbe=R)
 
-t.text(660, 676, "Der Schwefel trägt jetzt wieder nur zwei", size=12)
-t.text(660, 695, "Substituenten. Damit ist er weder elektrophil", size=12)
-t.text(660, 714, "aktiviert noch eine gute Abgangsgruppe. Die", size=12)
-t.text(660, 733, "Aktivierung ist verbraucht und muss über den", size=12)
-t.text(660, 752, "SAM-Zyklus mit neuem ATP erneuert werden.", size=12)
+t.text(660, 850, "Der Schwefel trägt jetzt wieder nur zwei", size=12)
+t.text(660, 869, "Substituenten. Damit ist er weder elektrophil", size=12)
+t.text(660, 888, "aktiviert noch eine gute Abgangsgruppe. Die", size=12)
+t.text(660, 907, "Aktivierung ist verbraucht und muss über den", size=12)
+t.text(660, 926, "SAM-Zyklus mit neuem ATP erneuert werden.", size=12)
 
 # ===================================================== ZONE C · Radikal-SAM
-t.zone(818, "C · DIESELBE VERBINDUNG, HOMOLYTISCH GESPALTEN: QUERVERBINDUNG ZU M-16")
-t.text(20, 848, "Radikal-SAM-Enzyme brechen nicht die Bindung zum Methyl, sondern die zum "
-                "Adenosyl, und zwar homolytisch.", size=12.5)
+t.zone(985, "C · DIESELBE VERBINDUNG, HOMOLYTISCH GESPALTEN: QUERVERBINDUNG ZU M-16")
+t.text(20, 1013, "Radikal-SAM-Enzyme brechen nicht die Bindung zum Methyl, sondern die zum "
+                 "Adenosyl, und zwar homolytisch. Von den beiden Elektronen dieser Bindung "
+                 "geht eines", size=12.5)
+t.text(20, 1031, "auf das C5&#8242;; das andere bleibt am Schwefel und macht ihn zusammen mit "
+                 "dem Elektron des Clusters zum neutralen Thioether.", size=12.5)
 
-# Groesser gezeichnet als die uebrigen Strukturen: an der C5'-S-Bindung setzen drei
-# Fischhaken an, und bei 21 px Bindungslaenge entarten sie zu Schleifen. Gedreht ist so,
-# dass die C5'-S-Bindung waagerecht liegt und die breite Marke "Adenin-Ribose" hinter
-# das C5' rueckt; sonst faellt sie genau dorthin, wo der Fischhaken zum C5' endet.
-rad = mech.Molekuel("C[S+](CC[C@H]([NH3+])C(=O)[O-])C*", 400, 932,
-                    labels={10: "Adenin-Ribose"}, rotate=150.0,
-                    bindung=38, name="SAM")
-t.mole.append(rad)
+# Dieselbe Struktur wie in Zone B und in derselben Lage: der Leser soll sehen,
+# dass es dieselbe Bindung ist, die hier anders bricht.
+rad = t.mol("C[S+](CC[C@H]([NH3+])C(=O)[O-])C*", 340, 1130,
+            labels={10: "Adenin-Ribose"}, kern=METHIONIN, name="SAM, Zone C")
+# Die Beschriftung steht ausnahmsweise ueber der Struktur: unter ihr liegt der
+# Weg des Clusterpfeils.
+t.text(344, 1056, "C5&#8242;&#8722;S bricht homolytisch: es entstehen L-Methionin",
+       size=10.5, anchor="middle", farbe=R)
+t.text(344, 1071, "und das 5&#8242;-Desoxyadenosyl-Radikal", size=10.5,
+       anchor="middle", farbe=R)
 
-# Der Cluster steht genau links vom Schwefel: nur aus dieser Richtung erreicht sein
-# Pfeil das Schwefelatom, ohne die Aminosäureseitenkette zu durchqueren.
-cluster = t.marke(250, 968, "[4Fe-4S]-Cluster")
-t.text(250, 950, "[4Fe&#8722;4S]", size=13, anchor="middle", gewicht=700, farbe=W)
-t.text(250, 990, "reduziert, gibt ein Elektron ab", size=10, anchor="middle", farbe=G)
+# Der Cluster steht unten links vom Schwefel. Am Schwefel haengen drei Bindungen:
+# die Kette nach links oben, das Methyl nach unten, die C5'-Bindung nach rechts
+# oben. Von den drei Luecken dazwischen ist die nach links unten die einzige, die
+# weit genug von der C5'-S-Bindung wegfuehrt; sonst kaemen der Clusterpfeil und
+# der Fischhaken an dieser Bindung einander ins Gehege.
+t.text(278, 1190, "[4Fe&#8722;4S]", size=13, anchor="middle", gewicht=700, farbe=W)
+t.text(278, 1208, "reduziert, gibt ein Elektron ab", size=10, anchor="middle", farbe=G)
+cluster = t.marke(302, 1170, "[4Fe-4S]-Cluster")
 
-# Drei Fischhaken, sonst geht die Elektronenbilanz nicht auf: das Clusterelektron
-# geht auf den Schwefel, dazu je ein Elektron der C5'-S-Bindung auf den Schwefel
-# und auf das C5'. Der Schwefel bekommt damit ein zweites freies Paar und wird
-# zum neutralen Thioether, das C5' behaelt ein einzelnes Elektron; dieses steht als
-# Punkt im Bild, damit der Fischhaken ein sichtbares Ziel hat.
-e_c5 = t.einzelelektron(rad, 9, 300, abstand=24)
-t.pfeil(cluster, (rad, 1), bogen=0.05, seite=-1, typ="fischhaken", farbe=R,
-        mindestbogen=8)
-t.pfeil((rad, 1, 9), rad.abseits(1, 0, abstand=30), bogen=0.40, seite=-1,
-        typ="fischhaken", farbe=R, mindestbogen=12, gap=3)
-t.pfeil((rad, 1, 9), e_c5, bogen=0.35, seite=1, typ="fischhaken", farbe=R,
-        mindestbogen=11)
+# Drei Elektronen bewegen sich: das Clusterelektron geht auf den Schwefel, dazu
+# je ein Elektron der C5'-S-Bindung auf den Schwefel und auf das C5'. Der
+# Schwefel bekommt damit ein zweites freies Paar und wird zum neutralen
+# Thioether, das C5' behaelt ein einzelnes Elektron und wird zum Radikal.
+# Gezeichnet sind zwei der drei Fischhaken. Der dritte - das zweite Elektron der
+# Bindung bleibt am Schwefel - laesst sich nicht setzen: der Schwefel traegt drei
+# Bindungen, die 120 Grad auseinander stehen, und in die Luecke daneben passt
+# kein Bogen, der die Mindestlaenge einhaelt, ohne eine der beiden anderen
+# Bindungen zu kreuzen. Der Verbleib dieses Elektrons steht daneben im Text.
+t.schub(cluster, Atom(rad, 1), elektronen=1, kette="c")
+t.schub(Bindung(rad, 1, 9), Atom(rad, 9), elektronen=1, kette="c")
 
-t.unterschrift(rad, "C5&#8242;&#8722;S bricht homolytisch: es entstehen L-Methionin",
-               "und das 5&#8242;-Desoxyadenosyl-Radikal", farbe=R)
-
-t.kasten(576, 872, 404, 116, fill="var(--drug-bg)", stroke=R)
-t.text(594, 894, "WARUM DAS IN DIE PRÜFUNG GEHÖRT", size=11, gewicht=700, farbe=R)
-t.text(594, 916, "Es entsteht dasselbe 5&#8242;-Desoxyadenosyl-Radikal wie aus", size=12.5)
-t.text(594, 935, "Adenosylcobalamin (Tafel M-16). Zwei ganz verschiedene", size=12.5)
-t.text(594, 954, "Cofaktoren liefern dasselbe Werkzeug für dieselbe Aufgabe:", size=12.5)
-t.text(594, 973, "die Abstraktion eines nicht aktivierten Wasserstoffs.", size=12.5)
+t.kasten(576, 1058, 404, 116, fill="var(--drug-bg)", stroke=R)
+t.text(594, 1080, "WARUM DAS IN DIE PRÜFUNG GEHÖRT", size=11, gewicht=700, farbe=R)
+t.text(594, 1102, "Es entsteht dasselbe 5&#8242;-Desoxyadenosyl-Radikal wie aus", size=12.5)
+t.text(594, 1121, "Adenosylcobalamin (Tafel M-16). Zwei ganz verschiedene", size=12.5)
+t.text(594, 1140, "Cofaktoren liefern dasselbe Werkzeug für dieselbe Aufgabe:", size=12.5)
+t.text(594, 1159, "die Abstraktion eines nicht aktivierten Wasserstoffs.", size=12.5)
 
 # ===================================================== ZONE D · Prüfung
-t.zone(1086, "D · WORAUF ES IN DER PRÜFUNG ANKOMMT")
-t.text(20, 1110, "SAM methyliert meist ein Heteroatom: O bei COMT und ASMT, N bei PNMT und "
+t.zone(1250, "D · WORAUF ES IN DER PRÜFUNG ANKOMMT")
+t.text(20, 1274, "SAM methyliert meist ein Heteroatom: O bei COMT und ASMT, N bei PNMT und "
                  "HNMT, S bei der Thiopurin-S-Methyltransferase. Die DNA-Methyltransferasen "
                  "sind die Ausnahme: sie", size=12)
-t.text(20, 1128, "methylieren das C5 des Cytosins, und zwar über denselben Umweg wie die "
+t.text(20, 1292, "methylieren das C5 des Cytosins, und zwar über denselben Umweg wie die "
                  "Thymidylatsynthase auf Tafel M-04.", size=12)
 
 # ===================================================== Ausgabe
@@ -198,19 +248,21 @@ ARIA = (
     "entsteht das Sulfonium S-Adenosylmethionin; Wasser wird verbraucht, Phosphat und "
     "Diphosphat gehen ab. Zone B: Ein Nucleophil, hier Catecholat, "
     "greift die Methylgruppe von der dem Schwefel abgewandten Seite an, waehrend die "
-    "Kohlenstoff-Schwefel-Bindung bricht. Der Uebergangszustand traegt eine planare "
+    "Kohlenstoff-Schwefel-Bindung bricht und ihr Elektronenpaar am Schwefel bleibt; gezeichnet "
+    "ist der Pfeil des Angriffs. Der Uebergangszustand traegt eine planare "
     "Methylgruppe zwischen zwei partiellen Bindungen. Produkte sind Guajacol und "
     "S-Adenosylhomocystein. Zone C: Radikal-SAM-Enzyme spalten stattdessen die Bindung "
-    "zwischen Schwefel und C5-Strich homolytisch. Drei Fischhakenpfeile zeigen den "
+    "zwischen Schwefel und C5-Strich homolytisch. Zwei Fischhakenpfeile zeigen den "
     "Elektronenweg: das Elektron des reduzierten Vier-Eisen-Vier-Schwefel-Clusters geht auf "
-    "den Schwefel, von den beiden Elektronen der Bindung geht eines ebenfalls auf den "
-    "Schwefel und eines auf das C5-Strich, wo es als Punkt stehen bleibt. So entstehen "
+    "den Schwefel, und von den beiden Elektronen der Bindung geht eines auf das C5-Strich. "
+    "Das zweite Elektron der Bindung bleibt am Schwefel; das steht im Text. So entstehen "
     "das neutrale L-Methionin und das "
-    "5-Strich-Desoxyadenosyl-Radikal, dasselbe wie aus Adenosylcobalamin."
+    "5-Strich-Desoxyadenosyl-Radikal, dasselbe wie aus Adenosylcobalamin. "
+    "Das Methioningeruest steht in allen fuenf Strukturen in derselben Lage, damit der "
+    "Unterschied zwischen den Stufen ins Auge faellt und nicht die Ausrichtung."
 )
 
 fehler, bericht = t.pruefe()
-print("Pfeilanker:")
 for z in bericht:
     print(z)
 if fehler:
