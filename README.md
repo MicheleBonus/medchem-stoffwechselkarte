@@ -32,7 +32,10 @@ build/
   shot_site.py         rendert alle Seiten headless und prüft Layout und Verweise
   gen_structures.py    SMILES -> structures.json (rund 300 Strukturformeln)
   mech.py              Zeichensprache für Mechanismus-Tafeln
-  tafel_m01.py … m17   je eine Tafel -> tafeln.json
+  mech_kerne.py        Leitgerüste: feste Referenzlage wiederkehrender Molekülkerne
+  mech_schub.py        Elektronenpfeile: Anker aus der Chemie, Geometrie aus dem Solver
+  mech_regeln.py       Regelkatalog für Elektronenpfeile und die Prüfung dagegen
+  tafel_m01.py … m17   je eine Tafel -> tafeln/mNN.svg
   vorschau.py          eine Tafel einzeln ansehen und prüfen
   vorschau_reihe.py    eine Gruppe von Strukturformeln nebeneinander ansehen
   src/                 Teil 0 bis 9 und die Rahmentexte der Tafeln
@@ -66,6 +69,28 @@ In den Quellen steht jeder interne Verweis als `href="#anker"`, unabhängig davo
 auf welcher Seite der Anker liegt. `site.py` sammelt alle Anker ein, ermittelt die
 Zielseite und schreibt den Verweis um. Wer Inhalte zwischen Dateien verschiebt,
 muss deshalb nichts an den Verweisen ändern.
+
+### Elektronenpfeile
+
+Ein Pfeil wird als Chemie angemeldet, nicht als Geometrie:
+
+```python
+t.schub(Paar(subst, 0),          Atom(intern, 12))       # neue σ-Bindung
+t.schub(Bindung(intern, 12, 13), Paar(intern, 13))       # π-Paar wird freies Paar
+```
+
+Kopfform, Farbe, Bauchseite, Öffnungswinkel und die genaue Ankerlage folgen daraus.
+Ein Solver sucht unter rund tausend Kandidaten den Bogen, der keine Bindung, kein
+Atomsymbol und keinen anderen Pfeil schneidet; als Hindernisse dienen die exakten
+Bindungsstrecken und Glyphenrechtecke, die RDKit in seinem SVG mit annotiert.
+Findet er keinen, bricht der Bau ab und nennt den Grund — das ist dann ein
+Layoutfehler und keiner, den man wegkrümmt. `mech_regeln.py` misst jeden fertigen
+Pfeil gegen einen Katalog aus Levy, *Arrow Pushing in Organic Chemistry*, und
+Brückner, *Reaktionsmechanismen*, und druckt die Maße beim Bauen aus.
+
+Wiederkehrende Molekülkerne bekommen in `mech_kerne.py` eine ein für alle Mal
+festgelegte Lage (`t.mol(..., kern="b6")`). Damit steht derselbe Kern in jeder
+Stufe einer Tafel gleich, gedreht und gespiegelt.
 
 ### Strukturformeln
 

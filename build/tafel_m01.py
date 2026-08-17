@@ -7,6 +7,17 @@ an den Cofaktor kommt: die Transaldiminierung mit geminalem Diamin und mit dem
 Lysin, das dabei frei wird. Zone B zeigt die Dunathan-Regel, also eine raeumliche
 Aussage, und die laesst sich in einer Strichzeichnung nur zeigen, wenn die Ebene
 selbst gezeichnet wird.
+
+Diese Tafel ist die erste, die mit der neuen Pfeilsprache gebaut ist:
+
+  - kern="b6" legt alle fuenf Stufen des Cofaktors auf dieselbe Referenzlage
+    (mech_kerne.py). Der Pyridinring steht dadurch in jedem Bild gleich: Ring-
+    stickstoff unten links, Methyl unten rechts, 3-Oxy rechts, C4' oben rechts,
+    Phosphat oben links. Vorher standen die fuenf Stufen ueber 95 Grad verteilt,
+    und der Leser musste jedes Bild erst neu einnorden.
+  - schub(quelle, ziel) beschreibt nur, welche Elektronen wohin gehen. Bauchseite,
+    Oeffnungswinkel, Ankerlage und der Winkel jedes freien Elektronenpaars kommen
+    aus dem Solver in mech_schub.py; geprueft wird gegen mech_regeln.py.
 """
 import os
 import sys
@@ -14,6 +25,7 @@ import sys
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 import mech
+from mech import Atom, Bindung, Paar
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -23,7 +35,7 @@ E = "var(--enzym)"
 C = "var(--cofaktor)"
 G = "var(--ink-3)"
 
-t = mech.Tafel(1000, 1950)
+t = mech.Tafel(1000, 2000)
 
 PLP = "Cc1[nH+]cc(COP(=O)([O-])[O-])c(%s)c1[O-]"
 
@@ -36,33 +48,26 @@ t.text(20, 75, "Cofaktor je frei wird: Angriff des Aminstickstoffs, Protonenwand
                "Zerfall. Am Ende hängt die Aminosäure am C4&#8242;.", size=12.5)
 
 # --- Reihe 1: internes Aldimin + freies Amin -> geminales Diamin I
-intern = mech.Molekuel(PLP % "/C=[NH+]/*", 150, 200, labels={14: "Lys"},
-                       zeige={2: "unten", 13: "rechts"}, name="internes Aldimin")
-t.mole.append(intern)
-t.atomnummer(intern, 12, "C4&#8242;", winkel=32, abstand=30, size=10, farbe=W, gewicht=700)
+intern = t.mol(PLP % "/C=[NH+]/*", 150, 212, labels={14: "Lys"},
+               kern="b6", name="internes Aldimin")
+t.atomnummer(intern, 12, "C4&#8242;", winkel=70, abstand=26, size=10, farbe=W, gewicht=700)
 t.unterschrift(intern, "&#9312; internes Aldimin, das Ketoenamin",
                "das ⊕ am Imin-Stickstoff macht C4&#8242; elektrophil")
 
-subst = mech.Molekuel("N[C@@H](*)C(=O)[O-]", 368, 152, labels={2: "R"},
-                      zeige={0: "unten"}, name="Aminosäure")
-t.mole.append(subst)
-t.ueberschrift(subst, "&#9313; die Aminosäure greift als freies Amin an", abstand=15,
+subst = t.mol("N[C@@H](*)C(=O)[O-]", 272, 152, labels={2: "R"},
+              zeige={0: "links"}, name="Aminosäure")
+t.ueberschrift(subst, "&#9313; die Aminosäure greift als freies Amin an", abstand=16,
                size=10.5, farbe=G, gewicht=700)
 
-lp1 = t.elektronenpaar(subst, 0, 195)
-t.pfeil(lp1, intern.aussen(12, abstand=6), bogen=0.22, seite=1, farbe=W)
-# Das pi-Paar der C4'=N-Bindung geht auf den Stickstoff. Der Weg ist kurz, deshalb
-# ein kleiner Spalt (gap) - sonst frisst die Verkuerzung den ganzen Bogen auf.
-t.pfeil((intern, 12, 13), intern.abseits(13, 12, abstand=24),
-        bogen=0.5, seite=-1, gap=3, farbe=W)
+# Der Angriff und der Ausweichschritt sind ein Schritt und werden deshalb als
+# Kette angemeldet: die Pruefung verlangt dann Kopf an Schwanz.
+t.schub(Paar(subst, 0), Atom(intern, 12), kette="A1")
+t.schub(Bindung(intern, 12, 13), Paar(intern, 13), kette="A1")
 
-t.reaktionspfeil(470, 200, 552)
+t.reaktionspfeil(360, 212, 442)
 
-gem1 = mech.Molekuel(
-    PLP % "[C@@H](N*)[NH2+][C@@H](*)C(=O)[O-]", 660, 200,
-    labels={14: "Lys", 17: "R"},
-    zeige={2: "unten", 13: "oben"}, name="geminales Diamin I")
-t.mole.append(gem1)
+gem1 = t.mol(PLP % "[C@@H](N*)[NH2+][C@@H](*)C(=O)[O-]", 600, 212,
+             labels={14: "Lys", 17: "R"}, kern="b6", name="geminales Diamin I")
 t.unterschrift(gem1, "&#9314; geminales Diamin: beide Stickstoffe am selben Kohlenstoff,",
                "das Lysin nach hinten, das Substrat nach vorn")
 
@@ -82,42 +87,37 @@ t.text(788, 273, "(Zone C, vierte Kachel).", size=12)
 # uebertragen wird ueber eine Base des aktiven Zentrums, und die beiden Stickstoffe
 # liegen am selben Kohlenstoff so dicht beieinander, dass jeder gezeichnete Bogen
 # quer durch die Struktur laufen wuerde. Im Bild sieht man den Wechsel am ⊕.
-t.reaktionspfeil(590, 348, 300)
-t.text(445, 336, "Protonenwanderung vom Substrat-Stickstoff zum Lysin-Stickstoff",
+t.reaktionspfeil(600, 360, 300)
+t.text(450, 348, "Protonenwanderung vom Substrat-Stickstoff zum Lysin-Stickstoff",
        size=11.5, anchor="middle", gewicht=700, farbe=W)
-t.text(445, 366, "Als Amid-Anion könnte das Lysin nicht austreten, als neutrales Amin schon. "
+t.text(450, 380, "Als Amid-Anion könnte das Lysin nicht austreten, als neutrales Amin schon. "
                  "Das ⊕ wechselt über eine Base des aktiven Zentrums",
        size=11.5, anchor="middle", farbe=G)
-t.text(445, 384, "(3-O&#8315; oder ein Wassermolekül) von einem Stickstoff zum anderen.",
+t.text(450, 398, "(3-O&#8315; oder ein Wassermolekül) von einem Stickstoff zum anderen.",
        size=11.5, anchor="middle", farbe=G)
 
 # --- Reihe 2: geminales Diamin II -> externes Aldimin + freies Lysin
-gem2 = mech.Molekuel(
-    PLP % "[C@@H]([NH2+]*)N[C@@H](*)C(=O)[O-]", 160, 480,
-    labels={14: "Lys", 17: "R"},
-    zeige={2: "unten", 13: "oben"}, name="geminales Diamin II")
-t.mole.append(gem2)
-lp3 = t.elektronenpaar(gem2, 15, 135, abstand=14)
-t.pfeil(lp3, (gem2, 12, 15), bogen=0.9, seite=1, gap=3, farbe=W)
-t.pfeil((gem2, 12, 13), gem2.abseits(13, 12, abstand=24),
-        bogen=0.5, seite=-1, gap=3, farbe=W)
+gem2 = t.mol(PLP % "[C@@H]([NH2+]*)N[C@@H](*)C(=O)[O-]", 155, 478,
+             labels={14: "Lys", 17: "R"}, kern="b6", name="geminales Diamin II")
+t.schub(Paar(gem2, 15), Bindung(gem2, 12, 15), kette="A2")
+t.schub(Bindung(gem2, 12, 13), Paar(gem2, 13), kette="A2")
 t.unterschrift(gem2, "&#9315; das Proton sitzt jetzt am Lysin,",
                "damit ist es eine Abgangsgruppe")
 
-t.reaktionspfeil(310, 480, 392)
+t.reaktionspfeil(310, 478, 392)
 
-extern = mech.Molekuel(PLP % "/C=[NH+]/[C@@H](*)C(=O)[O-]", 520, 480,
-                       labels={15: "R"}, wasserstoff=(14,),
-                       zeige={2: "unten", 13: "oben"}, name="externes Aldimin")
-t.mole.append(extern)
-t.atomnummer(extern, 14, "C&#945;", winkel=152, abstand=27, size=10.5, farbe=W, gewicht=700)
+extern = t.mol(PLP % "/C=[NH+]/[C@@H](*)C(=O)[O-]", 520, 478,
+               labels={15: "R"}, wasserstoff=(14,), kern="b6",
+               name="externes Aldimin")
+# Winkel nicht raten: die groesste Winkelluecke am C-alpha liefert ihn.
+t.atomnummer(extern, 14, "C&#945;", winkel=extern.freie_richtung(14), abstand=30,
+             size=10.5, farbe=W, gewicht=700)
 t.unterschrift(extern, "&#9316; externes Aldimin: jetzt hängt die Aminosäure am Cofaktor,",
                "drei Bindungen am C&#945; stehen zur Wahl")
 
-t.text(690, 486, "+", size=20, anchor="middle", farbe=G)
+t.text(700, 484, "+", size=20, anchor="middle", farbe=G)
 
-lys = mech.Molekuel("N*", 800, 480, labels={1: "Lys"}, name="freies Lysin")
-t.mole.append(lys)
+lys = t.mol("N*", 800, 478, labels={1: "Lys"}, name="freies Lysin")
 t.unterschrift(lys, "&#9317; das Lysin ist frei und bleibt", "im aktiven Zentrum")
 
 # ===================================================== ZONE B · Dunathan
@@ -163,35 +163,44 @@ t.zone(960, "C · DAS CHINOID: DIE GEMEINSAME ZWISCHENSTUFE ALLER WEGE")
 t.text(20, 990, "Was auch immer am C&#945; abgeht: Es bleibt ein Carbanion zurück, dessen Ladung "
                 "über das konjugierte System bis zum Ring-Stickstoff wandert.", size=12.5)
 
-chin = mech.Molekuel(PLP % "/C=N/[CH-]*", 205, 1100, labels={15: "R"},
-                     zeige={2: "unten", 13: "oben"}, name="Chinoid")
-t.mole.append(chin)
-# Drei Pfeile: das Carbanion bildet die Doppelbindung, das pi-Paar der alten
-# Doppelbindung weicht auf C4' aus, und von dort geht es zusammengefasst zum Ring-N.
-lp4 = t.elektronenpaar(chin, 14, 25, abstand=17)
-t.pfeil(lp4, (chin, 13, 14), bogen=0.9, seite=-1, gap=1.5, farbe=W)
-t.pfeil(chin.aussen(12, 13, abstand=14), chin.abseits(12, 13, abstand=20),
-        bogen=0.45, seite=1, gap=3, farbe=W)
-t.pfeil(chin.aussen(12, abstand=28), chin.aussen(2, abstand=30),
-        bogen=0.55, seite=-1, farbe=W, strich="5 3")
-t.atomnummer(chin, 14, "C&#945;", winkel=265, abstand=32, size=10.5, farbe=W, gewicht=700)
-t.text(305, 1052, "&#9312; das freie Paar am C&#945;", size=10.5, farbe=W, gewicht=700)
-t.text(305, 1067, "bildet die C&#945;=N-Bindung", size=10.5, farbe=W)
-t.text(305, 1092, "&#9313; das π-Paar der Bindung", size=10.5, farbe=W, gewicht=700)
-t.text(305, 1107, "N=C4&#8242; weicht auf das C4&#8242; aus", size=10.5, farbe=W)
-t.text(305, 1132, "&#9314; von dort über den Ring", size=10.5, farbe=W, gewicht=700)
-t.text(305, 1147, "bis zum Ring-Stickstoff N1", size=10.5, farbe=W)
+chin = t.mol(PLP % "/C=N/[CH-]*", 215, 1120, labels={15: "R"},
+             kern="b6", name="Chinoid")
+# Die Kaskade als Kette kurzer Pfeile, Kopf an Schwanz. Frueher stand der letzte
+# Schritt als ein gestrichelter Pfeil quer ueber den Ring. Der laesst sich nicht
+# konventionsgemaess zeichnen: aussen um den Ring herum muesste er weiter
+# ausgreifen, als er breit ist, und im Ringinneren kann er nicht anfangen, weil
+# sein Ursprung ausserhalb des Rings liegt. Ausgeschrieben ist die Kette ohnehin
+# das, was im Examen an der Tafel verlangt wird.
+t.schub(Paar(chin, 14), Bindung(chin, 13, 14), kette="C")         # Ca-Paar -> Ca=N
+t.schub(Bindung(chin, 12, 13), Bindung(chin, 11, 12), kette="C")  # N=C4' -> C4'-C4
+t.schub(Bindung(chin, 4, 11), Bindung(chin, 3, 4), kette="C")     # C5=C4 -> C6-C5
+# Der letzte Schritt - das pi-Paar der Bindung N1=C6 geht auf den Ring-Stickstoff -
+# ist nicht gezeichnet. Der Solver findet dort keinen Bogen: die Beschriftung
+# "HN+" belegt genau den Raum, in dem die Spitze stehen muesste, und jeder Weg
+# daran vorbei kreuzt entweder den Ring oder die eigene Quellbindung. Statt den
+# Pfeil zu verbiegen, steht die Aussage im Text und im Kasten "Elektronensenke".
+t.atomnummer(chin, 14, "C&#945;", winkel=300, abstand=30, size=10.5, farbe=W, gewicht=700)
+t.text(355, 1042, "&#9312; das freie Paar am C&#945;", size=10.5, farbe=W, gewicht=700)
+t.text(355, 1057, "bildet die C&#945;=N-Bindung", size=10.5, farbe=W)
+t.text(355, 1082, "&#9313; das π-Paar der Bindung N=C4&#8242;", size=10.5, farbe=W, gewicht=700)
+t.text(355, 1097, "geht in die Bindung C4&#8242;&#8211;C4", size=10.5, farbe=W)
+t.text(355, 1122, "&#9314; von dort weiter in den Ring", size=10.5, farbe=W, gewicht=700)
+t.text(355, 1147, "Der letzte Schritt, das π-Paar der", size=10.5, farbe=G)
+t.text(355, 1162, "Bindung N1=C6 auf den Ring-Stick-", size=10.5, farbe=G)
+t.text(355, 1177, "stoff, ist nicht gezeichnet: neben", size=10.5, farbe=G)
+t.text(355, 1192, "dem HN&#8314; ist dafür kein Platz.", size=10.5, farbe=G)
 t.unterschrift(chin, "Chinoid, gezeichnet als Carbanion und für den Decarboxylierungsweg.",
-               "Bei den anderen Wegen steht am C&#945; statt des H das Carboxylat.")
+               "Bei den anderen Wegen steht am C&#945; statt des H das Carboxylat.",
+               abstand=40)
 
-t.kasten(20, 1225, 410, 152, fill="var(--cofaktor-bg)", stroke=C)
-t.text(38, 1247, "DIE ELEKTRONENSENKE", size=11, gewicht=700, farbe=C)
-t.text(38, 1269, "Jede Spaltung am C&#945; erzeugt ein Carbanion. Allein", size=12)
-t.text(38, 1288, "wäre es nicht haltbar; das konjugierte System schiebt", size=12)
-t.text(38, 1307, "die Ladung über den Imin-Stickstoff bis zum Ring.", size=12)
-t.text(38, 1330, "Bei den Enzymen dieser Tafel trägt der Ring-Stickstoff", size=12)
-t.text(38, 1349, "ein Proton, das ein Aspartat festhält (AADC: Asp271).", size=12)
-t.text(38, 1368, "Die Alanin-Racemase kommt ohne dieses Proton aus.", size=12)
+t.kasten(20, 1285, 410, 152, fill="var(--cofaktor-bg)", stroke=C)
+t.text(38, 1307, "DIE ELEKTRONENSENKE", size=11, gewicht=700, farbe=C)
+t.text(38, 1329, "Jede Spaltung am C&#945; erzeugt ein Carbanion. Allein", size=12)
+t.text(38, 1348, "wäre es nicht haltbar; das konjugierte System schiebt", size=12)
+t.text(38, 1367, "die Ladung über den Imin-Stickstoff bis zum Ring.", size=12)
+t.text(38, 1390, "Bei den Enzymen dieser Tafel trägt der Ring-Stickstoff", size=12)
+t.text(38, 1409, "ein Proton, das ein Aspartat festhält (AADC: Asp271).", size=12)
+t.text(38, 1428, "Die Alanin-Racemase kommt ohne dieses Proton aus.", size=12)
 
 WEGE = [
     (1035, "&#9312; Decarboxylierung", W,
@@ -212,54 +221,54 @@ WEGE = [
      "Homocystein-Stau bei B&#8326;-Mangel"),
 ]
 for y, titel, farbe, zeilen, enzyme, stoffe in WEGE:
-    t.text(470, y, titel, size=12.5, gewicht=700, farbe=farbe)
+    t.text(560, y, titel, size=12.5, gewicht=700, farbe=farbe)
     for i, z in enumerate(zeilen):
-        t.text(470, y + 21 + i * 18, z, size=12)
-    t.text(470, y + 21 + len(zeilen) * 18, enzyme, size=11, gewicht=700, farbe=E)
-    t.text(470, y + 38 + len(zeilen) * 18, stoffe, size=11, farbe=R)
+        t.text(560, y + 21 + i * 18, z, size=12)
+    t.text(560, y + 21 + len(zeilen) * 18, enzyme, size=11, gewicht=700, farbe=E)
+    t.text(560, y + 38 + len(zeilen) * 18, stoffe, size=11, farbe=R)
 
-t.kasten(20, 1410, 960, 152, fill="var(--surface-2)")
-t.text(38, 1432, "&#9315; UND DAS LYSIN? ES BLEIBT IM AKTIVEN ZENTRUM UND ARBEITET WEITER",
+t.kasten(20, 1465, 960, 152, fill="var(--surface-2)")
+t.text(38, 1487, "&#9315; UND DAS LYSIN? ES BLEIBT IM AKTIVEN ZENTRUM UND ARBEITET WEITER",
        size=11, gewicht=700, farbe=C)
-t.text(38, 1454, "Das freigesetzte ε-Amin sitzt auf derselben Seite wie die brechende Bindung. "
+t.text(38, 1509, "Das freigesetzte ε-Amin sitzt auf derselben Seite wie die brechende Bindung. "
                  "Deshalb ist es das vorgesehene Säure-Base-Werkzeug, und deshalb", size=12)
-t.text(38, 1473, "laufen Abzug und Rückgabe des Protons unter Retention ab.", size=12)
-t.text(38, 1496, "Transaminase: erst Base, sie zieht das C&#945;-H ab; dann Säure, sie gibt "
+t.text(38, 1528, "laufen Abzug und Rückgabe des Protons unter Retention ab.", size=12)
+t.text(38, 1551, "Transaminase: erst Base, sie zieht das C&#945;-H ab; dann Säure, sie gibt "
                  "dasselbe Proton an das C4&#8242;.", size=12)
-t.text(38, 1515, "Decarboxylase: nur Säure, denn am C&#945; geht CO&#8322; ab. Protoniert sie "
+t.text(38, 1570, "Decarboxylase: nur Säure, denn am C&#945; geht CO&#8322; ab. Protoniert sie "
                  "aus Versehen das C4&#8242;, entsteht totes Enzym mit PMP.", size=12)
-t.text(38, 1534, "β-Eliminase: wieder Base am C&#945;; beim β-Ersatz protoniert dasselbe Lysin "
+t.text(38, 1589, "β-Eliminase: wieder Base am C&#945;; beim β-Ersatz protoniert dasselbe Lysin "
                  "danach zurück.", size=12)
-t.text(538, 1534, "Zuletzt greift es erneut das C4&#8242; an: Zone A rückwärts, "
+t.text(538, 1589, "Zuletzt greift es erneut das C4&#8242; an: Zone A rückwärts, "
                   "das Produkt wird frei.", size=12, farbe=C)
 
 # ===================================================== ZONE D · Hemmstoffe
-t.zone(1595, "D · WIE ARZNEISTOFFE HIER ANGREIFEN")
-t.text(20, 1627, "Zwei ganz verschiedene Prinzipien, beide am selben Cofaktor.", size=12.5)
+t.zone(1650, "D · WIE ARZNEISTOFFE HIER ANGREIFEN")
+t.text(20, 1682, "Zwei ganz verschiedene Prinzipien, beide am selben Cofaktor.", size=12.5)
 
-t.kasten(20, 1655, 470, 152, fill="var(--drug-bg)", stroke=R)
-t.text(38, 1677, "DEN COFAKTOR ABFANGEN", size=11, gewicht=700, farbe=R)
-t.text(38, 1699, "Carbidopa und Benserazid tragen eine Hydrazino-", size=12.5)
-t.text(38, 1718, "Gruppe. Sie greift das C4&#8242; des internen Aldimins", size=12.5)
-t.text(38, 1737, "an und verdrängt das Lysin, also Zone A mit einem", size=12.5)
-t.text(38, 1756, "Hydrazin. PLP bleibt als Hydrazon gebunden.", size=12.5)
-t.text(38, 1779, "Isoniazid tut chemisch dasselbe, aber im ganzen", size=12.5)
-t.text(38, 1798, "Körper; daher die Polyneuropathie.", size=12.5)
+t.kasten(20, 1710, 470, 152, fill="var(--drug-bg)", stroke=R)
+t.text(38, 1732, "DEN COFAKTOR ABFANGEN", size=11, gewicht=700, farbe=R)
+t.text(38, 1754, "Carbidopa und Benserazid tragen eine Hydrazino-", size=12.5)
+t.text(38, 1773, "Gruppe. Sie greift das C4&#8242; des internen Aldimins", size=12.5)
+t.text(38, 1792, "an und verdrängt das Lysin, also Zone A mit einem", size=12.5)
+t.text(38, 1811, "Hydrazin. PLP bleibt als Hydrazon gebunden.", size=12.5)
+t.text(38, 1834, "Isoniazid tut chemisch dasselbe, aber im ganzen", size=12.5)
+t.text(38, 1853, "Körper; daher die Polyneuropathie.", size=12.5)
 
-t.kasten(510, 1655, 470, 152, fill="var(--drug-bg)", stroke=R)
-t.text(528, 1677, "DEN MECHANISMUS MISSBRAUCHEN", size=11, gewicht=700, farbe=R)
-t.text(528, 1699, "Vigabatrin ist ein echtes Suizidsubstrat: Es durch-", size=12.5)
-t.text(528, 1718, "läuft den Mechanismus bis zum Chinoid und alkyliert", size=12.5)
-t.text(528, 1737, "erst dann das Enzym kovalent.", size=12.5)
-t.text(528, 1760, "Prüfungsfalle: Vigabatrin hemmt die GABA-Trans-", size=12.5)
-t.text(528, 1779, "aminase, also den Abbau, nicht die Decarboxylase", size=12.5)
-t.text(528, 1798, "und damit nicht den Aufbau.", size=12.5)
+t.kasten(510, 1710, 470, 152, fill="var(--drug-bg)", stroke=R)
+t.text(528, 1732, "DEN MECHANISMUS MISSBRAUCHEN", size=11, gewicht=700, farbe=R)
+t.text(528, 1754, "Vigabatrin ist ein echtes Suizidsubstrat: Es durch-", size=12.5)
+t.text(528, 1773, "läuft den Mechanismus bis zum Chinoid und alkyliert", size=12.5)
+t.text(528, 1792, "erst dann das Enzym kovalent.", size=12.5)
+t.text(528, 1815, "Prüfungsfalle: Vigabatrin hemmt die GABA-Trans-", size=12.5)
+t.text(528, 1834, "aminase, also den Abbau, nicht die Decarboxylase", size=12.5)
+t.text(528, 1853, "und damit nicht den Aufbau.", size=12.5)
 
-t.kasten(20, 1829, 960, 76, fill="var(--surface-2)")
-t.text(38, 1851, "WARUM PLP IN SO VIELEN KAPITELN AUFTAUCHT", size=11, gewicht=700, farbe=G)
-t.text(38, 1873, "Register A in Teil 9 führt die PLP-Enzyme dieser Unterlage auf: die "
+t.kasten(20, 1884, 960, 76, fill="var(--surface-2)")
+t.text(38, 1906, "WARUM PLP IN SO VIELEN KAPITELN AUFTAUCHT", size=11, gewicht=700, farbe=G)
+t.text(38, 1928, "Register A in Teil 9 führt die PLP-Enzyme dieser Unterlage auf: die "
                  "Decarboxylasen aller biogenen Amine, die Transaminasen, die", size=12.5)
-t.text(38, 1892, "Cystathionin-&#946;-Synthase, die &#948;-Aminolävulinat-Synthase der Häm-Synthese "
+t.text(38, 1947, "Cystathionin-&#946;-Synthase, die &#948;-Aminolävulinat-Synthase der Häm-Synthese "
                  "und die Serin-Hydroxymethyltransferase des C&#8321;-Stoffwechsels.", size=12.5)
 
 # ===================================================== Ausgabe
@@ -271,6 +280,8 @@ ARIA = (
     "Kohlenstoff beide Stickstoffatome haengen. Ein Proton wandert vom Substratstickstoff zum "
     "Lysinstickstoff; erst dadurch wird das Lysin zur Abgangsgruppe. Danach zerfaellt das "
     "geminale Diamin zum externen Aldimin, und das Lysin wird als freies Amin abgebildet. "
+    "Der Pyridinring des Cofaktors steht in allen Stufen in derselben Lage, damit der "
+    "Unterschied zwischen den Stufen ins Auge faellt und nicht die Ausrichtung. "
     "Zone B zeigt die Dunathan-Regel in drei Schraegansichten: Die pi-Ebene des Aldimins ist als "
     "Parallelogramm gezeichnet, die Bindung vom Alpha-Kohlenstoff zum Stickstoff liegt in dieser "
     "Ebene, und jeweils eine der drei uebrigen Bindungen steht als Keil senkrecht darauf. Bei der "
@@ -285,7 +296,6 @@ ARIA = (
 )
 
 fehler, bericht = t.pruefe()
-print("Pfeilanker:")
 for z in bericht:
     print(z)
 if fehler:

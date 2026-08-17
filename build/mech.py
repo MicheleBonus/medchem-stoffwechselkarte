@@ -12,10 +12,21 @@ Alle Molekuele einer Tafel werden mit derselben festen Bindungslaenge gezeichnet
 (fixedBondLength), damit die Geometrie ueber die ganze Tafel einheitlich ist.
 
 Konventionen, die die Sprache erzwingt:
-  - Elektronenpaar-Pfeil  = voller Pfeilkopf   (typ='paar')
-  - Einzelelektron        = Fischhaken, halber Kopf (typ='fischhaken')
+  - Elektronenpaar-Pfeil  = voller Pfeilkopf
+  - Einzelelektron        = Fischhaken, halber Kopf
   - Uebergangszustand     = eckige Klammern mit Doppelkreuz
   - freie Elektronenpaare werden als Punktpaar gesetzt und sind Pfeilursprung
+
+Zwei Wege stehen nebeneinander:
+
+  schub(Paar(m,0), Atom(m2,12))   beschreibt nur die Chemie. Bauchseite,
+      Oeffnungswinkel und Ankerlage sucht der Solver in mech_schub.py, geprueft
+      wird gegen den Regelkatalog in mech_regeln.py. Die Lage der Molekuele kommt
+      aus dem Leitgeruest-Register mech_kerne.py (kern="b6").
+
+  pfeil(von, nach, bogen=, seite=, gap=)  ist der aeltere Weg mit von Hand
+      gesetzter Geometrie. Er bleibt, solange die Tafeln M-02 bis M-17 ihn
+      benutzen, und ist fuer neue Tafeln nicht mehr gedacht.
 """
 import math
 import re
@@ -24,7 +35,17 @@ from rdkit import Chem
 from rdkit.Chem import rdDepictor, rdCIPLabeler, rdFMCS
 from rdkit.Chem.Draw import rdMolDraw2D
 
+import mech_kerne
+import mech_regeln
+import mech_schub
+from mech_schub import Atom, Bindung, Elektron, Fest, Paar   # noqa: F401
+
 rdDepictor.SetPreferCoordGen(True)
+
+# Beide Buecher fuehren alle Schiebepfeile in einer Farbe; unterschieden wird
+# ueber die Kopfform. Die frueher zweifarbige Fuehrung lud dazu ein, die Farbe zu
+# lesen statt den Kopf.
+SIGNAL = "var(--warn)"
 
 # Palette wie in gen_structures.py: C wird spaeter zu currentColor
 PALETTE = {
@@ -109,8 +130,13 @@ class Molekuel(object):
 
     def __init__(self, smiles, x, y, labels=None, rotate=0.0, stereo=False,
                  bindung=BINDUNG, name=None, zeige=None, wasserstoff=(),
-                 vorlage=None, muster=None):
-        """zeige={atom_idx: 'links'|'rechts'|'oben'|'unten'} dreht die Darstellung so,
+                 vorlage=None, muster=None, kern=None):
+        """kern="b6" legt die Struktur auf die feste Referenzlage dieses
+        Leitgeruests (mech_kerne.py). Damit steht derselbe Kern in jeder Stufe
+        einer Tafel und in jeder Tafel gleich - gedreht *und* gespiegelt. Das ist
+        der Weg fuer neue Tafeln; zeige= und vorlage= sind die aelteren.
+
+        zeige={atom_idx: 'links'|'rechts'|'oben'|'unten'} dreht die Darstellung so,
         dass dieses Atom in die genannte Richtung weist - damit Pfeile zwischen zwei
         Molekuelen kurze Wege haben, statt quer ueber die Struktur zu laufen.
 
@@ -168,7 +194,14 @@ class Molekuel(object):
                         "echter Unicode stehen (z. B. CH₂ statt CH&#8322;)." % txt)
                 mol.GetAtomWithIdx(int(idx)).SetProp("atomLabel", txt)
         self.gelegt = False
-        if vorlage is not None:
+        if kern is not None:
+            if vorlage is not None or zeige:
+                raise ValueError("%s: kern= bestimmt die Lage bereits; vorlage= "
+                                 "und zeige= sind daneben ohne Wirkung."
+                                 % (name or smiles))
+            mech_kerne.kern(kern).lege(mol)
+            self.gelegt = True
+        elif vorlage is not None:
             ref = vorlage.mol if isinstance(vorlage, Molekuel) else vorlage
             if isinstance(ref, str):
                 ref = Chem.MolFromSmiles(ref)
@@ -223,7 +256,67 @@ class Molekuel(object):
         cy = sum(p[1] for p in roh) / len(roh)
         self.ox, self.oy = x - cx, y - cy
         self.koord = [(self.ox + px, self.oy + py) for px, py in roh]
-        self.inhalt = self._inhalt(d.GetDrawingText())
+        gezeichnet = d.GetDrawingText()
+        self.strecken, self.glyphen, self.strichbreite = self._geometrie(gezeichnet)
+        self.inhalt = self._inhalt(gezeichnet)
+
+    # -------------------------------------------------- Tinte
+    _ZAHL = re.compile(r"-?\d+\.?\d*(?:[eE][-+]?\d+)?")
+
+    def _geometrie(self, svg):
+        """Bindungsstrecken und Glyphenrechtecke aus dem RDKit-SVG lesen.
+
+        RDKit annotiert jedes Element: class='bond-3 atom-2 atom-4' fuer eine
+        Bindungslinie, class='atom-13' fuer die Glyphen eines Atomsymbols. Damit
+        kennt der Pfeil-Solver seine Hindernisse genau, statt Textbreiten zu
+        schaetzen. Die alte Schaetzung gab fuer "NH+" 36x18 px an; gemessen sind
+        es 21,1x9,0, und aus dieser Differenz stammten die groessten Fehlbilder.
+        """
+        strecken, glyphen = [], {}
+        breiten = []
+        for tag, attr in re.findall(r"<(path|ellipse)([^>]*)/>", svg):
+            m = re.search(r"class='(bond-(\d+)|atom-(\d+))[^']*'", attr)
+            if not m:
+                continue
+            dm = re.search(r"d='([^']*)'", attr)
+            if dm:
+                punkte = []
+                for teil in dm.group(1).split("M")[1:]:
+                    v = [float(z) for z in self._ZAHL.findall(teil)]
+                    punkte.append([(v[i] + self.ox, v[i + 1] + self.oy)
+                                   for i in range(0, len(v) - 1, 2)])
+            else:
+                g = dict((k, float(v)) for k, v in
+                         re.findall(r"\b(cx|cy|rx|ry|r)='([-\d.]+)'", attr))
+                rx = g.get("rx", g.get("r", 1.0))
+                ry = g.get("ry", g.get("r", 1.0))
+                punkte = [[(g["cx"] - rx + self.ox, g["cy"] - ry + self.oy),
+                           (g["cx"] + rx + self.ox, g["cy"] + ry + self.oy)]]
+            if m.group(2) is not None:                      # Bindung
+                sw = re.search(r"stroke-width:([\d.]+)", attr)
+                if sw:
+                    breiten.append(float(sw.group(1)))
+                for zug in punkte:
+                    for a, b in zip(zug, zug[1:]):
+                        strecken.append((a[0], a[1], b[0], b[1], int(m.group(2))))
+            else:                                           # Atomsymbol
+                i = int(m.group(3))
+                xs = [p[0] for zug in punkte for p in zug]
+                ys = [p[1] for zug in punkte for p in zug]
+                if not xs:
+                    continue
+                alt = glyphen.get(i)
+                box = (min(xs), min(ys), max(xs), max(ys))
+                glyphen[i] = box if alt is None else (
+                    min(alt[0], box[0]), min(alt[1], box[1]),
+                    max(alt[2], box[2]), max(alt[3], box[3]))
+        breite = sorted(breiten)[len(breiten) // 2] if breiten else 2.0
+        return strecken, glyphen, breite
+
+    def freie_richtung(self, idx, hin=None):
+        """Richtung der groessten Winkelluecke zwischen den Bindungen am Atom."""
+        return mech_schub._freie_richtungen(
+            self, int(idx), hin or (self.koord[0] if self.koord else (0, 0)), 1)[0][0]
 
     def _zeichner(self, rotate):
         d = rdMolDraw2D.MolDraw2DSVG(1400, 1000)
@@ -458,12 +551,88 @@ class Tafel(object):
         self.mole = []
         self.stuecke = []          # (z, svg) - z steuert die Zeichenreihenfolge
         self.anker = []            # Prueflast: jeder Pfeilendpunkt mit Bezug
+        self.schuebe = []          # deklarierte Elektronenverschiebungen
+        self.sperren = []          # eigene Beschriftung als Hindernis (Kasten)
+        self._geloest = False
 
     # -------------------------------------------------- Bausteine
     def mol(self, smiles, x, y, **kw):
         m = Molekuel(smiles, x, y, **kw)
         self.mole.append(m)
         return m
+
+    # -------------------------------------------------- Schiebepfeile
+    def schub(self, quelle, ziel, elektronen=2, **kw):
+        """Eine Elektronenverschiebung anmelden. Geometrie kommt aus dem Solver.
+
+        quelle und ziel sind Paar(m, i), Atom(m, i), Bindung(m, i, j),
+        Elektron(m, i) oder ein fester Ort. elektronen=1 ergibt einen Fischhaken.
+        kette="a" fasst mehrere Pfeile zu einem Schritt zusammen; die Pruefung
+        verlangt dann Kopf an Schwanz.
+        """
+        s = mech_schub.Schub(quelle, ziel, elektronen, **kw)
+        self.schuebe.append(s)
+        self.anker.append((s.quelle.herkunft(), s.ziel.herkunft(),
+                           "paar" if elektronen == 2 else "fischhaken"))
+        self._geloest = False
+        return s
+
+    def _tinte(self):
+        t = mech_schub.Tinte()
+        for m in self.mole:
+            for x0, y0, x1, y1, bi in m.strecken:
+                t.strecke(x0, y0, x1, y1, ("bindung", m.name, bi))
+            for i, (x0, y0, x1, y1) in m.glyphen.items():
+                t.kasten(x0, y0, x1, y1, ("glyph", m.name, i))
+        for i, (x0, y0, x1, y1) in enumerate(self.sperren):
+            t.kasten(x0, y0, x1, y1, ("sperre", None, i))
+        return t
+
+    def loesen(self):
+        """Alle angemeldeten Pfeile geometrisch aufloesen.
+
+        Erst hier, weil der Solver die vollstaendige Tafel als Hindernislage
+        braucht: Beschriftungen, die nach dem Pfeil im Skript stehen, gehoeren
+        dazu. Deshalb loest svg() und pruefe() aus, nicht schub() selbst.
+        """
+        if self._geloest:
+            return
+        tinte = self._tinte()
+        gesetzt = []
+        for i, s in enumerate(self.schuebe):
+            m = s.quelle.mol() or s.ziel.mol()
+            L = m.bindung_px if m is not None else BINDUNG
+            vor = None
+            if i and s.kette is not None and self.schuebe[i - 1].kette == s.kette:
+                vor = self.schuebe[i - 1]
+            s.breite = (max(1.4, m.strichbreite * 0.78) if m is not None else 1.6)
+            s.loesen(tinte, L, gesetzt, vor)
+            gesetzt.append(s.bogen)
+            # Ein gezeichnetes Punktpaar ist ab jetzt selbst Hindernis.
+            if s.zusatz_q and "paar" in s.zusatz_q:
+                px, py, grad = s.zusatz_q["paar"]
+                r = mech_schub.PAAR_SPREIZ * L + 2.2
+                tinte.kasten(px - r, py - r, px + r, py + r,
+                             ("paar", s.quelle.herkunft()[1], i))
+                self._punktpaar(px, py, grad, L)
+            if s.zusatz_q and "punkt" in s.zusatz_q:
+                px, py = s.zusatz_q["punkt"]
+                tinte.kasten(px - 2.4, py - 2.4, px + 2.4, py + 2.4,
+                             ("punkt", s.quelle.herkunft()[1], i))
+                self.stuecke.append((2, "<circle cx='%.1f' cy='%.1f' r='2.0' "
+                                        "fill='%s'/>" % (px, py, SIGNAL)))
+            for teil in s.svg(L, SIGNAL, s.breite):
+                self.stuecke.append((3, teil))
+        self._geloest = True
+
+    def _punktpaar(self, x, y, grad, L):
+        a = math.radians(grad)
+        px, py = -math.sin(a) * mech_schub.PAAR_SPREIZ * L, \
+            math.cos(a) * mech_schub.PAAR_SPREIZ * L
+        for s in (1, -1):
+            self.stuecke.append((2, "<circle cx='%.1f' cy='%.1f' r='1.7' "
+                                    "fill='var(--ink-2)'/>"
+                                 % (x + px * s, y + py * s)))
 
     def _punkt(self, ziel):
         """(mol, i) -> Atom, (mol, i, j) -> Bindungsmitte, Punkt -> bereits belegt.
@@ -613,6 +782,15 @@ class Tafel(object):
     # -------------------------------------------------- Beschriftung
     def text(self, x, y, s, size=12.5, anchor="start", farbe="currentColor",
              gewicht=None, mono=False, z=4):
+        # Der Pfeil-Solver braucht die Beschriftung als Hindernis. Die Breite ist
+        # geschaetzt (halbe Schriftgroesse je Zeichen); anders als bei den
+        # Atomsymbolen gibt es hier keine Glyphen, die man ausmessen koennte.
+        n = len(re.sub(r"&#?\w+;", "x", s))
+        w = n * float(size) * (0.60 if mono else 0.52)
+        x0 = x - w / 2.0 if anchor == "middle" else (x - w if anchor == "end" else x)
+        self.sperren.append((x0, y - float(size) * 0.76, x0 + w,
+                             y + float(size) * 0.22))
+        self._geloest = False
         att = ["x='%.1f'" % x, "y='%.1f'" % y, "font-size='%s'" % size,
                "fill='%s'" % farbe]
         if anchor != "start":
@@ -658,6 +836,11 @@ class Tafel(object):
 
     def reaktionspfeil(self, x0, y0, x1, y1=None, farbe="currentColor"):
         """Gerader Reaktionspfeil. Ohne y1 waagerecht."""
+        # Regel V4: kein Elektronenpfeil ueberquert den Reaktionspfeil.
+        yy = y0 if y1 is None else y1
+        self.sperren.append((min(x0, x1) - 2, min(y0, yy) - 4,
+                             max(x0, x1) + 2, max(y0, yy) + 4))
+        self._geloest = False
         self.stuecke.append((1,
             "<line x1='%.1f' y1='%.1f' x2='%.1f' y2='%.1f' stroke='%s' "
             "stroke-width='1.5' marker-end='url(#rxn)'/>"
@@ -699,6 +882,8 @@ class Tafel(object):
                 % (cx - nx * b, cy - ny * b, cx + nx * b, cy + ny * b, farbe)))
 
     def kasten(self, x, y, w, h, fill="var(--surface-2)", stroke="currentColor", r=8):
+        self.sperren.append((x, y, x + w, y + h))
+        self._geloest = False
         self.stuecke.append((0,
             "<rect x='%.1f' y='%.1f' width='%.1f' height='%.1f' rx='%d' fill='%s' "
             "stroke='%s' stroke-width='1.2' opacity='.95'/>" % (x, y, w, h, r, fill, stroke)))
@@ -728,6 +913,7 @@ class Tafel(object):
     )
 
     def svg(self, aria):
+        self.loesen()
         teile = [m.svg() for m in self.mole]
         teile += [s for _, s in sorted(self.stuecke, key=lambda t: t[0])]
         return (
@@ -739,8 +925,9 @@ class Tafel(object):
     # -------------------------------------------------- Selbstpruefung
     def pruefe(self):
         """Jeder Pfeil muss an einem Atom, einer Bindung, einem Elektronenpaar oder
-        einer ausdruecklich benannten Marke ansetzen und enden. Gibt (Fehler, Bericht)
-        zurueck; der Bericht listet jeden Pfeil mit seinen beiden Ankern auf."""
+        einer ausdruecklich benannten Marke ansetzen und enden. Pfeile, die ueber
+        schub() angemeldet sind, werden zusaetzlich gegen den Regelkatalog in
+        mech_regeln.py gemessen. Gibt (Fehler, Bericht) zurueck."""
         fehler, bericht = [], []
         for i, (a0, a1, typ) in enumerate(self.anker, 1):
             for rolle, a in (("Start", a0), ("Ziel", a1)):
@@ -749,6 +936,15 @@ class Tafel(object):
                                   % (i, typ, rolle))
             bericht.append("  %2d %-11s %-34s -> %s"
                            % (i, typ, self._zeige(a0), self._zeige(a1)))
+        if self.schuebe:
+            self.loesen()
+            b = mech_regeln.pruefe_schuebe(self)
+            fehler += b.fehler
+            bericht = ["", "Gemessen gegen den Regelkatalog "
+                           "(L = Bindungslaenge %.0f px):" % self.mole[0].bindung_px]
+            bericht += b.zeilen
+            for h in b.hinweise:
+                bericht.append("  Hinweis: %s" % h)
         return fehler, bericht
 
     @staticmethod
