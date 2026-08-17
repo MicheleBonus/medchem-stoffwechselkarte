@@ -17,17 +17,28 @@ Paar des Schwefels nach rechts, wo das ATP wartet, in Zone B die Methylgruppe
 nach unten, wo das Catecholat angreift, und in Zone C die C5'-S-Bindung frei
 nach oben rechts, wo die Fischhaken Platz brauchen.
 
-Zwei Elektronenbewegungen der Tafel sind nicht gezeichnet, und zwar aus einem
-Grund, der nichts mit dieser Tafel zu tun hat: beide enden am Sulfonium-
-Schwefel und kommen aus einer seiner eigenen Bindungen. Um ein dreifach
-substituiertes Atom herum stehen die Bindungen 120 Grad auseinander. Der
-Schwanz sitzt seitlich neben der Quellbindung, die Spitze in einer der drei
-Luecken; die beiden Luecken neben der Quellbindung liegen so dicht daneben,
-dass die Sehne nur etwa 0,4 L lang wird (gefordert sind 0,60 L), und in die
-dritte kommt kein Bogen, ohne eine der beiden anderen Bindungen zu kreuzen.
-Mit einem zweifach substituierten Sauerstoff oder Schwefel gelingt derselbe
-Pfeil anstandslos - in Zone A ist er gezeichnet. Was die beiden fehlenden
-Pfeile sagen wuerden, steht im Fliesstext der Zonen B und C.
+Zwei Elektronenbewegungen der Tafel sind nicht gezeichnet. Beide enden am
+Sulfonium-Schwefel und kommen aus einer seiner eigenen Bindungen; beide
+scheitern an der Pfeilsprache, nicht an der Lage der Molekuele auf der Tafel.
+Nachgemessen ist das an der Stelle, an der sie stehen (siehe die Kommentare in
+Zone B und Zone C):
+
+  Zone B, das Paar der Bindung Methyl-Schwefel: um ein dreifach substituiertes
+  Atom stehen die Bindungen genau 120 Grad auseinander, und als Ziellage bietet
+  der Solver nur die Winkelhalbierende einer Luecke an. Von dort wird die Sehne
+  0,37 L lang statt der geforderten 0,50 L. Zwanzig Grad daneben gaebe es die
+  Lage; das braucht einen Faecher von Ziellagen, wie ihn die Fest-Anker seit
+  der letzten Runde haben.
+
+  Zone C, der dritte Fischhaken: der Bogen selbst geht. Zwei Fischhaken an
+  derselben C5'-S-Bindung kommen einander aber auf 0,22 L nahe, und der
+  Regelkatalog fordert 0,25 L, waehrend der Solver selbst schon bei 0,17 L
+  zufrieden ist - er sucht also gar nicht nach der Lage, die die Pruefung
+  verlangt.
+
+Mit einem zweifach substituierten Sauerstoff gelingt derselbe Pfeil
+anstandslos - in Zone A ist er gezeichnet. Was die beiden fehlenden Pfeile
+sagen wuerden, steht im Fliesstext der Zonen B und C.
 """
 import os
 import sys
@@ -118,12 +129,17 @@ smk = t.mol("C[S+](CC[C@H]([NH3+])C(=O)[O-])C*", 340, 560,
 cat = t.mol("Oc1ccccc1[O-]", 297, 648, zeige={7: "rechts"}, name="Catecholat")
 
 # Gezeichnet ist der angreifende Pfeil. Der zweite Pfeil desselben Schrittes -
-# das Paar der Bindung Methyl-Schwefel bleibt am Schwefel - ist nicht gezeichnet:
-# um ein dreifach substituiertes Atom herum stehen die drei Bindungen 120 Grad
-# auseinander, und in die Luecke daneben passt kein Bogen, der die Mindestlaenge
-# einhaelt, ohne eine der beiden anderen Bindungen zu kreuzen. Die Aussage steht
-# im Uebergangszustand (gestrichelte Bindung, delta plus am Schwefel), im
-# Fliesstext darunter und in der Unterschrift des SAH.
+# das Paar der Bindung Methyl-Schwefel bleibt am Schwefel - ist nicht gezeichnet.
+# Der Grund liegt nicht an dieser Tafel, sondern an der Lage der drei Bindungen
+# um ein Sulfonium: sie stehen genau 120 Grad auseinander (gemessen 90,3 / 210,3
+# / 330,3 Grad), und der Solver bietet als Ziellage nur die Winkelhalbierende
+# einer Luecke an. Von dort aus wird die Sehne 0,37 L lang; gefordert sind
+# 0,50 L, und bei 0,37 L bliebe neben dem Kopf auch kein Schaft mehr uebrig
+# (4,4 px statt der noetigen 4,8 px). Zwanzig Grad neben der Halbierenden
+# gaebe es die Lage: 0,51 bis 0,57 L Sehne bei 0,25 bis 0,28 L Freiraum. Was
+# der Pfeil sagen wuerde, steht im Uebergangszustand (gestrichelte Bindung,
+# delta plus am Schwefel), im Fliesstext darunter und in der Unterschrift des
+# SAH.
 t.schub(Paar(cat, 7), Atom(smk, 0))
 
 t.ueberschrift(smk, "S-Adenosylmethionin", abstand=24,
@@ -210,17 +226,23 @@ t.text(344, 1071, "und das 5&#8242;-Desoxyadenosyl-Radikal", size=10.5,
 # der Fischhaken an dieser Bindung einander ins Gehege.
 t.text(278, 1190, "[4Fe&#8722;4S]", size=13, anchor="middle", gewicht=700, farbe=W)
 t.text(278, 1208, "reduziert, gibt ein Elektron ab", size=10, anchor="middle", farbe=G)
-cluster = t.marke(302, 1170, "[4Fe-4S]-Cluster")
+# Der Ankerpunkt liegt am rechten Rand der Beschriftung, nicht darueber: von dort
+# aus setzt der Solver den Schwanz dicht neben das Wort, und der Pfeil kommt
+# sichtbar aus dem Cluster. Stand die Marke hoeher (302, 1170), begann der Pfeil
+# achtzehn Pixel ueber der Schrift und schien aus dem Nichts zu kommen.
+cluster = t.marke(302, 1181, "[4Fe-4S]-Cluster")
 
 # Drei Elektronen bewegen sich: das Clusterelektron geht auf den Schwefel, dazu
 # je ein Elektron der C5'-S-Bindung auf den Schwefel und auf das C5'. Der
 # Schwefel bekommt damit ein zweites freies Paar und wird zum neutralen
 # Thioether, das C5' behaelt ein einzelnes Elektron und wird zum Radikal.
 # Gezeichnet sind zwei der drei Fischhaken. Der dritte - das zweite Elektron der
-# Bindung bleibt am Schwefel - laesst sich nicht setzen: der Schwefel traegt drei
-# Bindungen, die 120 Grad auseinander stehen, und in die Luecke daneben passt
-# kein Bogen, der die Mindestlaenge einhaelt, ohne eine der beiden anderen
-# Bindungen zu kreuzen. Der Verbleib dieses Elektrons steht daneben im Text.
+# Bindung bleibt am Schwefel - laesst sich nicht setzen, und zwar aus einem
+# anderen Grund als frueher angenommen: der Bogen selbst geht (Sehne 0,58 L,
+# kreuzungsfrei), aber dann haengen zwei Fischhaken an derselben C5'-S-Bindung
+# und laufen zu ihren beiden Enden. Ihre Schwaenze sitzen hoechstens 0,56 L
+# auseinander, und die Boegen kommen einander auf hoechstens 0,22 L nahe.
+# Gefordert sind 0,25 L. Der Verbleib dieses Elektrons steht daneben im Text.
 t.schub(cluster, Atom(rad, 1), elektronen=1, kette="c")
 t.schub(Bindung(rad, 1, 9), Atom(rad, 9), elektronen=1, kette="c")
 

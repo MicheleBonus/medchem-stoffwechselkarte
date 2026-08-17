@@ -98,7 +98,12 @@ t.text(120, 602, "und macht Rebound · Zyklus 1 und 2", size=11, anchor="middle"
 
 zc2 = t.zentrum(360, 480, "Fe(III)", axial=["O", "O&#8315;"], unten="S&#8722;Cys",
                 schritt=46, name="Ferri-Peroxo")
-lp_p = t.paar(382, 380, 20, "Peroxo-Sauerstoff")
+# Das freie Paar des terminalen Peroxo-Sauerstoffs. Es gehoert an das O&#8315;,
+# nicht in dessen Naehe: frueher stand es 23 px = 1,11 L daneben und sah aus, als
+# gehoere es zu nichts. Jetzt sitzt es 12 px = 0,57 L vom Atom, gerade so weit,
+# dass es neben der Beschriftung "O&#8315;" Platz hat, und quer zur O&#8722;O-Achse,
+# also dort, wo ein Chemiker es zeichnen wuerde.
+lp_p = t.paar(371, 392, 20, "Peroxo-Sauerstoff")
 t.text(360, 566, "Ferri-Peroxo-Komplex", size=12.5, anchor="middle", gewicht=700, farbe=E)
 t.text(360, 586, "nucleophil: greift den Aldehyd-", size=11, anchor="middle", farbe=G)
 t.text(360, 602, "kohlenstoff an · nur Zyklus 3", size=11, anchor="middle", farbe=G)
@@ -106,8 +111,10 @@ t.text(360, 602, "kohlenstoff an · nur Zyklus 3", size=11, anchor="middle", far
 # Der Aldehyd steht dicht neben dem Peroxo-Komplex. Frueher lag er 90 px weiter
 # rechts; der Angriffspfeil wurde damit 7,7 Bindungslaengen lang und holte weit
 # aus. Levy nennt fuer einen Pfeil zwischen zwei Teilchen 1,5 bis 4 L, und in
-# diesem Fenster liegt er jetzt.
-ald = t.mol("*C=O", 470, 434, labels={0: "C10"}, zeige={1: "links"},
+# diesem Fenster liegt er jetzt. Die letzten 8 px kamen dazu, als das freie Paar
+# an seinen richtigen Platz am Sauerstoff rueckte: der Schwanz wanderte damit um
+# 11 px nach links, und die Sehne waere sonst ueber 4 L hinausgewachsen.
+ald = t.mol("*C=O", 462, 434, labels={0: "C10"}, zeige={1: "links"},
             name="19-Oxo-Gruppe")
 # Ein Schritt, zwei Pfeile: das freie Paar des Peroxo-Sauerstoffs bildet die
 # Bindung zum Carbonylkohlenstoff, das pi-Paar der C=O weicht auf den Sauerstoff
@@ -123,16 +130,18 @@ t.text(640, 424, "Addition", size=10, anchor="middle", gewicht=700, farbe=C)
 # traegt, nur als Text da: der Peroxo-Sauerstoff haengt jetzt am C19, daneben das
 # Alkoholat. Wie die O-O-Bindung danach bricht, ist in der Literatur strittig und
 # deshalb hier nicht mit Pfeilen behauptet.
-# Die Drehung steht fest bei 125 Grad: Alkoholat links, Peroxidkette nach rechts
-# oben zum Eisen, C10 nach rechts unten. So bleibt um jedes der drei Atomlabel
-# Platz, und - der eigentliche Grund - beide Pfeile dieses Schrittes finden neben
-# ihren Bindungen Platz. Bei 90 Grad lief der Pfeil aus dem Alkoholat mit Bogen
-# und Kopf genau auf der Bindung O-C19, die er schliessen soll: gemessen 0,00 L
-# Abstand, im Bild ein Knoten aus Bindungsstrich und Pfeilspitze. Die Pruefung
-# sieht das nicht, weil die Zielbindung von der Freiraummessung ausgenommen ist.
-# Bei 125 Grad liegen beide Pfeile 0,22 bzw. 0,28 L neben der naechsten Tinte.
+# Die Drehung steht fest bei 110 Grad: Alkoholat links unten, Peroxidkette nach
+# rechts oben zum Eisen, C10 nach rechts unten. So bleibt um jedes der drei
+# Atomlabel Platz, und beide Pfeile dieses Schrittes finden neben ihren Bindungen
+# Raum. Der Wert war frueher 125 Grad, damit der Pfeil aus dem Alkoholat nicht auf
+# der Bindung O-C19 zu liegen kam, die er schliessen soll. Das erledigt jetzt der
+# Kreuzungstest im Solver selbst. Uebrig bleibt der Massstab, an dem sich die
+# Drehung wirklich messen laesst: die Sehne des Rueckhakens aus dem Alkoholat. Ueber
+# alle 72 Drehungen im 5-Grad-Raster durchgemessen, war 125 Grad mit 0,50 L der
+# schlechteste Wert ueberhaupt - genau auf der harten Untergrenze. Bei 110 Grad
+# sind es 0,57 L, und der zweite Pfeil bleibt mit 0,56 L unveraendert gut.
 adukt = t.mol("[O-]C(OO*)*", 848, 424, labels={4: "Fe", 5: "C10"},
-              rotate=125.0, name="Peroxyhalbacetal")
+              rotate=110.0, name="Peroxyhalbacetal")
 # Wieder ein Schritt aus zwei Pfeilen: ein freies Paar des Alkoholats schliesst
 # die Carbonylbindung, und das Paar der Bindung C19-C10 bleibt am Steroid.
 t.schub(Paar(adukt, 0), Bindung(adukt, 0, 1), kette="B2")

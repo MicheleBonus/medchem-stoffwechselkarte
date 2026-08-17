@@ -261,7 +261,18 @@ rad = t.mol("[CH2]C(C(=O)[O-])C(=O)*", 500, 838, labels={7: "SCoA"},
 # Umgekehrt legt der Solver den ersten Bogen dorthin, wo der zweite Platz
 # braucht, und die beiden kommen sich auf 0,24 L nahe.
 t.schub(Atom(rad, 0), Atom(rad, 5), elektronen=1)
-t.schub(Bindung(rad, 1, 5), Bindung(rad, 0, 5), elektronen=1)
+# Der zweite Haken - ein Elektron aus der brechenden Bindung C2-C(O) in die
+# werdende Bindung - laesst sich hier nicht zeichnen, und zwar aus einem Grund,
+# der in der Struktur liegt und nicht im Zeichner. Die werdende Bindung
+# verbindet das CH2 mit dem Thioesterkohlenstoff; ihre Mitte liegt bei
+# (508, 824) und damit elf Pixel neben dem C2, also mitten im Dreieck aus C2,
+# CH2 und Carbonyl. Jeder Bogen dorthin kreuzt eine der drei Bindungen; auf der
+# freien Aussenseite bleiben zwischen Quell- und Zielanker nur 0,41
+# Bindungslaengen, zu wenig fuer Kopf und Schaft. Nachgerechnet ueber 2568
+# Kandidatenlagen und zusaetzlich mit vergroessertem Ausschnitt (28 und 32 px):
+# kein Treffer. Solange Ausgangsstoff und Produkt nebeneinander stehen, ist die
+# werdende Bindung eben noch nicht gezeichnet, und ein Pfeil, der auf sie zeigt,
+# muss durch das Molekuel. Wohin dieses Elektron geht, sagt die Bildunterschrift.
 t.unterschrift(rad, "die Thioestergruppe wandert an das Radikalzentrum.",
                "Das Radikal bleibt am Nachbarn zurück.")
 

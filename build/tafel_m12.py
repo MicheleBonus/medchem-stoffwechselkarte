@@ -90,17 +90,24 @@ hO = tyr.h_index[5]
 # Ferryl, das andere bleibt am Phenolsauerstoff und macht ihn zum Radikal. Beide
 # Haken kommen aus derselben Bindung und laufen auseinander; sie haengen deshalb
 # nicht Kopf an Schwanz und bilden keine Kette.
-# Der Endpunkt ist ausdruecklich gesetzt, sonst steht die Spitze zu weit weg.
-# Ohne winkel/abstand haengt sie an der Textellipse des O (halbe Textbreite plus
-# 3 px), und dazu kommt der Zuschlag, den mech_schub.Fest fuer den Ursprung
-# vorsieht: bis 0,45 L in Richtung der Quelle. Bei einer Sehne von sieben
-# Bindungslaengen ist der Zuschlag dem Solver billiger als der laengere Bogen, er
-# nimmt also immer den groessten - die Spitze stand 0,88 L neben dem O und
-# schwebte im Leeren. Mit dem Ankerpunkt dicht am O (3 px) landet sie nach
-# demselben Zuschlag 12 px rechts daneben: 0,37 L vor dem Glyphenrand, also im
-# Fenster von Z1, und auf gleicher Hoehe wie das O.
-t.schub(Bindung(tyr, 5, hO), zcp.ax(0, winkel=20, abstand=3), elektronen=1)
+# Die Reihenfolge ist nicht beliebig. Der Solver setzt einen Pfeil nach dem
+# anderen und weicht dem schon gesetzten aus. Der kurze Rueckhaken hat neben der
+# O&#8722;H-Bindung nur eine brauchbare Lage: die schmale Luecke ueber der Bindung,
+# zwischen dem H-Glyphen und dem O-Glyphen. Der lange Haken zum Ferryl kann
+# ober- wie unterhalb laufen und greift, allein gelassen, ebenfalls nach oben.
+# Steht er zuerst, bleibt fuer den Rueckhaken nichts uebrig: alle 1584 Lagen
+# fielen durch, 1345 davon, weil sie eine Bindung oder ein Atomsymbol kreuzten.
+# Deshalb zuerst der kurze; der lange nimmt dann die Luecke darunter.
 t.schub(Bindung(tyr, 5, hO), Atom(tyr, 5), elektronen=1)
+# Der Endpunkt am Ferryl bleibt von Hand gesetzt. Der Fest-Anker legt seinen
+# Faecher in den Abstand max(rx, ry) plus Zuschlag, und ry ist die halbe
+# Zeilenhoehe des Ligandtextes, 9 px. Ein Pfeil, der von rechts waagerecht
+# ankommt, braucht diese neun Pixel nicht: seine Spitze stand dadurch 17,8 px
+# neben dem O und zeigte 52 Grad an ihm vorbei. Der Ankerpunkt 5 px rechts
+# daneben, 10 Grad unter der Waagerechten, holt sie auf 13,6 px heran und dreht
+# den Kopf auf 18 Grad Abweichung: er zeigt sichtbar auf das O, an das der
+# Wasserstoff geht.
+t.schub(Bindung(tyr, 5, hO), zcp.ax(0, winkel=10, abstand=5), elektronen=1)
 t.unterschrift(tyr, "Tyrosin 385: das Wasserstoffatom seiner", "phenolischen OH-Gruppe geht ans Ferryl")
 
 t.reaktionspfeil(614, 158, 678)
@@ -148,14 +155,17 @@ t.text(232, 398, "Tyr385&#8226;", size=11, anchor="middle", gewicht=700, farbe=R
 # bindung C12=C13; deren zweites Elektron kommt aus der alten Doppelbindung
 # C11=C12, und das uebrige Elektron von dort bleibt am C11 zurueck. Genau diese
 # Grenzstruktur steht daneben.
-# Die beiden mittleren Haken sind gegenueber dieser Erzaehlung vertauscht
-# angemeldet. Der Grund ist der Solver: er setzt in Reihenfolge und weicht dem
-# schon gesetzten Pfeil aus. Kommt der kurze Haken von der C13-H-Bindung zuerst,
-# draengt er den langen aus dem Feld unter der Kette, und beide liegen dann
-# 0,18 L auseinander statt der geforderten 0,25.
+# Angemeldet in genau der Reihenfolge, in der die Erzaehlung laeuft. Der Solver
+# setzt einen Pfeil nach dem anderen und weicht dem schon gesetzten aus; die
+# Reihenfolge entscheidet deshalb, wer die enge Lage bekommt. Beide mittleren
+# Haken zielen auf dieselbe Bindung C12&#8722;C13, einer von oben, einer von unten.
+# Ueber der Bindung liegt nur der schmale Keil im Tal des C12, und dorthin kommt
+# nur der kurze Haken von der C13&#8722;H-Bindung; der lange von der Doppelbindung
+# C11=C12 hat unter der Kette freies Feld. Steht der lange zuerst, nimmt er den
+# Keil, und fuer den kurzen bleibt nichts.
 t.schub(Bindung(f1, 6, h13), tyrrad, elektronen=1)
-t.schub(Bindung(f1, 4, 5), Bindung(f1, 5, 6), elektronen=1)
 t.schub(Bindung(f1, 6, h13), Bindung(f1, 5, 6), elektronen=1)
+t.schub(Bindung(f1, 4, 5), Bindung(f1, 5, 6), elektronen=1)
 t.schub(Bindung(f1, 4, 5), Atom(f1, 4), elektronen=1)
 # Senkrecht unter das C13. Schraeg (105 Grad) stand die Nummer zwischen C12 und
 # C13 und war keinem der beiden zuzuordnen; in einer Zickzackkette ist die
@@ -219,6 +229,16 @@ t.reaktionspfeil(306, 762, 366)
 
 f4 = t.mol(r"*[CH]C1CC(OO1)C=CC=C*", 500, 762, labels={0: "C7", 11: "C16"},
            kern=KETTE, name="C8-Radikal")
+# Diese Stufe steht flacher als die vier anderen, und das laesst sich von hier aus
+# nicht abstellen. Gemessen ueber C7 bis C16: 23,7 px Hoehenausschlag statt 29,1,
+# und die Kettenachse steigt um 5,4 Grad statt waagerecht zu liegen. Der Grund ist
+# der Fuenfring. Das Leitgeruest wird mit GenerateDepictionMatching2DStructure
+# aufgelegt, und das zieht die Vorlage nur weich nach; wo der Ring die Winkel an
+# C9, C10 und C11 auf gut 104 Grad zwingt, gewinnt der Ring. rotate= koennte den
+# Rest geradedrehen, ist aber neben kern= abgeschaltet (mech.py setzt es auf 0).
+# Andere SMILES-Schreibweisen desselben Molekuels aendern nichts: vier Varianten
+# durchprobiert, alle vier ergeben dieselben Koordinaten.
+#
 # Dasselbe Muster wie eben: das Radikal von C8 bildet die Bindung zu C12, das
 # pi-Paar der Doppelbindung C12=C13 laeuft nach C13 aus. Auch hier greift der
 # erste Haken ueber den halben Ausschnitt hinweg: C8 und C12 haengen an den

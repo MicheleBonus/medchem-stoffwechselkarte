@@ -14,18 +14,24 @@ Tafel:
   - Die Haem-Zustaende sind Zentrum()-Bausteine ohne SMILES. Ihre Ankerpunkte
     (fe, s, ax, axb) gehen als feste Orte durch den Solver; er bestimmt daran
     Bauchseite, Oeffnungswinkel und die genaue Lage von Schwanz und Spitze.
-  - art="intra" steht dort, wo Quelle und Ziel zum selben Teilchen gehoeren, der
-    Solver das aber nicht sehen kann: das Thiolat und das Eisen sind derselbe
-    Komplex, ebenso die Fe-O-Bindung und das Eisen. Ohne die Angabe raet er auf
-    "inter" und verlangt eine Sehne von mindestens 1,5 Bindungslaengen - fuer
-    einen Schub innerhalb eines Metallzentrums ist das zu weit.
+    Seit das Zentrum seine Striche und Beschriftungen in die Tintenkarte meldet,
+    haelt er dort von sich aus Abstand.
+  - Die Pfeilart steht dort von Hand, wo Quelle und Ziel zum selben Teilchen
+    gehoeren, der Solver das aber nicht sehen kann. art="intra" beim Thiolat,
+    das auf das Eisen desselben Komplexes schiebt; art="zurueck" bei den beiden
+    Haken, die aus der Fe-O-Bindung auf eines ihrer eigenen Atome zurueckgehen.
+    Ohne die Angabe raet er auf "inter" und verlangt eine Sehne von mindestens
+    1,5 Bindungslaengen - fuer einen Schub im Metallzentrum ist das zu weit.
   - winkel=/abstand= an fe() und ax() sind kein Nachbessern von Hand, sondern
-    die einzige Stellschraube, die ein fester Anker hat. Die Spitze eines
-    Kreisbogens zeigt nicht laengs der Sehne, sondern um den halben Oeffnungs-
-    winkel (50 Grad) daneben. Liegt der Ankerpunkt genau auf dem Zielsymbol,
-    zeigt der Kopf zwangslaeufig 50 Grad daran vorbei. Um diese 50 Grad
-    versetzt, trifft er. Nachgemessen ist jeder Kopf gegen die Richtung zum
-    Metall bzw. zum Sauerstoff: fuenf der sechs Pfeile bleiben unter 8 Grad.
+    die einzige Stellschraube, die ein fester Anker hat. Sie sagt nicht, wo die
+    Spitze landet, sondern um welchen Ort herum der Solver seinen Faecher legt.
+    Massgeblich ist, dass die Spitze vor dem Wort stehen bleibt: "Fe(III)" ist
+    siebenmal so breit wie "O", und ein Anker im Wortmittelpunkt schoebe sie
+    quer durch die Schrift. Nachgemessen steht jede Spitze 0,25 bis 0,40
+    Bindungslaengen vor ihrem Glyphen, und vier der sechs Koepfe zeigen weniger
+    als 3 Grad neben dem gemeinten Ort vorbei; der Rueckhaken aufs Eisen liegt
+    bei 13 Grad, der Pfeil zum abgehenden Wasser bei 17 - dessen Ziel ist keine
+    Atomlage, sondern die Stelle, an der das Wasser das Bild verlaesst.
   - Ibuprofen und sein Radikal liegen auf demselben Leitgeruest (mech_kerne).
     Vorher bekam jede Stufe ihr eigenes Compute2DCoords, und der Leser musste
     das zweite Bild erst neu einnorden, statt den Unterschied zu sehen.
@@ -174,11 +180,11 @@ t.text(246, 838, "mit beiden Bindungselektronen", size=10.5, farbe=G)
 
 # Das freie Paar des Cystein-Thiolats schiebt auf das Eisen. Beides gehoert zum
 # selben Komplex, deshalb art="intra". Der Anker liegt nicht im Eisensymbol,
-# sondern links darunter: von dort zeigt der Kopf nach dem Bogen genau auf das
-# Metall (0,9 Grad daneben), waehrend er vom Symbol selbst aus 48 Grad daran
-# vorbeigezeigt hat.
+# sondern links daneben: "Fe(III)" ist ein breites Wort, und die Spitze gehoert
+# davor. Nachgemessen steht sie 0,32 Bindungslaengen vor dem Wortrand und der
+# Kopf zeigt 1,0 Grad neben dem Metallmittelpunkt vorbei.
 lp_s = t.paar(118, 910, 180, "Cystein-Thiolat")
-t.schub(lp_s, z0.fe(winkel=124, abstand=22), art="intra")
+t.schub(lp_s, z0.fe(winkel=155, abstand=10), art="intra")
 t.text(20, 944, "Schub vom Thiolat", size=10.5, farbe=W, gewicht=700)
 t.text(150, 968, "protonierter Hydroperoxo-Komplex", size=10.5, anchor="middle", farbe=G)
 
@@ -217,7 +223,7 @@ t.text(20, 1120, "Das zweite Elektron der C&#8722;H-Bindung bleibt am tertiären
 
 zc1 = t.zentrum(84, 1196, "Fe(IV)", axial=["O"], doppelt=True, radikal=True,
                 schritt=62, name="Compound I")
-ibu = mech.Molekuel("CC(C)Cc1ccc(cc1)[C@H](C)C(=O)O", 211, 1192,
+ibu = mech.Molekuel("CC(C)Cc1ccc(cc1)[C@H](C)C(=O)O", 201, 1192,
                     wasserstoff=[1], kern=IBU, name="Ibuprofen")
 t.mole.append(ibu)
 hidx = ibu.h_index[1]
@@ -225,17 +231,26 @@ hidx = ibu.h_index[1]
 # Homolyse der C-H-Bindung: ein Elektron geht mit dem Wasserstoff auf den
 # Oxo-Sauerstoff, das andere bleibt am tertiaeren Kohlenstoff zurueck.
 #
-# Gezeichnet ist nur der erste Haken. Der zweite - aus derselben Bindung zurueck
-# auf das eigene Kohlenstoffatom - laesst sich hier nicht regelgerecht setzen.
-# Das tertiaere C traegt vier Nachbarn (zwei Methyl, die Benzylgruppe, das H);
-# zwischen ihnen bleibt keine Winkelluecke, in der ein Bogen den geforderten
-# Abstand von 0,25 Bindungslaengen zu allen vier Strichen haelt. Der Solver
-# verwirft alle 816 Kandidaten und kommt auf hoechstens 0,22. Den Ausschnitt zu
-# vergroessern hilft nicht: Abstandsregel und Ankerlagen sind in Bindungslaengen
-# formuliert, bei 26 und bei 31 px steht dieselbe 0,22. Wie in M-01 beim letzten
-# Ringschritt steht die Aussage deshalb im Text statt als verbogener Pfeil im
-# Bild; das Radikal in der rechten Struktur zeigt sie ohnehin.
-t.schub(Bindung(ibu, 1, hidx), zc1.ax(0, winkel=-30, abstand=14), elektronen=1)
+# Gezeichnet ist nur der erste Haken. Der zweite - der Rueckhaken aus derselben
+# Bindung auf das eigene Kohlenstoffatom - laesst sich hier nicht setzen, und
+# zwar aus einem Grund, der mit der Pfeilart "zurueck" nichts zu tun hat: das
+# tertiaere C traegt vier Bindungen, gezeichnet bei 60, 150, 210 und 300 Grad.
+# Neben der C-H-Bindung (210 Grad) bleiben damit nur ein Sektor von 60 und einer
+# von 90 Grad frei. U4 setzt den Schwanz auf 0,47-0,64 L vom Kohlenstoff, rund
+# 21-34 Grad neben der Bindung, Z1 die Spitze auf hoechstens 0,46 L; innerhalb
+# eines 90-Grad-Sektors ergibt das eine Sehne von hoechstens 0,30 L. Der Schaft
+# braucht 0,38 L, das Sehnenfenster von "zurueck" 0,55 L. Wer weiter ausholt,
+# kreuzt eine der vier Bindungen. Der Solver verwirft alle 1020 Kandidaten mit
+# derselben Begruendung ("kreuzt eine Bindung oder ein Atomsymbol") und kommt
+# ueber eine Sehne von 0,14 L nicht hinaus; warum_pfeil.py nennt als naechste
+# Stoerelemente die drei Bindungen des Kohlenstoffs selbst (6,5 und zweimal
+# 9,2 px) und sein eigenes Wasserstoffsymbol (9,2 px). Das naechste fremde
+# Stueck - die Beschriftung des Haems - liegt 40,3 px entfernt. Es ist also
+# allein die Nachbarschaft dieses einen Atoms: Verschieben hilft nicht, und
+# Vergroessern auch nicht, weil alle Masse in Bindungslaengen zaehlen. Die
+# Aussage steht deshalb im Text; das Radikal in der rechten Struktur zeigt sie
+# ohnehin.
+t.schub(Bindung(ibu, 1, hidx), zc1.ax(0, winkel=-40, abstand=4), elektronen=1)
 t.unterschrift(ibu, "Ibuprofen: angegriffen wird das tertiäre C-Atom",
                "der Isobutylgruppe, es entsteht 2-Hydroxyibuprofen", abstand=44)
 t.text(84, 1258, "Compound I", size=10.5, anchor="middle", gewicht=700, farbe=W)
@@ -247,7 +262,7 @@ zc2 = t.zentrum(566, 1196, "Fe(IV)", axial=["OH"], schritt=62, name="Compound II
 # Die Radikalstelle steht im SMILES: das Kohlenstoffatom hat wirklich nur drei
 # Bindungen und ein Einzelelektron. Elektron(ibr, 1) zeichnet den Punkt selbst
 # und setzt den Schwanz daran an.
-ibr = mech.Molekuel("C[C](C)Cc1ccc(cc1)[C@H](C)C(=O)O", 701, 1192,
+ibr = mech.Molekuel("C[C](C)Cc1ccc(cc1)[C@H](C)C(=O)O", 691, 1192,
                     kern=IBU, name="Ibuprofen-Radikal")
 t.mole.append(ibr)
 
@@ -255,24 +270,27 @@ t.mole.append(ibr)
 # und ein Elektron der Fe-O-Bindung bilden die neue C-O-Bindung, das zweite Elektron
 # dieser Bindung bleibt am Eisen und macht aus Fe(IV) wieder Fe(III).
 #
-# Die beiden Haken aus der Fe-O-Bindung setzen auf gleicher Hoehe an, je einer
-# links und einer rechts vom Bindungsstrich, und laufen nach entgegengesetzten
-# Seiten auseinander - das ist die uebliche Schreibweise fuer eine Homolyse.
+# Die beiden Haken aus der Fe-O-Bindung setzen je einer links und einer rechts
+# vom Bindungsstrich an und laufen nach entgegengesetzten Seiten auseinander -
+# das ist die uebliche Schreibweise fuer eine Homolyse.
 #
 # axb() liefert die Bindungsmitte selbst, also einen Punkt *auf* dem Strich; U4
-# verlangt den Schwanz seitlich daneben (Lot 0,20-0,30 L). Fuer Molekuelbindungen
-# setzt der Solver das um, fuer die gezeichneten Zentren kann er es nicht - ihre
-# Striche stehen nicht in der Tintenkarte. Der Schwanz wird deshalb hier gesetzt:
-# 4,5 px sind bei L = 21 px genau 0,21 L.
+# verlangt den Schwanz seitlich daneben. Die Koordinationsstriche des Zentrums
+# stehen inzwischen in der Tintenkarte, der Solver haelt also von sich aus
+# Abstand; der Punkt hier gibt nur die Seite vor, links oder rechts.
+#
+# art="zurueck": beide Haken kommen aus der Fe-O-Bindung und enden an einem ihrer
+# eigenen Atome. Der Solver erkennt das an Molekuelbindungen selbst, an den
+# gezeichneten Zentren kann er es nicht - dort steht es hier.
 def fe_o(seite):
     """Schwanz neben der Fe-O-Bindung von Compound II, seite = -1 links, +1 rechts."""
     return mech.Punkt(zc2.x + seite * 4.5, zc2.y - 29.0,
                       ("zentrum-bindung", zc2.name, (-1, 0)))
 
 
-t.schub(Elektron(ibr, 1), zc2.ax(0, winkel=-20, abstand=14), elektronen=1)
-t.schub(fe_o(+1), zc2.ax(0, winkel=58, abstand=18), elektronen=1, art="intra")
-t.schub(fe_o(-1), zc2.fe(winkel=234, abstand=15), elektronen=1, art="intra")
+t.schub(Elektron(ibr, 1), zc2.ax(0, winkel=-30, abstand=4), elektronen=1)
+t.schub(fe_o(+1), zc2.ax(0, winkel=40, abstand=10), elektronen=1, art="zurueck")
+t.schub(fe_o(-1), zc2.fe(winkel=205, abstand=10), elektronen=1, art="zurueck")
 t.unterschrift(ibr, "Kohlenstoffradikal: die Hydroxylgruppe fällt zurück,",
                "das Eisen wird dabei zu Fe(III) reduziert", abstand=44)
 t.text(566, 1258, "Compound II, Fe(IV)&#8722;OH", size=10.5, anchor="middle",

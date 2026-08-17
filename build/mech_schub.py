@@ -87,11 +87,13 @@ SEHNE = {
     "intra": ((0.75, 1.20), (0.60, 1.90)),
     "ring": ((0.60, 0.90), (0.45, 1.30)),
     "inter": ((1.50, 4.00), (1.20, 8.00)),
-    # Rueckhaken: aus einer Bindung auf eines ihrer eigenen Atome. Geometrisch
-    # kann diese Sehne nicht laenger als etwa 0,9 L werden, siehe Schub._art.
-    # Nach unten begrenzt sie der Kopf: unter 0,55 L bleibt vom Schaft nichts
-    # uebrig, und der Pfeil ist nur noch eine Spitze.
-    "zurueck": ((0.55, 0.85), (0.50, 1.05)),
+    # Der kurze Pfeil um ein gemeinsames Atom herum, siehe Schub._art.
+    # Geometrisch kann diese Sehne nicht viel laenger als 1,0 L werden. Nach
+    # unten begrenzt sie der Kopf: unter etwa 0,45 L bleibt vom Schaft nichts
+    # uebrig, und der Pfeil ist nur noch eine Spitze. Die harte Untergrenze
+    # liegt darunter, weil bei einem Bindung-zu-Bindung-Pfeil beide Anker im
+    # spitzen Winkel liegen koennen; die Schaftpruefung faengt das ab.
+    "zurueck": ((0.50, 0.85), (0.38, 1.10)),
 }
 
 
@@ -771,20 +773,24 @@ class Schub(object):
         idx = []
         for a in (self.quelle, self.ziel):
             idx += ([a.i, a.j] if isinstance(a, Bindung) else [a.idx])
-        # Der Rueckhaken: aus einer Bindung heraus auf eines ihrer eigenen Atome.
-        # Das haeufigste Motiv der ganzen Sammlung - jede Heterolyse sieht so aus -
-        # und das mit der kuerzesten Sehne. Anfang und Ende liegen nur eine halbe
-        # Bindungslaenge auseinander, quer dazu je 0,2 L versetzt; laenger als
-        # 0,75 L kann diese Sehne gar nicht werden. Im Fenster fuer gewoehnliche
-        # innermolekulare Pfeile (ab 0,60 L) fiel sie deshalb regelmaessig durch,
-        # und der Pfeil blieb ungezeichnet. Neun Tafeln hatten dadurch
-        # unvollstaendige Pfeilsaetze.
-        paare = [(a, b) for a, b in ((self.quelle, self.ziel),
-                                     (self.ziel, self.quelle))]
-        for bind, ende in paare:
-            if isinstance(bind, Bindung) and not isinstance(ende, Bindung):
-                if ende.idx in (bind.i, bind.j):
-                    return "zurueck"
+        # Der kurze Pfeil um ein gemeinsames Atom herum. Zwei Faelle, dieselbe
+        # Geometrie: aus einer Bindung auf eines ihrer eigenen Atome (jede
+        # Heterolyse), und aus einer Bindung in die Nachbarbindung am selben Atom
+        # (jede Verschiebung, jeder Radikalschritt). Es ist das haeufigste Motiv
+        # der Sammlung und hat die kuerzeste Sehne: Anfang und Ende liegen eine
+        # halbe Bindungslaenge auseinander, quer dazu je 0,2 L versetzt. Im
+        # Fenster fuer gewoehnliche innermolekulare Pfeile (ab 0,60 L) fiel es
+        # regelmaessig durch, und der Pfeil blieb ungezeichnet - obwohl reichlich
+        # kreuzungsfreie Boegen zur Verfuegung standen. Neun Tafeln hatten
+        # dadurch unvollstaendige Pfeilsaetze.
+        def atome(a):
+            return {a.i, a.j} if isinstance(a, Bindung) else {a.idx}
+
+        gemeinsam = atome(self.quelle) & atome(self.ziel)
+        if gemeinsam and not (isinstance(self.quelle, Bindung)
+                              and isinstance(self.ziel, Bindung)
+                              and atome(self.quelle) == atome(self.ziel)):
+            return "zurueck"
         ri = mq.mol.GetRingInfo()
         for ring in ri.AtomRings():
             if all(i in ring for i in idx):

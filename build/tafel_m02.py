@@ -20,12 +20,19 @@ Umgestellt auf die neue Pfeilsprache:
 Von den sechs frueheren Pfeilen sind vier geblieben. Die beiden anderen gehoeren
 zum selben Muster: ein Bindungspaar bleibt am eigenen Atom zurueck, und dieses
 Atom traegt drei Bindungen, von denen eine auf der Winkelhalbierenden der beiden
-uebrigen steht (das C2-H des Thiazoliums, das N-CH2 des Ringstickstoffs). Dann
-sind die freien Keile je 126 Grad breit, und der Solver bietet als Spitzenlage
-nur deren Mitte an: im selben Keil wird die Sehne 0,25-0,42 L und faellt unter
-das Fenster F4, im anderen laeuft der Bauch quer ueber die eigene Quellbindung.
-Beides ist durchgerechnet, auch bei vergroessertem Ausschnitt - die Lage ist
-massstabsfrei. Was die Elektronen tun, steht deshalb in den Unterschriften.
+uebrigen steht (das C2-H des Thiazoliums, das N-CH2 des Ringstickstoffs). Beide
+sind mit der Pfeilart "zurueck" noch einmal angemeldet und wieder abgelehnt
+worden; die Zaehler stehen an Ort und Stelle. Kurz: die freien Keile sind 108
+und zweimal 126 Grad breit, ihre Mitten liegen 54 bis 63 Grad neben der
+Quellbindung. Schwanz und Spitze auf derselben Seite dieser Bindung geben
+hoechstens 0,44 L Sehne - das harte Fenster beginnt bei 0,50 L -, und jeder
+Bogen, der das Fenster erreicht, hat Schwanz und Spitze auf verschiedenen Seiten
+und muss die Quellbindung, eine Nachbarbindung oder das N+-Symbol durchqueren.
+Zeichenbar wuerden beide erst, wenn die Spitze 0,74 bis 0,80 L vom Atom entfernt
+stehen duerfte statt der zugelassenen 0,45 L; das ist der weit ausholende Haken,
+den der Katalog unter Z3 verworfen hat. Alles daran ist massstabsfrei, bei
+bindung=26 und bindung=31 nachgerechnet. Was die Elektronen tun, steht deshalb
+in den Unterschriften.
 """
 import os
 import sys
@@ -88,12 +95,22 @@ t.atomnummer(thia, 7, "C2", winkel=352, abstand=30, size=10.5, farbe=W, gewicht=
 # Pfeil endet am Wasserstoffatom.
 t.schub(base, Atom(thia, ht))
 # Der zweite Pfeil dieses Schrittes - das Bindungspaar der C-H-Bindung bleibt am
-# C2 zurueck - ist nicht gezeichnet. Am C2 stehen drei Bindungen (S, N und H),
-# und das H zeigt genau in die Winkelhalbierende der beiden freien Keile. Damit
-# bleiben nur zwei Keile von je 126 Grad: liegen Schwanz und Spitze im selben,
-# wird die Sehne 0,25-0,45 L kurz und faellt unter das Fenster F4; liegen sie in
-# verschiedenen, muss der Bauch quer ueber die eigene C-H-Bindung. Beides ist
-# geprueft (auch bei vergroessertem Ausschnitt, die Lage ist massstabsfrei).
+# C2 zurueck - ist nicht gezeichnet. Er ist als Rueckhaken angemeldet worden und
+# an der Geometrie gescheitert, nachgemessen mit der jetzigen Pfeilsprache:
+#   Am C2 stehen drei Bindungen (S bei 36, N bei 144, H bei 270 Grad), und das H
+#   liegt genau auf der Winkelhalbierenden. Die freien Keile sind darum 108 und
+#   zweimal 126 Grad breit; ihre Mitten liegen 63 Grad neben der C-H-Bindung.
+#   Von den 108 Ankerpaaren liegen 68 im harten Sehnenfenster 0,50-1,05 L, und
+#   alle 816 Boegen daraus kreuzen: 622 die eigene C-H-Bindung, der Rest die
+#   C-S- oder die C-N-Bindung. Kreuzungsfrei bleiben nur die Boegen mit Schwanz
+#   und Spitze auf derselben Seite der C-H-Bindung; deren laengste Sehne ist
+#   0,447 L, und ihr Freiraum zu fremder Tinte betraegt 0,22 L (gefordert sind
+#   0,25 L). Der Pfeil scheitert also zweifach.
+#   Zeichenbar wuerde er erst, wenn die Spitze 0,80 L statt hoechstens 0,45 L vom
+#   C2 entfernt stehen duerfte - das ist Levys weit um das Atom schwingender
+#   Haken, den der Katalog unter Z3 ausdruecklich verworfen hat.
+#   Alles daran ist massstabsfrei: bei bindung=26 und bindung=31 kommt derselbe
+#   Befund heraus.
 # Wo die Elektronen bleiben, sagt das freie Paar am C2 des Ylids nebenan.
 t.unterschrift(thia, "Thiazolium: das C2 sitzt zwischen Schwefel und Ammonium;",
                "das Paar der C&#8722;H-Bindung bleibt an ihm zurück und wird",
@@ -133,9 +150,20 @@ ylid2 = t.mol(YLID, 190, 585, labels=RESTE, kern=KERN, name="Ylid")
 # Das Pyruvat steht schraeg darueber: das freie Paar des Ylids zeigt vom C2 an
 # der Ringspitze nach oben, und dorthin greift es an. Die Unterschrift des
 # Pyruvats steht ausnahmsweise darueber, weil unter ihm der Pfeil laeuft.
-pyr = t.mol("CC(=O)C(=O)[O-]", 275, 505, zeige={1: "links"}, name="Pyruvat")
+# Der Drehwinkel ist nicht beliebig, sondern am zweiten Pfeil gemessen: bei der
+# frueheren Lage ("zeige") blieb dem Pfeil vom Pi-Paar der Carbonylbindung nur
+# eine Sehne von 0,50 L, und seine Spitze zeigte 56 Grad am Sauerstoff vorbei.
+# Bei 110 Grad wird die Sehne 0,56 L - im Buchfenster fuer den Rueckhaken -,
+# die Spitze weicht nur noch 42 Grad ab, und der Freiraum steigt von 0,30 auf
+# 0,51 L. Der Angriffspfeil wird dabei zugleich besser (Kopfabweichung 4 statt
+# 14 Grad).
+pyr = t.mol("CC(=O)C(=O)[O-]", 275, 505, rotate=110, name="Pyruvat")
 # Ein Schritt: das freie Paar des Ylids bildet die neue C-C-Bindung, das
 # Pi-Paar der Carbonylbindung weicht auf den Sauerstoff aus.
+# Die beiden Pfeile treffen sich am Ketokohlenstoff selbst - der eine endet
+# davor, der andere beginnt an dessen Carbonylbindung. Ihre Anker liegen deshalb
+# konstruktionsbedingt knapp eine Bindungslaenge auseinander (0,91 L); das ist
+# der Fall, fuer den mech_regeln.py das weitere Fenster "kette_atom" fuehrt.
 t.schub(Paar(ylid2, 7), Atom(pyr, 1), kette="b")
 t.schub(Bindung(pyr, 1, 2), Paar(pyr, 2), kette="b")
 # Die Marke "Keto-C" liess sich nirgends kollisionsfrei setzen und ist neben
@@ -155,13 +183,7 @@ t.unterschrift(lac, "2-Lactyl-TPP, das Addukt", abstand=30)
 # --- zweite Reihe: Decarboxylierung
 lac2 = t.mol(LACTYL, 200, 795, labels=RESTE_L, kern=KERN, name="2-Lactyl-TPP")
 # Gezeichnet ist der Bindungsbruch: die brechende C-C-Bindung bildet die
-# Doppelbindung zum Ring. Der zweite Pfeil desselben Schrittes - das Pi-Paar der
-# C=N+-Bindung weicht auf den Ringstickstoff aus - ist nicht gezeichnet, aus
-# derselben Ursache wie in Zone A: am N3 stehen drei Bindungen, sein
-# CH2-Pyrimidin steht auf der Winkelhalbierenden, und die verbleibenden Keile
-# sind zu eng. Schwanz und Spitze im selben Keil geben nur 0,42 L Sehne, das
-# Fenster fuer einen Ringpfeil beginnt bei 0,45 L; in verschiedenen Keilen
-# laeuft der Bauch ueber die eigene Quellbindung. Die Unterschrift sagt es.
+# Doppelbindung zum Ring.
 # art="ring" ist hier kein Ringpfeil im topologischen Sinn, sondern die
 # Sehnenklasse: der Pfeil greift um ein einziges gemeinsames Atom herum, und dafuer
 # gilt das kurze Fenster 0,60-0,90 L. Ohne die Angabe zielt der Solver auf die
@@ -169,6 +191,20 @@ lac2 = t.mol(LACTYL, 200, 795, labels=RESTE_L, kern=KERN, name="2-Lactyl-TPP")
 # Sehne nur auf der falschen Seite der brechenden Bindung und laesst den Bauch
 # dann quer ueber genau die Bindung laufen, aus der die Elektronen kommen.
 t.schub(Bindung(lac2, 8, 11), Bindung(lac2, 7, 8), art="ring")
+# Der zweite Pfeil desselben Schrittes - das Pi-Paar der C=N+-Bindung weicht auf
+# den Ringstickstoff aus - ist nicht gezeichnet, aus derselben Ursache wie in
+# Zone A und ebenso nachgemessen:
+#   Am N3 stehen drei Bindungen (C4 bei 72, das CH2-Pyrimidin bei 198, C2 bei
+#   324 Grad); das CH2 liegt auf der Winkelhalbierenden, die Keilmitten liegen
+#   wieder 63 bzw. 54 Grad neben der C=N+-Bindung. 68 der 108 Ankerpaare liegen
+#   im harten Fenster 0,50-1,05 L, und alle 816 Boegen daraus kreuzen: 406 das
+#   Glyphenrechteck des N+, 245 die eigene C=N+-Bindung, 98 die N-CH2- und 96
+#   die N-C4-Bindung. Kreuzungsfrei bleibt nur, was auf derselben Seite der
+#   C=N+-Bindung ansetzt und endet; dessen laengste Sehne ist 0,437 L.
+#   Zeichenbar wuerde er ab einem Spitzenabstand von 0,74 L vom N3 (Sehne dann
+#   0,50 L, Freiraum 0,47 L); erlaubt sind hoechstens 0,45 L. Auch das ist
+#   massstabsfrei - bindung=26 und bindung=31 aendern nichts.
+# Die Unterschrift sagt, wohin das Paar geht.
 t.unterschrift(lac2, "die C&#8722;C-Bindung bricht, die Elektronen bilden die",
                "Doppelbindung zum Ring, und das π-Paar der",
                "C=N&#8314;-Bindung geht auf den Stickstoff", abstand=32)

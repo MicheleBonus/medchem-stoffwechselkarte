@@ -117,7 +117,7 @@ t.ueberschrift(carb, "das Carbanion: kurzlebig, aber stark nucleophil", abstand=
 # Schritt und deshalb als Kette angemeldet: die Pruefung verlangt Kopf an Schwanz.
 co2 = t.mol("O=C=O", 480, 240, zeige={0: "oben"}, name="Kohlendioxid")
 t.schub(Paar(carb, 2), Atom(co2, 1), kette="b")
-t.schub(Bindung(co2, 0, 1), Paar(co2, 0), kette="b")
+t.schub(Bindung(co2, 1, 2), Paar(co2, 2), kette="b")
 t.unterschrift(co2, "CO&#8322;", abstand=24, farbe=G)
 
 t.reaktionspfeil(566, 176, 706)

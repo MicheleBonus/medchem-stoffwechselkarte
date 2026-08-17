@@ -11,7 +11,7 @@ Noradrenalin unterscheiden sich nur um die eine Hydroxylgruppe, und genau die
 soll ins Auge fallen - nicht eine verdrehte Ringlage. Der Kern stellt den
 Brenzcatechinring so, dass die Seitenkette nach links zeigt und die beiden
 Hydroxylgruppen nach rechts und rechts unten. Damit steht das benzylische
-Wasserstoffatom auf der dem Kupfer zugewandten Seite, und die beiden Fischhaken
+Wasserstoffatom auf der dem Kupfer zugewandten Seite, und die drei Fischhaken
 finden zwischen Substrat und Superoxo-Sauerstoff einen kurzen Weg, ohne das
 Geruest zu kreuzen.
 """
@@ -80,7 +80,10 @@ t.text(20, 430, "Der Sauerstoff wird nicht bis zum Ferryl-Äquivalent aktiviert.
                 "Superoxo-Komplex reicht, um ein Wasserstoffatom abzuziehen.", size=12.5)
 
 z1 = t.zentrum(110, 540, "Cu(I)", unten="", ebene=False, schritt=46, name="Cu(I)")
-t.text(110, 596, "Cu(I)", size=11, anchor="middle", gewicht=700, farbe=E)
+# Die Zeile darunter benennt die Stufe, so wie rechts "Superoxo-Komplex". Frueher
+# stand hier noch einmal "Cu(I)" - dieselbe Angabe, die das Zentrum selbst traegt.
+t.text(110, 596, "das reduzierte Zentrum", size=11, anchor="middle", gewicht=700,
+       farbe=E)
 
 t.reaktionspfeil(160, 540, 320)
 t.text(240, 528, "+ O&#8322;", size=10.5, anchor="middle", gewicht=700, farbe=C)
@@ -100,19 +103,11 @@ dop = t.mol("NCCc1ccc(O)c(O)c1", 475, 500, wasserstoff=[2], kern=CATECHOLAMIN,
 hd = dop.h_index[2]
 # Die Abstraktion, in Fischhaken: das ungepaarte Elektron des Superoxo-Sauerstoffs
 # holt sich das Wasserstoffatom, ein Elektron der benzylischen C-H-Bindung geht mit
-# - zusammen bilden die beiden die neue O-H-Bindung.
+# - zusammen bilden die beiden die neue O-H-Bindung -, und das zweite Elektron
+# derselben Bindung bleibt am benzylischen Kohlenstoff zurueck. Drei Haken, wie es
+# eine Abstraktion verlangt.
 #
-# Der dritte Haken - das zweite Elektron derselben Bindung bleibt am benzylischen
-# Kohlenstoff zurueck - ist nicht gezeichnet. Er fuehrte aus der C-H-Bindung auf
-# deren eigenes Kohlenstoffatom, und dafuer ist am Atom kein Platz: es traegt drei
-# Bindungen und damit drei gleich weite Winkelluecken. Die Luecke neben der
-# C-H-Bindung liegt nur ein Drittel der geforderten Sehnenlaenge vom Schwanz
-# entfernt; die beiden anderen erreicht kein Bogen, ohne eine Nachbarbindung zu
-# kreuzen. Der Solver lehnt alle 768 Kandidaten ab. Wie in M-08 an derselben
-# Stelle steht die Aussage deshalb im Text - unten in Zone C, beim stabilisierten
-# benzylischen Radikal - statt als verbogener Pfeil im Bild.
-#
-# Beide Haken haengen am selben Sauerstoff. Ohne Angabe setzt der Solver ihre
+# Die ersten beiden Haken haengen am selben Sauerstoff. Ohne Angabe setzt der Solver ihre
 # Anker auf dieselbe Gerade vom Sauerstoff zum Substrat, und die beiden Boegen
 # laufen dort fuenf Pixel nebeneinander her - unter dem geforderten Mindestabstand
 # zweier Pfeile. Deshalb sind die beiden Ankerorte ausdruecklich getrennt: das
@@ -121,6 +116,22 @@ hd = dop.h_index[2]
 # O-H-Bindung entsteht.
 t.schub(z2.ax(1, winkel=8, abstand=15), Atom(dop, hd), elektronen=1)
 t.schub(Bindung(dop, 2, hd), z2.ax(1, winkel=70, abstand=12), elektronen=1)
+# Der dritte Haken, der Rueckhaken: aus derselben C-H-Bindung auf ihr eigenes
+# Kohlenstoffatom. Das Atom als Ziel geht hier nicht - der benzylische Kohlenstoff
+# traegt drei Bindungen und damit drei gleich weite Winkelluecken von 120 Grad,
+# und zwischen dem Schwanz neben der C-H-Bindung und jeder erlaubten Spitzenlage
+# am Atom bleiben hoechstens 0,44 L Sehne. Gefordert sind 0,50 L; alles Laengere
+# kreuzt eine der drei Bindungen.
+# abseits() loest das: die Herkunft bleibt das Atom, der Zielort rueckt aber
+# 2,5 px in die Winkelluecke zwischen C-H-Bindung und Ring, und der Faecher der
+# Fest-Anker findet dort eine Sehne von 0,51 L. Die Spitze steht damit 0,39 L vor
+# dem Kohlenstoff, mitten im Fenster der Regel Z1, und der Kopf zeigt darauf.
+# Die andere Luecke - die neben der CH2-Gruppe - scheidet aus: dorthin kommt kein
+# Bogen, ohne die C-H-Bindung selbst zu kreuzen.
+# art="zurueck" steht dabei, weil die automatische Erkennung zwei Anker desselben
+# Molekuels braucht und abseits() einen festen Ort liefert.
+t.schub(Bindung(dop, 2, hd), dop.abseits(2, 1, abstand=2.5), elektronen=1,
+        art="zurueck")
 t.unterschrift(dop, "Dopamin: abstrahiert wird das benzylische",
                "Wasserstoffatom, nicht ein beliebiges", abstand=30)
 
@@ -181,12 +192,13 @@ ARIA = (
     "Elektronentransfer-Zentrum mit drei Histidinen und das katalytische Zentrum mit zwei "
     "Histidinen und einem Methionin, getrennt durch etwa elf Angstroem ohne verbindende "
     "Proteinkette; daneben das gezeichnete Ascorbat, das beide reduziert. Zone B zeigt den "
-    "Zyklus: Aus Kupfer eins und Sauerstoff entsteht ein Superoxo-Komplex, der mit zwei "
-    "Fischhakenpfeilen das benzylische Wasserstoffatom vom Dopamin abstrahiert. Der eine Haken "
-    "bringt das ungepaarte Elektron des Superoxo-Sauerstoffs an das Wasserstoffatom, der andere "
+    "Zyklus: Aus Kupfer eins und Sauerstoff entsteht ein Superoxo-Komplex, der mit drei "
+    "Fischhakenpfeilen das benzylische Wasserstoffatom vom Dopamin abstrahiert. Der erste Haken "
+    "bringt das ungepaarte Elektron des Superoxo-Sauerstoffs an das Wasserstoffatom, der zweite "
     "fuehrt ein Elektron der benzylischen Kohlenstoff-Wasserstoff-Bindung zum Sauerstoff; "
-    "zusammen bilden die beiden die neue Sauerstoff-Wasserstoff-Bindung. Das zweite Elektron "
-    "dieser Bindung bleibt als Radikal am benzylischen Kohlenstoff zurueck. "
+    "zusammen bilden die beiden die neue Sauerstoff-Wasserstoff-Bindung. Der dritte Haken "
+    "fuehrt das zweite Elektron derselben Bindung auf den benzylischen Kohlenstoff zurueck, wo "
+    "es als Radikal bleibt. "
     "Aus dem Superoxo wird dabei ein Hydroperoxo. Nach dem Rebound, der "
     "ein Elektron und ein Proton verbraucht und Wasser freisetzt, "
     "entsteht Noradrenalin mit R-konfigurierter Hydroxylgruppe. Zone C stellt die "

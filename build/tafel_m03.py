@@ -164,21 +164,28 @@ t.mole.append(enol)
 # dann der Bruch der N-C-Bindung.
 #
 # Wohin das Paar dieser Bindung geht, ist ausgeschrieben. Am Stickstoff selbst
-# laesst es sich nicht zeigen: er sitzt im Ring, seine beiden Ringbindungen
-# lassen ihm nur zwei schmale Luecken nach aussen, und beide liegen so dicht an
-# der brechenden Bindung, dass jeder Bogen dorthin kuerzer waere als das erlaubte
-# Mindestmass - der Solver lehnt alle 840 Kandidaten ab. Ausgeschrieben ist es
-# ohnehin die bessere Aussage: das Biotin-Anion ist ein Amid-Anion und damit
-# mesomeriestabilisiert, das Paar wird vom Ureido-Carbonyl aufgenommen. Genau
-# deshalb zerfaellt das Carbamat so bereitwillig.
+# laesst es sich nicht zeigen, und der Grund haengt nicht am Ausschnitt, sondern
+# an der Valenz: N1' traegt drei Bindungen - zum Ureido-Carbonyl, zum
+# Carboxylkohlenstoff und zum Ringfusionskohlenstoff -, die drei Luecken
+# dazwischen sind je etwa 120 Grad weit. Der Schwanz sitzt neben der Mitte der
+# brechenden Bindung. Ein Paar in einer der beiden Luecken, die auf derselben
+# Seite dieser Bindung liegen, ist von dort nur 0,28 bis 0,40 L entfernt, und
+# unter 0,50 L bleibt neben dem Kopf kein Schaft mehr uebrig. Jede Lage mit
+# langer genug Sehne liegt jenseits einer der drei Bindungen, der Bogen muesste
+# sie also durchqueren. Ausgezaehlt: von 816 geprueften Boegen kreuzen 796 eine
+# Bindung oder das N-Symbol, die uebrigen 20 kommen fremder Tinte zu nah; die
+# kurzen Lagen fallen schon an der Mindestsehne heraus. Massstab hilft nicht,
+# weil alle Groessen in L gemessen sind und sich mitvergroessern.
+# Ausgeschrieben ist es ohnehin die bessere Aussage: das Biotin-Anion ist ein
+# Amid-Anion und damit mesomeriestabilisiert, das Paar wird vom Ureido-Carbonyl
+# aufgenommen. Genau deshalb zerfaellt das Carbamat so bereitwillig.
 #
 # art="ring": der zweite Pfeil endet an einer Ringbindung des Ureido-Rings und
 # ist der Resonanzpfeil des Amid-Anions. Regel F4 gibt dafuer 0,60-0,90 L vor,
-# nicht die 0,75-1,20 L eines gewoehnlichen innermolekularen Pfeils. Mit dem
-# weiteren Fenster waehlte der Solver eine Sehne von 1,02 L, und dabei setzte
-# der Schwanz unterhalb der brechenden N-C-Bindung an: der Bogen kreuzte die
-# Bindung, aus der er kommt. Mit dem Resonanzfenster liegen Schwanz und Bogen
-# geschlossen oberhalb der Bindung.
+# nicht die 0,75-1,20 L eines gewoehnlichen innermolekularen Pfeils. Ohne die
+# Angabe zaehlt der Solver ihn als gewoehnlichen innermolekularen Pfeil und
+# macht ihn 0,77 statt 0,71 L lang; zulaessig ist seit dem Kreuzungstest beides,
+# das engere Fenster passt zur Aussage.
 t.schub(Paar(enol, 0), Atom(cbio2, 3), kette="C")
 t.schub(Bindung(cbio2, 2, 3), Bindung(cbio2, 1, 2), kette="C", art="ring")
 t.schub(Bindung(cbio2, 0, 1), Paar(cbio2, 0), kette="C")

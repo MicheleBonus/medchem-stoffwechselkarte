@@ -15,13 +15,16 @@ verglich Drehungen statt Oxidationsstufen.
 
 Von den vier frueheren Pfeilen sind zwei gezeichnet, und zwar die beiden, die eine
 neue Bindung machen. Die beiden anderen enden an einem dreifach substituierten
-Stickstoff - das Bindungspaar C1-N10 auf dem N10, das pi-Paar C1=N5 auf dem N5 -
-und fuer die laesst sich kein regelkonformer Bogen legen: An einem Atom mit drei
-Substituenten liegt jede der drei Luecken 60 Grad neben einer seiner Bindungen,
-und die Spitze steht dort entweder so dicht an der Quellbindung, dass der Bauch
-auf ihr laege, oder hinter einer der beiden anderen Bindungen. Das gilt bei jeder
-Drehung und bei jeder Bindungslaenge; nachgerechnet mit einem freistehenden
-Molekuel auf leerer Tafel. Beide Aussagen stehen deshalb im Text der Zone B, so
+Stickstoff - das Bindungspaar C1-N10 auf dem N10, das pi-Paar C1=N5 auf dem N5.
+Beide sind mit der neuen Pfeilart "zurueck" neu vermessen worden, und der Befund
+hat sich geaendert: Ein regelkonformer Bogen existiert jetzt, nur liegt seine
+Spitze weiter vom Stickstoff weg, als der Zielanker sie setzen kann. Am N10 faengt
+der kollisionsfreie Bereich auf der angebotenen Winkelhalbierenden bei 0,62 L vom
+Atomzentrum an; Paar.kandidaten bietet als Ziel hoechstens 0,45 L. Am N5 des
+Iminiums braucht es zusaetzlich sechs Grad neben der Winkelhalbierenden, und die
+bietet _freie_richtungen fuer Luecken unter 150 Grad nicht an. Das steckt in
+mech_schub.py und nicht in dieser Datei; die genauen Zahlen stehen an den beiden
+Stellen weiter unten. Beide Aussagen stehen deshalb weiter im Text der Zone B, so
 wie es M-01 mit seinem letzten Chinoid-Schritt haelt.
 
 Der Mechanismus-Ausschnitt ist mit 23 px Bindungslaenge gezeichnet und nicht mehr
@@ -152,16 +155,26 @@ meth = mech.Molekuel("*N1C(*)CN(*)C1", 150, 584, labels={0: "C4a", 3: "C7", 6: "
                      kern=KERN, bindung=23, name="Methylen-THF")
 t.mole.append(meth)
 # Das freie Paar am N5 schiebt sich in die Bindung N5-C1; daraus wird die
-# Doppelbindung des Iminiums. Der Schwanz sitzt am Stickstoff selbst und nicht an
-# einem gezeichneten Punktpaar: das Paar stuende 0,52 Bindungslaengen vom N5 weg
-# und damit so dicht neben der Bindung N5-C1, dass die Sehne unter das
-# Mindestmass faellt. Regel U2 verlangt den Schwanz nur dort am Paar, wo eines
-# gezeichnet ist.
-t.schub(Atom(meth, 1), Bindung(meth, 1, 7))
-# Der Gegenpfeil - das Bindungspaar C1-N10 geht auf das N10 - ist nicht
-# gezeichnet. Am dreifach substituierten N10 liegt jede zulaessige Spitzenlage
-# entweder so dicht an der Quellbindung, dass der Bauch auf ihr laege, oder hinter
-# einer der beiden anderen Bindungen. Die Aussage steht im Text der Zone.
+# Doppelbindung des Iminiums. Der Schwanz sitzt jetzt am gezeichneten Punktpaar
+# und nicht mehr am Stickstoff selbst; die Begruendung fuer das Weglassen - die
+# Sehne falle unter das Mindestmass - haelt nicht mehr. Nachgemessen sind es
+# 0,67 L, und der Pfeil ist eine Heterolyse am selben Atom, also die Art
+# "zurueck" mit dem Fenster 0,55-0,85 L. Damit liegt er mitten darin.
+# Der Unterschied am Bild ist der wichtigere: mit Punktpaar sieht der Leser,
+# woher die Elektronen kommen; ohne es begann der Pfeil in der Ringmitte.
+t.schub(Paar(meth, 1), Bindung(meth, 1, 7))
+# Der Gegenpfeil - das Bindungspaar C1-N10 geht auf das N10 - bleibt ungezeichnet.
+# Nachgemessen mit der neuen Pfeilart "zurueck" (Sehne 0,50-1,05 L):
+# Ein regelkonformer Bogen EXISTIERT. Am N10 bietet _freie_richtungen genau eine
+# Zielrichtung an, die Winkelhalbierende der Luecke zwischen Aryl und C1 bei
+# 158,7 Grad; dort liegt der kleinste kollisionsfreie Spitzenradius bei 0,62 L
+# vom Atomzentrum (Ueberstand ueber den Glyphen 0,44 L, also innerhalb der von
+# Z3 erlaubten 0,09-0,46 L). Paar.kandidaten bietet als Ziel aber nur die drei
+# Radien 0,30/0,37/0,45 L an. Bei 0,45 L bleibt die Sehne bei 0,39 L und faellt
+# unter das Mindestmass; alles, was die Sehne erreicht, kreuzt die eigene
+# Bindung oder das N-Symbol (831 von 840 Kandidaten). Das laesst sich in dieser
+# Datei nicht heilen: Zielradius und Zielrichtung kommen aus mech_schub.py.
+# Die Aussage steht deshalb im Text der Zone.
 t.unterschrift(meth, "der Fünfring öffnet sich", abstand=32)
 
 t.reaktionspfeil(250, 588, 330)
@@ -182,36 +195,52 @@ t.text(578, 612, "das Hydrid für deren Reduktion zur Methylgruppe.", size=12.5)
 t.text(578, 635, "Der Cofaktor wird dabei zu Dihydrofolat oxidiert, und nur", size=12.5)
 t.text(578, 654, "die Dihydrofolat-Reduktase bringt ihn zurück.", size=12.5)
 
+# Der ternaere Komplex steht rechts, wird aber zuerst gebaut: seine Lage ist die
+# festgelegte (KERN haelt den THF-Teil), und das dUMP links muss sich danach
+# richten. Vorher stand es mit zeige= fuer sich, und RDKit legte den Uracilring
+# dabei gespiegelt an: dRib-P oben links statt unten links, das Cystein oben statt
+# unten. Der Leser musste den Ring zwischen Ausgangsstoff und Produkt umklappen.
+tern = mech.Molekuel("O=C1NC(=O)N(*)C(S*)C1CN(*)C(*)CN(*)*", 740, 768,
+                     labels={6: "dRib-P", 9: "Enzym", 13: "C4a", 15: "C7",
+                             18: "Aryl", 19: "H"},
+                     kern=KERN, bindung=23,
+                     name="ternärer Komplex")
+
+# Der Uracilring ohne die Reste: er allein muss in beiden Stufen gleich liegen.
+URACIL = "[#8]=[#6]1~[#7]~[#6](=[#8])~[#7]~[#6]~[#6]~1"
+
 dump = mech.Molekuel("O=C1NC(=O)N(*)C(S*)[CH-]1", 195, 768,
-                     labels={6: "dRib-P", 9: "Enzym"}, zeige={10: "rechts"},
+                     labels={6: "dRib-P", 9: "Enzym"},
+                     vorlage=tern, muster=URACIL,
                      bindung=23, name="dUMP")
 t.mole.append(dump)
 t.unterschrift(dump, "dUMP, nachdem ein Cystein", "des Enzyms an C6 addiert hat", abstand=32)
-# Die Marke sitzt schraeg ueber dem Carbanion. Unten rechts stand sie zwar frei,
-# war aber naeher am Carbonyl C4 und an dessen Sauerstoff als an dem C5, das sie
-# benennt - eine Marke, deren naechstes Atom ein anderes ist, benennt das falsche.
-# Waagerecht nach rechts geht es nicht, dort stehen das freie Paar und der
-# Pfeilschwanz; nach links liegt das Ringinnere, schraeg darueber das C6 mit dem
-# Cystein und darunter das Carbonyl. Frei bleibt nur der Keil nach rechts oben.
+# Die Marke sitzt schraeg ueber dem Carbanion. Waagerecht nach rechts geht es
+# nicht, dort stehen das freie Paar und der Pfeilschwanz; nach links liegt das
+# Ringinnere, schraeg darunter das C6 mit dem Cystein und dessen Schwefel, schraeg
+# darueber das Carbonyl C4. Frei bleibt der Keil nach rechts oben: dort steht die
+# Marke 14 px vom C5 und 23 px vom naechsten anderen Atom, benennt also das
+# richtige. Eine Marke, deren naechstes Atom ein anderes ist, benennt das falsche.
 t.atomnummer(dump, 10, "C5", winkel=305, abstand=17, size=10, farbe=W, gewicht=700)
 
 imin2 = mech.Molekuel("*[N+](=C)C(*)CN(*)*", 340, 768,
                       labels={0: "C4a", 4: "C7", 7: "Aryl", 8: "H"},
                       kern=KERN, bindung=23, name="Iminium")
 t.mole.append(imin2)
-# Das freie Paar am C5 des dUMP bildet die Bindung zum C1 des Iminiums. Der
-# Gegenpfeil - das pi-Paar der Bindung C1=N5 geht auf das N5 zurueck - steht im
-# Text der Zone: am dreifach substituierten N5 hat seine Spitze keinen Platz.
+# Das freie Paar am C5 des dUMP bildet die Bindung zum C1 des Iminiums.
 t.schub(Paar(dump, 10), Atom(imin2, 2))
+# Der Gegenpfeil - das pi-Paar der Bindung C1=N5 geht auf das N5 zurueck - bleibt
+# ebenfalls ungezeichnet, und zwar noch knapper als am N10. Am sp2-N5 stehen drei
+# Substituenten in 120-Grad-Luecken; angeboten wird die Winkelhalbierende bei
+# 182,6 Grad. Dort faengt der kollisionsfreie Bereich erst bei 0,64 L an, und das
+# sind 0,48 L Ueberstand ueber den Glyphen - zwei Hundertstel ueber der Grenze
+# von Z3. Sechs Grad daneben, bei 176,5 Grad, ginge es mit 0,60 L und 0,44 L
+# Ueberstand regelkonform; diese Richtung bietet _freie_richtungen nicht an, weil
+# es fuer Luecken unter 150 Grad bei der Winkelhalbierenden bleibt.
 t.unterschrift(imin2, "C5 greift das C&#8321; an", abstand=32)
 
 t.reaktionspfeil(425, 764, 600)
 
-tern = mech.Molekuel("O=C1NC(=O)N(*)C(S*)C1CN(*)C(*)CN(*)*", 740, 768,
-                     labels={6: "dRib-P", 9: "Enzym", 13: "C4a", 15: "C7",
-                             18: "Aryl", 19: "H"},
-                     kern=KERN, bindung=23,
-                     name="ternärer Komplex")
 t.mole.append(tern)
 t.unterschrift(tern, "der kovalente ternäre Komplex aus Enzym, Substrat und Cofaktor",
                abstand=32)
@@ -285,7 +314,8 @@ ARIA = (
     "Methylstufe ueber die Methylentetrahydrofolat-Reduktase verbraucht NADPH und ein Proton "
     "und ist irreversibel. Zone B fuehrt den Mechanismus der Thymidylatsynthase aus. Der "
     "Fuenfring des Methylentetrahydrofolats oeffnet sich zum Iminium: Ein Elektronenpfeil "
-    "geht vom Stickstoff N5 in die Bindung zwischen N5 und der Kohlenstoffbruecke, aus der "
+    "geht vom freien Paar am Stickstoff N5 in die Bindung zwischen N5 und der "
+    "Kohlenstoffbruecke, aus der "
     "damit die Doppelbindung des Iminiums wird; das Bindungspaar zwischen der Bruecke und dem "
     "Stickstoff N10 geht dabei auf das N10 ueber. Am Iminium ist die Kohlenstoffbruecke jetzt "
     "elektrophil. Ein zweiter Elektronenpfeil geht vom freien Paar am Kohlenstoff C5 des dUMP, "

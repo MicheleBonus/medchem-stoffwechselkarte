@@ -195,13 +195,19 @@ bh4 = t.mol("CC(O)C(O)C1CNC2=C(N1)C(=O)NC(N)=N2", 290, 828,
 # lokalisierte Radikalkation BH4-Punkt-plus. Ein Methylenkohlenstoff haette weder
 # ein freies Paar noch ein Einzelelektron abzugeben. Das Punktpaar zeichnet der
 # Solver selbst, sobald Paar(...) die Quelle ist.
-t.atomnummer(bh4, 10, "N5", winkel=237, abstand=25, size=9.5, farbe=R, gewicht=700)
+# Die Nummer steht waagerecht links neben dem Symbol. Vorher stand sie schraeg
+# darueber - genau in der Luecke, in die der Solver das Punktpaar setzt und aus
+# der der Fischhaken zum Haem hin abgeht. Der Pfeil hatte dadurch keinen Weg.
+t.atomnummer(bh4, 10, "N5", winkel=180, abstand=24, size=9.5, farbe=R, gewicht=700)
 # Ziel ist der distale Sauerstoff: dort sitzt die Ladung, sobald aus dem
-# Fe(II)-O2-Komplex das Ferri-Peroxid geworden ist. ax(1) ohne Winkel brachte
-# seine Beschriftungsbreite als Mindestabstand mit, und die Spitze blieb dadurch
-# 19 px vor dem O stehen - zu weit, um noch auf es zu zeigen. Mit abstand=0 ist
-# der Anker das O selbst, und der Solver setzt die Spitze knapp davor.
-t.schub(Paar(bh4, 10), zh.ax(1, winkel=0, abstand=0), elektronen=1)
+# Fe(II)-O2-Komplex das Ferri-Peroxid geworden ist. abstand=6 setzt den Anker
+# knapp rechts neben das O, also gerade aus dem Buchstaben heraus - der Pfeil
+# kommt von rechts. Ohne diesen Versatz (abstand=0) liegt der Anker mitten im
+# Glyphen, und jede Spitze davor haelt den Mindestabstand nicht ein; mit dem
+# vollen Beschriftungsmass von ax(1) ohne Winkel bleibt sie dagegen 0,7
+# Bindungslaengen vor dem O stehen. Der Faecher der Fest-Anker sucht in diesem
+# Ring die Lage, an der die Spitze auf das O zeigt.
+t.schub(Paar(bh4, 10), zh.ax(1, winkel=0, abstand=6), elektronen=1)
 t.unterschrift(bh4, "BH&#8324; gibt ein einzelnes Elektron vom N5 ab",
                "und wird sofort wieder reduziert", abstand=38)
 

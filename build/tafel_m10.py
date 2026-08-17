@@ -48,6 +48,21 @@ AREN = mech_kerne.eigener(
     muster="[#0]~[#6]1~[#6]~[#6]~[#6](~[!#6])~[#6]~[#6]~1",
     ring=[1, 2, 3, 4, 6, 7], leit=1, folge=2, winkel=0.0)
 
+# Dasselbe Geruest fuer die mittlere Stufe, aber als eigene Vorlage, und mit
+# einem Muster, das die OH-Gruppe aussen vor laesst. Grund: am sp3-Zentrum des
+# Addukts stehen vier Nachbarn statt drei, das Sauerstoffatom sitzt dort um
+# fuenfzehn Grad aus der Ringachse gedreht. Nimmt man es in den Abgleich hinein,
+# verteilt die Ausgleichsrechnung diese Abweichung auf den ganzen Ring und
+# verdreht ihn um 5,2 Grad gegen Aromat und Phenol - genug, dass beim Vergleich
+# der drei Stufen das Bild kippt, statt stehenzubleiben. Abgeglichen wird
+# deshalb nur ueber den Rest R und die sechs Ringatome, die in allen drei
+# Stufen dieselbe regelmaessige Lage haben. Das Kation im Muster legt dabei die
+# Umlaufrichtung fest, sonst passte der Ring auch spiegelverkehrt.
+AREN_SIGMA = mech_kerne.eigener(
+    "aren-sigma", "OC1C=CC(*)=C[CH+]1",
+    muster="[#0]~[#6]1~[#6]~[#6+]~[#6]~[#6]~[#6]~1",
+    ring=[1, 2, 3, 4, 6, 7], leit=1, folge=2, winkel=0.0)
+
 t = mech.Tafel(1000, 1260)
 
 # ===================================================== ZONE A · Sauerstoffaktivierung
@@ -55,7 +70,10 @@ t.zone(24, "A · EISEN UND COFAKTOR TEILEN SICH DIE ARBEIT")
 t.text(20, 54, "Anders als beim P450 sitzt hier kein Häm, sondern ein nacktes Nicht-Häm-Eisen. "
                "Den Sauerstoff aktiviert nicht das Metall allein, sondern das Pterin.", size=12.5)
 
-zfe = t.zentrum(120, 168, "Fe(II)", unten="His", name="Nicht-Häm-Eisen")
+# ebene=False: die beiden Balken stehen fuer die Porphyrinebene. Hier waeren sie
+# falsch, denn der Fliesstext daneben sagt gerade, dass kein Haem da ist. Bild
+# und Text widersprachen einander an dieser Stelle.
+zfe = t.zentrum(120, 168, "Fe(II)", unten="His", ebene=False, name="Nicht-Häm-Eisen")
 t.text(120, 224, "Fe(II) im aktiven Zentrum", size=11, anchor="middle", gewicht=700, farbe=W)
 
 bh4 = t.mol("CC(O)C(O)C1CNC2=C(N1)C(=O)NC(N)=N2", 380, 168, kern=PTERIN, name="BH4")
@@ -67,7 +85,7 @@ t.text(557, 190, "4a-Peroxo-Brücke", size=10, anchor="middle", farbe=G)
 t.text(557, 204, "zwischen Pterin und Eisen", size=10, anchor="middle", farbe=G)
 
 zfeo = t.zentrum(680, 168, "Fe(IV)", axial=["O"], doppelt=True, unten="His", schritt=46,
-                 name="Ferryl")
+                 ebene=False, name="Ferryl")
 t.text(680, 224, "Fe(IV)=O: dasselbe Oxidans", size=11, anchor="middle", gewicht=700, farbe=W)
 t.text(680, 240, "wie Compound I, nur ohne Porphyrin", size=10.5, anchor="middle", farbe=G)
 
@@ -106,7 +124,7 @@ t.text(267, 476, "greift an", size=10, anchor="middle", farbe=G)
 # steht die OH-Gruppe zwischen beiden, und der Pfeil muesste ueber ihre
 # Beschriftung hinweg.
 sigma = t.mol("OC1C=CC(*)=C[CH+]1", 420, 452, labels={5: "R"}, wasserstoff=[1],
-              kern=AREN, name="σ-Addukt")
+              kern=AREN_SIGMA, name="σ-Addukt")
 hs = sigma.h_index[1]
 # Das Elektronenpaar der C-H-Bindung geht mitsamt dem Kern an das Nachbaratom:
 # ein Hydridschub, kein Protonenabgang.

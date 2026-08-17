@@ -96,7 +96,12 @@ lac = t.mol("C[C@H](O)C(=O)[O-]", 175, 196, wasserstoff=[1, 2],
 hl = lac.h_index[1]
 ho = lac.h_index[2]
 
-nad = t.mol(NADOX, 300, 208, labels={6: "Ribose-ADP"}, kern=NIC, name="NAD+")
+# x=282 statt der frueheren 300: der Hydridpfeil ist der laengste der Tafel, und
+# bei 300 mass seine Sehne 4,70 L - das Buch laesst zwischen zwei Teilchen
+# hoechstens 4,00 L zu. Mit 282 sind es 3,85 L. Zwischen der Tinte des Lactats
+# und dem Ring bleiben immer noch 48 px Luft, und die beiden Unterschriften
+# stehen weiterhin nebeneinander statt uebereinander.
+nad = t.mol(NADOX, 282, 208, labels={6: "Ribose-ADP"}, kern=NIC, name="NAD+")
 
 # Die Base gehoert ins Bild: ohne sie bliebe das Proton am Sauerstoff sitzen und aus dem
 # Pyruvat wuerde ein Oxocarbenium. Mit ihr stimmt die Ladungsbilanz beider Seiten.
@@ -110,12 +115,25 @@ t.schub(Bindung(lac, 2, ho), Bindung(lac, 1, 2), kette="a")   # O-H wird zur C=O
 t.schub(Bindung(lac, 1, hl), Atom(nad, 9), kette="a")         # das Hydrid ans C4
 t.schub(Bindung(nad, 8, 9), Bindung(nad, 7, 8), kette="a")    # C4=C5 wird C5=C6
 # Der fuenfte Schritt - das pi-Paar der Bindung C6=N1 geht auf den Ringstickstoff -
-# ist nicht gezeichnet, aus genau dem Grund, an dem er schon in M-01 gescheitert
-# ist: das N1 traegt drei Substituenten, seine drei Winkelluecken sind je 120 Grad
-# breit, und in jede von ihnen ragt Tinte. Der Solver kommt an die eigene Bindung
-# N1-C2 auf 0,20 L heran und braucht 0,25 L; das gilt bei jeder Bindungslaenge
-# von 17 bis 30 px gleichermassen, ist also kein Layout-, sondern ein
-# Geometrieproblem. Statt den Pfeil zu verbiegen, steht die Aussage im Text.
+# ist nicht gezeichnet. Er ist als Rueckhaken angemeldet worden, seit es die
+# Pfeilart "zurueck" gibt, und noch einmal ohne Beschriftung, mit Bindungslaengen
+# von 21 bis 31 px und in sechs Ringdrehungen von 15 bis 195 Grad geprueft.
+# Jedesmal derselbe Befund: alle 768 Bogenkandidaten kreuzen Tinte.
+# Der Grund liegt am Stickstoff selbst und nicht am Layout. N1 traegt drei
+# Substituenten, seine drei Winkelluecken sind je 120 Grad breit, und der
+# Rueckhaken braucht eine Sehne von 0,50 bis 1,05 L:
+#   - Luecke bei 165 Grad, zwischen Riborest und C6: die Sehne misst von dort
+#     0,23 bis 0,44 L, wenn der Schwanz aussen an der Bindung N1=C6 sitzt. Lang
+#     genug (0,71 bis 0,85 L) wird sie nur von einem Schwanz auf der Ringseite -
+#     dann kreuzt der Bogen die eigene Bindung N1=C6 oder das Symbol N&#8314;.
+#   - Luecke bei 45 Grad, gegenueber dem C6: die Sehne stimmt (0,86 bis 1,10 L),
+#     aber zwischen Schwanz und Spitze liegt die Bindung N1-Riborest. Zwischen
+#     ihrem Strich und der Unterkante des Symbols N&#8314; bleiben 0,7 px.
+#   - Luecke bei 285 Grad zeigt ins Ringinnere; Sehne hoechstens 0,20 bis 0,76 L,
+#     und der Bogen kreuzt dabei die Ringbindungen.
+# Das ist Geometrie, kein Platzmangel: dieselbe Ablehnung kommt auch dann, wenn
+# das Molekuel allein auf einer leeren Tafel steht. Statt den Pfeil zu verbiegen,
+# steht die Aussage im Text.
 # Der frueher hier stehende gestrichelte Sammelpfeil quer durch den Ring war
 # ohnehin keine zulaessige Schreibweise: seine Sehne mass 1,8 L bei 1,3 L Grenze.
 

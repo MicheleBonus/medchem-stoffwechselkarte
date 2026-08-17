@@ -76,15 +76,19 @@ t.atomnummer(fox, 11, "N1", winkel=60, abstand=26, size=10.5, farbe=R, gewicht=7
 
 # Die Lage des Amins ist nicht beliebig, und zwar wegen des ersten Pfeils. Er
 # geht vom freien Paar des Stickstoffs in die C-N-Bindung, also zurueck an das
-# eigene Atom; er muss deshalb um den Stickstoff herumgreifen. Auf welcher Seite
-# der Bindung er landet, haengt daran, wohin das Paar gesetzt wird, und das haengt
-# an der Schreibrichtung des Symbols: "NH2" reicht waagerecht weit, senkrecht
-# kaum. Stand das R nach oben (zeige={0: "oben"}), so kam das Paar rechts neben
-# den Stickstoff, die Spitze aber unter die Bindung - der Bogen kreuzte sie.
-# Bei rotate=30 liegt das Paar ueber dem Symbol und die Spitze daneben, auf
-# derselben Seite: kein Schnitt, Lot 0,22 L, Laengslage genau in der Mitte.
+# eigene Atom, und muss dabei um den Stickstoff herumgreifen. Wohin das Paar
+# gesetzt wird, entscheidet die Schreibrichtung des Symbols: "NH2" reicht
+# waagerecht weit, senkrecht kaum, und das Paar weicht der breiten Seite aus.
+# Bei rotate=30 lag es links oben, also auf der vom Ziel abgewandten Seite des
+# Stickstoffs; der Kopf zeigte dann 39 Grad an der C-N-Bindung vorbei ins Leere.
+# Der ganze Winkelbereich ist durchgerechnet: erst ab rotate=90 faellt das Paar
+# unter die C-N-Bindung, und bei 110 Grad zeigt der Kopf genau auf ihre Mitte
+# (Abweichung 0 Grad, Sehne 0,56 L, Freiraum 0,54 L). Zugleich weist das
+# alpha-Staendige H nach links unten, dem Flavin entgegen; steht es rechts
+# (rotate 0 bis 10), muss der Hydridpfeil um das Molekuel herum und kreuzt die
+# C-R-Bindung; der Solver bricht dort ab.
 amin = t.mol("*CN", 272, 165, labels={0: "R"}, wasserstoff=[1],
-             rotate=30, name="Amin")
+             rotate=110, name="Amin")
 ha = amin.h_index[1]
 
 # Ein einziger Reaktionsschritt, deshalb eine Kette: Das freie Paar am Stickstoff
@@ -169,8 +173,29 @@ add = t.mol(ADDUKT, 700, 730, labels={9: "Cys", 11: "Ribityl", 20: "R"},
 # steht, laeuft hier die Addukt-Kette. Die Marke rueckt deshalb als einzige in
 # die Luecke zwischen Ring und Kette.
 t.atomnummer(add, 14, "N5", winkel=207, abstand=34, size=10.5, farbe=R, gewicht=700)
-t.unterschrift(add, "das N5-Addukt: der Cofaktor ist kovalent blockiert,",
-               "das Enzym damit endgültig aus dem Verkehr", abstand=32, farbe=R, gewicht=700)
+# Gezeichnet ist das kumulierte Allen N5-CH=C=CH-N(CH3)R am reduzierten,
+# 1,5-dihydro vorliegenden Flavin. Beim Gegenlesen kam der Einwand, die Literatur
+# zeige an dieser Stelle das durchkonjugierte Flavocyanin. Nachgesehen in beiden
+# Lehrbuechern des Kurses: Steinhilber, Schubert-Zsilavecz, Roth, Abb. 3.118
+# ("alkenyliertes FAD") und Mueller, Prinz, Lehr, Abb. 7.323 zeichnen beide das
+# Allen als erstes Addukt. Mueller setzt daneben ausdruecklich einen zweiten
+# Schritt: erst ein Proton macht daraus das durchkonjugierte, mesomere Kation.
+# Die Struktur bleibt deshalb, und die Unterschrift sagt jetzt, welche Stufe zu
+# sehen ist. Die beiden Buecher gehen an einer anderen Stelle auseinander:
+# Mueller haelt den Cofaktor in der reduzierten Form fest (N1 traegt ein H, das
+# Molekuel ist ungeladen), Steinhilber zeichnet ihn als N5-Flaviniumsalz. Hier
+# steht Muellers Fassung, weil sie zur Aussage "der Cofaktor bleibt reduziert
+# und kann keine Elektronen mehr aufnehmen" passt.
+y_add = t.unterschrift(add, "das N5-Addukt: der Cofaktor ist kovalent blockiert,",
+                       "das Enzym damit endgültig aus dem Verkehr", abstand=32,
+                       farbe=R, gewicht=700)
+add_x = sum(add.rand()[0::2]) / 2.0
+t.text(add_x, y_add + 21, "So zeichnen es Steinhilber (Abb. 3.118) und Müller, Prinz, Lehr",
+       size=10.5, anchor="middle", farbe=G)
+t.text(add_x, y_add + 36, "(Abb. 7.323): ein kumuliertes Allen. Ein Proton daran gibt",
+       size=10.5, anchor="middle", farbe=G)
+t.text(add_x, y_add + 51, "das durchkonjugierte Flavocyanin.", size=10.5,
+       anchor="middle", farbe=G)
 
 # ===================================================== ZONE C · Folgerungen
 t.zone(942, "C · WAS SICH FÜR DIE THERAPIE DARAUS ERGIBT")
@@ -229,7 +254,9 @@ ARIA = (
     "Suizidinhibition: Vom Stickstoff des R-konfigurierten Selegilins geht mit einem "
     "Fischhakenpfeil ein einzelnes Elektron auf das Flavin ueber; anschliessend geht auch das "
     "Wasserstoffatom des Propargylkohlenstoffs an das Flavin, und der Rest addiert kovalent "
-    "an das N5. Es entsteht das gezeichnete N5-Addukt, das den Cofaktor endgueltig blockiert. "
+    "an das N5. Es entsteht das gezeichnete N5-Addukt, ein kumuliertes Allen zwischen dem N5 "
+    "des reduzierten Flavins und dem Stickstoff des Hemmstoffs, das den Cofaktor endgueltig "
+    "blockiert; ein Proton daran gibt das durchkonjugierte Flavocyanin. "
     "Zone C zieht die therapeutischen Folgerungen."
 )
 
