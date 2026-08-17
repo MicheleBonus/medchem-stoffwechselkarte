@@ -37,6 +37,7 @@ build/
   mech_regeln.py       Regelkatalog für Elektronenpfeile und die Prüfung dagegen
   tafel_m01.py … m17   je eine Tafel -> tafeln/mNN.svg
   vorschau.py          eine Tafel einzeln ansehen und prüfen
+  warum_pfeil.py       nennt bei abgelehntem Pfeil das störende Element
   vorschau_reihe.py    eine Gruppe von Strukturformeln nebeneinander ansehen
   src/                 Teil 0 bis 9 und die Rahmentexte der Tafeln
   src_plan/            der Lernfahrplan
